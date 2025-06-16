@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -64,14 +66,50 @@
                               <Font name="Franklin Gothic Demi Cond" size="36.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="10.0" left="60.0" top="50.0" />
+                              <Insets bottom="10.0" left="60.0" top="40.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField prefHeight="63.0" prefWidth="817.0" style="-fx-border-radius: 5em; -fx-background-radius: 2em;" stylesheets="@style.css">
+                        <TextField prefHeight="70.0" prefWidth="817.0" style="-fx-border-radius: 5em; -fx-background-radius: 2em;" stylesheets="@style.css">
                            <VBox.margin>
                               <Insets left="50.0" right="50.0" />
                            </VBox.margin>
                         </TextField>
+                        <Label layoutX="70.0" layoutY="60.0" text="PASSWORD" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="36.0" />
+                           </font>
+                           <padding>
+                              <Insets left="60.0" top="40.0" />
+                           </padding>
+                        </Label>
+                        <TextField layoutX="60.0" layoutY="112.0" prefHeight="70.0" prefWidth="817.0" style="-fx-border-radius: 5em; -fx-background-radius: 2em;" stylesheets="@style.css">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" top="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <HBox alignment="CENTER" prefHeight="168.0" prefWidth="917.0" spacing="70.0">
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                           <children>
+                              <Button mnemonicParsing="false" prefHeight="105.0" prefWidth="350.0" style="-fx-background-radius: 15;" stylesheets="@style.css" text="MASUK" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="44.0" />
+                                 </font>
+                                 <effect>
+                                    <GaussianBlur radius="4.0" />
+                                 </effect>
+                              </Button>
+                              <Button layoutX="69.0" layoutY="42.0" mnemonicParsing="false" prefHeight="105.0" prefWidth="350.0" style="-fx-background-radius: 15;" stylesheets="@style.css" text="BATAL" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="44.0" />
+                                 </font>
+                                 <effect>
+                                    <GaussianBlur radius="4.0" />
+                                 </effect>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                      <effect>
                         <InnerShadow />
