@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.LoginController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="1080.0" prefWidth="1920.0">
+         <children>
+            <ImageView fitHeight="762.0" fitWidth="733.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/Logo-2.png" />
+               </image>
+            </ImageView>
+            <VBox prefHeight="1080.0" prefWidth="1206.0" style="-fx-background-color: #0D2857;">
+               <children>
+                  <Label text="WELCOME!" textFill="WHITE">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="123.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="80.0" top="70.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox prefHeight="14.0" prefWidth="1205.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3554d1" height="70.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="20.0">
+                           <HBox.margin>
+                              <Insets left="150.0" right="10.0" />
+                           </HBox.margin>
+                        </Rectangle>
+                        <Label text="LOGIN KASIR" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="64.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="80.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <VBox prefHeight="547.0" prefWidth="917.0" style="-fx-background-color: #3F5880; -fx-background-radius: 3em;">
+                     <VBox.margin>
+                        <Insets left="150.0" right="120.0" top="20.0" />
+                     </VBox.margin>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <children>
+                        <Label text="NAMA" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="36.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="60.0" top="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField prefHeight="63.0" prefWidth="817.0" style="-fx-border-radius: 5em; -fx-background-radius: 2em;" stylesheets="@style.css">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                     <effect>
+                        <InnerShadow />
+                     </effect>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
