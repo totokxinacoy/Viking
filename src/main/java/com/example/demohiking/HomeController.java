@@ -16,7 +16,19 @@ import java.util.ResourceBundle;
 public class HomeController implements Initializable {
 
     @FXML
-    private VBox pnItems = null;
+    private VBox pnItemsProduk = null;
+
+    @FXML
+    private VBox pnItemsDenda = null;
+
+    @FXML
+    private VBox pnItemsCustomer = null;
+
+    @FXML
+    private VBox pnItemsPaket = null;
+
+    @FXML
+    private VBox pnItemsTransaksi = null;
 
     @FXML
     private Button btnProduk;
@@ -65,12 +77,91 @@ public class HomeController implements Initializable {
                 nodes[i].setOnMouseExited(event -> {
                     nodes[j].setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
                 });
-                pnItems.getChildren().add(nodes[i]);
+                pnItemsProduk.getChildren().add(nodes[i]);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
+        for (int i = 0; i < nodes.length; i++) {
+            try {
+
+                final int j = i;
+                nodes[i] = FXMLLoader.load(getClass().getResource("Item.fxml"));
+
+                //give the items some effect
+
+                nodes[i].setOnMouseEntered(event -> {
+                    nodes[j].setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                nodes[i].setOnMouseExited(event -> {
+                    nodes[j].setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+                pnItemsPaket.getChildren().add(nodes[i]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = 0; i < nodes.length; i++) {
+            try {
+
+                final int j = i;
+                nodes[i] = FXMLLoader.load(getClass().getResource("Item.fxml"));
+
+                //give the items some effect
+
+                nodes[i].setOnMouseEntered(event -> {
+                    nodes[j].setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                nodes[i].setOnMouseExited(event -> {
+                    nodes[j].setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+                pnItemsCustomer.getChildren().add(nodes[i]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = 0; i < nodes.length; i++) {
+            try {
+
+                final int j = i;
+                nodes[i] = FXMLLoader.load(getClass().getResource("Item.fxml"));
+
+                //give the items some effect
+
+                nodes[i].setOnMouseEntered(event -> {
+                    nodes[j].setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                nodes[i].setOnMouseExited(event -> {
+                    nodes[j].setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+                pnItemsTransaksi.getChildren().add(nodes[i]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = 0; i < nodes.length; i++) {
+            try {
+
+                final int j = i;
+                nodes[i] = FXMLLoader.load(getClass().getResource("Item.fxml"));
+
+                //give the items some effect
+
+                nodes[i].setOnMouseEntered(event -> {
+                    nodes[j].setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                nodes[i].setOnMouseExited(event -> {
+                    nodes[j].setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+                pnItemsDenda.getChildren().add(nodes[i]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
