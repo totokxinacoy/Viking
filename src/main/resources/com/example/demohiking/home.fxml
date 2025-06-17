@@ -44,7 +44,7 @@
                   </TextField>
                   <Pane layoutX="85.0" layoutY="171.0" prefHeight="837.0" prefWidth="1126.0" style="-fx-background-color: #D4EBF8;" styleClass="scroll-pane-color">
                      <children>
-                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0" stylesheets="@../../../../../../../RestaurantMgtSampleUI/src/home/style.css">
+                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0">
                            <content>
                               <VBox fx:id="pnItemsProduk" prefHeight="764.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
                                  <padding>
@@ -279,7 +279,7 @@
                   </TextField>
                   <Pane layoutX="85.0" layoutY="171.0" prefHeight="837.0" prefWidth="1126.0" style="-fx-background-color: #D4EBF8;" styleClass="scroll-pane-color">
                      <children>
-                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0" stylesheets="@../../../../../../../RestaurantMgtSampleUI/src/home/style.css">
+                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0">
                            <content>
                               <VBox fx:id="pnItemsDenda" prefHeight="764.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
                                  <padding>
@@ -514,7 +514,7 @@
                   </TextField>
                   <Pane layoutX="85.0" layoutY="171.0" prefHeight="837.0" prefWidth="1126.0" style="-fx-background-color: #D4EBF8;" styleClass="scroll-pane-color">
                      <children>
-                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0" stylesheets="@../../../../../../../RestaurantMgtSampleUI/src/home/style.css">
+                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0">
                            <content>
                               <VBox fx:id="pnItemsCustomer" prefHeight="764.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
                                  <padding>
@@ -749,7 +749,7 @@
                   </TextField>
                   <Pane layoutX="85.0" layoutY="171.0" prefHeight="837.0" prefWidth="1126.0" style="-fx-background-color: #D4EBF8;" styleClass="scroll-pane-color">
                      <children>
-                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0" stylesheets="@../../../../../../../RestaurantMgtSampleUI/src/home/style.css">
+                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0">
                            <content>
                               <VBox fx:id="pnItemsPaket" prefHeight="764.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
                                  <padding>
@@ -984,7 +984,7 @@
                   </TextField>
                   <Pane layoutX="85.0" layoutY="171.0" prefHeight="837.0" prefWidth="1126.0" style="-fx-background-color: #D4EBF8; -fx-background-radius: 2em;" styleClass="scroll-pane-color">
                      <children>
-                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0" stylesheets="@../../../../../../../RestaurantMgtSampleUI/src/home/style.css">
+                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0">
                            <content>
                               <VBox fx:id="pnItemsTransaksi" prefHeight="764.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
                                  <padding>

@@ -63,7 +63,9 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Node[] nodes = new Node[15];
-        for (int i = 0; i < nodes.length; i++) {
+        int i;
+
+        for (i = 0; i < nodes.length; i++) {
             try {
 
                 final int j = i;
@@ -83,7 +85,7 @@ public class HomeController implements Initializable {
             }
         }
 
-        for (int i = 0; i < nodes.length; i++) {
+        for (i = 0; i < nodes.length; i++) {
             try {
 
                 final int j = i;
@@ -103,7 +105,7 @@ public class HomeController implements Initializable {
             }
         }
 
-        for (int i = 0; i < nodes.length; i++) {
+        for (i = 0; i < nodes.length; i++) {
             try {
 
                 final int j = i;
@@ -123,7 +125,7 @@ public class HomeController implements Initializable {
             }
         }
 
-        for (int i = 0; i < nodes.length; i++) {
+        for (i = 0; i < nodes.length; i++) {
             try {
 
                 final int j = i;
@@ -143,7 +145,7 @@ public class HomeController implements Initializable {
             }
         }
 
-        for (int i = 0; i < nodes.length; i++) {
+        for (i = 0; i < nodes.length; i++) {
             try {
 
                 final int j = i;
@@ -163,6 +165,8 @@ public class HomeController implements Initializable {
             }
         }
     }
+
+
 
 
     public void handleClicks(ActionEvent actionEvent) {
