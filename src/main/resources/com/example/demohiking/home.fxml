@@ -1009,7 +1009,7 @@
                                     <Font name="Franklin Gothic Demi Cond" size="32.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="100.0" top="25.0" />
+                                    <Insets left="130.0" top="25.0" />
                                  </HBox.margin>
                               </Text>
                            </children>
@@ -1318,8 +1318,26 @@
                   </ImageView>
                </graphic>
                <VBox.margin>
-                  <Insets bottom="180.0" />
+                  <Insets bottom="30.0" />
                </VBox.margin>
+            </Button>
+            <Button fx:id="btnLogout" alignment="BASELINE_LEFT" graphicTextGap="22.0" layoutX="10.0" layoutY="740.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="74.0" prefWidth="315.0" stylesheets="@style.css" text="KELUAR" textFill="#e7e5e5">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <font>
+                  <Font name="Franklin Gothic Demi Cond" size="28.0" />
+               </font>
+               <padding>
+                  <Insets left="40.0" />
+               </padding>
+               <graphic>
+                  <ImageView fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/transaction.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
             </children>
          <effect>

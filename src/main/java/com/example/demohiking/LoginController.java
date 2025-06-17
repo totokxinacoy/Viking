@@ -40,24 +40,27 @@ public class LoginController implements Initializable {
     }
 
     private void handleLogin() {
-        String username = txtUsername.getText();
+        String nama = txtUsername.getText();    // Nama_Karyawan
         String password = txtPassword.getText();
 
-        String query = "SELECT * FROM Users WHERE username = ? AND password = ?";
+        String query = "SELECT * FROM Karyawan WHERE Nama_Karyawan = ? AND Password = ?";
 
         try {
             DBConnect connection = new DBConnect();
             Connection conn = connection.getConnection();
 
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, username);
-            statement.setString(2, password);
+            statement.setString(1, nama);      // parameter pertama
+            statement.setString(2, password);  // parameter kedua
 
             ResultSet result = statement.executeQuery();
 
             if (result.next()) {
-                // Login berhasil
-                showAlert(Alert.AlertType.INFORMATION, "Login Berhasil", "Selamat datang, " + username + "!");
+                // Simpan session
+                String npk = result.getString("NPK");
+                Session.setSession(npk, nama);
+
+                showAlert(Alert.AlertType.INFORMATION, "Login Berhasil", "Selamat datang, " + nama + "!");
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
                 Parent root = loader.load();
@@ -67,13 +70,12 @@ public class LoginController implements Initializable {
                 stage.setTitle("Halaman Utama");
                 stage.show();
             } else {
-                showAlert(Alert.AlertType.ERROR, "Login Gagal", "Username atau password salah.");
+                showAlert(Alert.AlertType.ERROR, "Login Gagal", "Nama atau password salah.");
                 txtUsername.clear();
                 txtPassword.clear();
             }
 
             conn.close();
-
         } catch (Exception e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Kesalahan", "Terjadi kesalahan saat login.");

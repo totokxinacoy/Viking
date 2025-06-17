@@ -1,5 +1,6 @@
 package com.example.demohiking;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +9,10 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.StageStyle;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -48,6 +53,9 @@ public class HomeController implements Initializable {
 
     @FXML
     private Button btnTransaksi;
+
+    @FXML
+    private Button btnLogout;
 
     @FXML
     private Pane pnlProduk;
@@ -135,6 +143,7 @@ public class HomeController implements Initializable {
     }
 
     private void loadProdukItems() {
+        pnItemsProduk.getChildren().clear(); // <- tambahkan ini
         List<Produk> dataProduk = getDataProduk();
         for (int i = 0; i < dataProduk.size(); i++) {
             try {
@@ -161,13 +170,35 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // INITIALIZE MENU PRODUK
-        cmbKategori.getItems().addAll("Base Slayer", "Jaket", "Celana", "Sepatu", "Tracking Pole");
+        // Inisialisasi lain dulu
+        cmbKategori.getItems().addAll("Tas", "Sepatu", "Aksessoris", "Pakaian", "Tenda");
         loadProdukItems();
         txtIDProduk.setEditable(false);
         txtIDProduk.setText(generateProdukID());
+
+        // Tunda pengecekan session sampai setelah UI tampil
+        Platform.runLater(this::cekSession);
     }
 
+    private void cekSession() {
+        if (!Session.isLoggedIn()) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+                Parent root = loader.load();
+
+                Stage loginStage = new Stage();
+                loginStage.setScene(new Scene(root));
+                loginStage.initStyle(StageStyle.UNDECORATED);
+                loginStage.setTitle("Login");
+                loginStage.show();
+
+                Stage currentStage = (Stage) btnLogout.getScene().getWindow();
+                currentStage.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
 
@@ -193,6 +224,30 @@ public class HomeController implements Initializable {
         {
             pnlTransaksi.setStyle("-fx-background-color : #ffffff");
             pnlTransaksi.toFront();
+        }
+    }
+
+
+
+    @FXML
+    private void handleLogout() {
+        Session.clearSession();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+            Parent root = loader.load();
+
+            Stage loginStage = new Stage();
+            loginStage.setScene(new Scene(root));
+            loginStage.initStyle(StageStyle.UNDECORATED);
+            loginStage.setTitle("Login Kembali");
+            loginStage.show();
+
+            // Tutup Home
+            Stage currentStage = (Stage) btnLogout.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -267,11 +322,12 @@ public class HomeController implements Initializable {
 
 
     public void RefreshData() {
-//        txtIDProduk.setText(generateProdukID());
+        txtIDProduk.setText(generateProdukID());
         txtNama.setText("");
         cmbKategori.setValue("");
         txtHarga.setText("");
         txtStock.setText("");
         txtDeskripsi.setText("");
+        loadProdukItems();
     }
 }
