@@ -13,14 +13,14 @@
     <children>
         <Label fx:id="lblNama" prefHeight="22.0" prefWidth="129.0" text="ID Produk" textFill="WHITE">
          <HBox.margin>
-            <Insets left="40.0" />
+            <Insets left="70.0" />
          </HBox.margin>
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font></Label>
         <Label fx:id="lblHarga" prefHeight="22.0" prefWidth="486.0" text="Nama Produk" textFill="WHITE" wrapText="true">
             <HBox.margin>
-                <Insets left="30.0" />
+                <Insets left="25.0" />
             </HBox.margin>
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
@@ -35,10 +35,10 @@
             </ImageView>
          </graphic>
          <HBox.margin>
-            <Insets left="260.0" />
+            <Insets left="240.0" />
          </HBox.margin>
       </Button>
-      <Button fx:id="btnDelete" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" stylesheets="@style.css" textFill="#0d2857">
+      <Button fx:id="btnDelete" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" textFill="#0d2857">
          <graphic>
             <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>

@@ -70,13 +70,47 @@ public class HomeController implements Initializable {
     @FXML
     private TextField txtNama;
     @FXML
-    private TextField cmbKategori;
+    private ComboBox<String> cmbKategori;
     @FXML
     private TextField txtHarga;
     @FXML
     private TextField txtStock;
     @FXML
     private TextArea txtDeskripsi;
+
+    // PRODUK CRUD
+    private String generateProdukID() {
+        String id = "PRD001";
+        String query = "SELECT MAX(ID_Produk) as max_id FROM Produk";
+
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                String maxID = rs.getString("max_id");
+
+                // Validasi agar tidak error saat null atau format tidak sesuai
+                if (maxID != null && maxID.length() >= 4) {
+                    String numberPart = maxID.substring(3);
+                    if (!numberPart.isEmpty() && numberPart.matches("\\d+")) {
+                        int nextID = Integer.parseInt(numberPart) + 1;
+                        id = String.format("PRD%03d", nextID);
+                    }
+                }
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
 
     public List<Produk> getDataProduk() {
         List<Produk> list = new ArrayList<>();
@@ -107,7 +141,6 @@ public class HomeController implements Initializable {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemProduk.fxml"));
                 Node node = loader.load();
 
-                // Ambil controller dan isi data
                 ItemController controller = loader.getController();
                 controller.setData(dataProduk.get(i));
 
@@ -128,9 +161,11 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        // INITIALIZE MENU PRODUK
+        cmbKategori.getItems().addAll("Base Slayer", "Jaket", "Celana", "Sepatu", "Tracking Pole");
         loadProdukItems();
-
+        txtIDProduk.setEditable(false);
+        txtIDProduk.setText(generateProdukID());
     }
 
 
@@ -163,22 +198,33 @@ public class HomeController implements Initializable {
 
     @FXML
     protected void onAddProduk() {
-        String idProduk = txtIDProduk.getText();
-        String nama = txtNama.getText();
-//        String kategori = (String) cmbKategori.getValue();
-        String kategori = cmbKategori.getText();
-        String desk = txtDeskripsi.getText();
+        String idProduk = txtIDProduk.getText().trim();
+        String nama = txtNama.getText().trim();
+        String kategori = cmbKategori.getValue();
+        String desk = txtDeskripsi.getText().trim();
+        String hargaStr = txtHarga.getText().trim();
+        String stockStr = txtStock.getText().trim();
         String status = "Aktif";
 
+        // Validasi input kosong
+        if (idProduk.isEmpty() || nama.isEmpty() || kategori == null || kategori.isEmpty()
+                || desk.isEmpty() || hargaStr.isEmpty() || stockStr.isEmpty()) {
+
+            showAlert(Alert.AlertType.WARNING, "Validasi Input", "Semua field harus diisi!");
+            return;
+        }
+
+        // Validasi angka
         int harga, stock;
         try {
-            harga = Integer.parseInt(txtHarga.getText());
-            stock = Integer.parseInt(txtStock.getText());
+            harga = Integer.parseInt(hargaStr);
+            stock = Integer.parseInt(stockStr);
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Input Error", "Harga dan Stok harus berupa angka.");
             return;
         }
 
+        // Query insert
         String query = "INSERT INTO Produk VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
@@ -220,10 +266,10 @@ public class HomeController implements Initializable {
     }
 
 
-    public void RefreshData(){
-        txtIDProduk.setText("");
+    public void RefreshData() {
+//        txtIDProduk.setText(generateProdukID());
         txtNama.setText("");
-        cmbKategori.setText("");
+        cmbKategori.setValue("");
         txtHarga.setText("");
         txtStock.setText("");
         txtDeskripsi.setText("");
