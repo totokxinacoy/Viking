@@ -10,7 +10,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 import java.net.URL;
@@ -40,31 +43,43 @@ public class LoginController implements Initializable {
         String username = txtUsername.getText();
         String password = txtPassword.getText();
 
-        if (username.equals("admin") && password.equals("1234")) {
-            try {
-                showAlert(Alert.AlertType.INFORMATION, "Welcome Kasir", username + " Login Successful!");
-                // Muat file FXML baru
+        String query = "SELECT * FROM Users WHERE username = ? AND password = ?";
+
+        try {
+            DBConnect connection = new DBConnect();
+            Connection conn = connection.getConnection();
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, username);
+            statement.setString(2, password);
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                // Login berhasil
+                showAlert(Alert.AlertType.INFORMATION, "Login Berhasil", "Selamat datang, " + username + "!");
+
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
                 Parent root = loader.load();
 
-                // Ambil stage dari tombol login
                 Stage stage = (Stage) btnLogin.getScene().getWindow();
-
-                // Set scene baru
                 stage.setScene(new Scene(root));
                 stage.setTitle("Halaman Utama");
                 stage.show();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Kesalahan", "Gagal membuka halaman.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Login Gagal", "Username atau password salah.");
+                txtUsername.clear();
+                txtPassword.clear();
             }
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Login Gagal", "Username atau password salah.");
-            txtUsername.clear();
-            txtPassword.clear();
+
+            conn.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Kesalahan", "Terjadi kesalahan saat login.");
         }
     }
+
 
 
 
