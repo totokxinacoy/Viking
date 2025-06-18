@@ -7,15 +7,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.StageStyle;
 
 import javax.swing.*;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,6 +26,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
+    @FXML
+    private ImageView imgProduk;
+
+    private File selectedImageFile;
 
     @FXML
     private VBox pnItemsProduk = null;
@@ -238,6 +245,21 @@ public class HomeController implements Initializable {
         }
     }
 
+    @FXML
+    private void handleChooseImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Pilih Gambar Produk");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            selectedImageFile = file;
+            Image image = new Image(file.toURI().toString());
+            imgProduk.setImage(image);
+        }
+    }
 
 
     @FXML
@@ -291,7 +313,7 @@ public class HomeController implements Initializable {
         }
 
         // Insert Produk
-        String query = "INSERT INTO Produk VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Produk VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             DBConnect connect = new DBConnect();
@@ -305,6 +327,8 @@ public class HomeController implements Initializable {
             pstat.setInt(5, harga);
             pstat.setInt(6, stock);
             pstat.setString(7, status);
+            InputStream imageStream = new FileInputStream(selectedImageFile);
+            pstat.setBinaryStream(8, imageStream, (int) selectedImageFile.length());
 
             pstat.executeUpdate();
             pstat.close();
@@ -315,6 +339,8 @@ public class HomeController implements Initializable {
         } catch (SQLException ex) {
             System.out.println("Terjadi error saat insert data produk: " + ex.getMessage());
             showAlert(Alert.AlertType.ERROR, "Database Error", ex.getMessage());
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
