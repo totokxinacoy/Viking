@@ -163,6 +163,7 @@ public class HomeController implements Initializable {
 
                 ItemProdukController controller = loader.getController();
                 controller.setData(dataProduk.get(i));
+                controller.setHomeController(this); // <-- penting!
 
                 final int j = i;
                 node.setOnMouseEntered(event -> {
@@ -296,11 +297,15 @@ public class HomeController implements Initializable {
         String stockStr = txtStock.getText().trim();
         String status = "Aktif";
 
-        // Validasi input kosong
         if (idProduk.isEmpty() || nama.isEmpty() || kategori == null || kategori.isEmpty()
                 || desk.isEmpty() || hargaStr.isEmpty() || stockStr.isEmpty()) {
-
             showAlert(Alert.AlertType.WARNING, "Validasi Input", "Semua field harus diisi!");
+            return;
+        }
+
+        // Validasi gambar
+        if (selectedImageFile == null) {
+            showAlert(Alert.AlertType.WARNING, "Validasi Gambar", "Silakan pilih gambar produk terlebih dahulu.");
             return;
         }
 
@@ -368,6 +373,7 @@ public class HomeController implements Initializable {
         txtHarga.setText("");
         txtStock.setText("");
         txtDeskripsi.setText("");
+        imgProduk.setImage(null);
         loadProdukItems();
     }
 }

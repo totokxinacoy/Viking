@@ -26,6 +26,10 @@ public class ItemProdukController {
         private Produk produk;
         private HomeController homeController;
 
+    public void setHomeController(HomeController controller) {
+        this.homeController = controller;
+    }
+
         public void setData(Produk produk) {
             this.produk = produk;
             lblNama.setText(produk.getId());
@@ -98,8 +102,10 @@ public class ItemProdukController {
 
                     if (rows > 0) {
                         showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Produk telah dihapus.");
+
+                        // Langsung panggil refresh tanpa menunggu konfirmasi tambahan
                         if (homeController != null) {
-                            homeController.RefreshData(); // refresh tampilan produk
+                            homeController.RefreshData();
                         }
                     } else {
                         showAlert(Alert.AlertType.WARNING, "Gagal", "Produk tidak ditemukan di database.");
