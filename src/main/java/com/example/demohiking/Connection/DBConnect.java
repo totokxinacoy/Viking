@@ -1,4 +1,4 @@
-package com.example.demohiking;
+package com.example.demohiking.Connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

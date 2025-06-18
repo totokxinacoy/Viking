@@ -1,5 +1,6 @@
 package com.example.demohiking;
 
+import com.example.demohiking.Connection.DBConnect;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -13,7 +14,6 @@ import javafx.stage.Stage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 
 import java.net.URL;
