@@ -142,15 +142,17 @@ public class HomeController implements Initializable {
         return list;
     }
 
+
     private void loadProdukItems() {
-        pnItemsProduk.getChildren().clear(); // <- tambahkan ini
+        pnItemsProduk.getChildren().clear();
         List<Produk> dataProduk = getDataProduk();
+
         for (int i = 0; i < dataProduk.size(); i++) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemProduk.fxml"));
                 Node node = loader.load();
 
-                ItemController controller = loader.getController();
+                ItemProdukController controller = loader.getController();
                 controller.setData(dataProduk.get(i));
 
                 final int j = i;
@@ -168,9 +170,18 @@ public class HomeController implements Initializable {
         }
     }
 
+    public void setDetailProduk(Produk produk) {
+        txtIDProduk.setText(produk.getId());
+        txtNama.setText(produk.getNama());
+        cmbKategori.setValue(produk.getKategori());
+        txtDeskripsi.setText(produk.getDeskripsi());
+        txtHarga.setText(String.valueOf((int) produk.getHarga()));
+        txtStock.setText(String.valueOf(produk.getStok()));
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Inisialisasi lain dulu
+        // Inisalisasi Component Produk
         cmbKategori.getItems().addAll("Tas", "Sepatu", "Aksessoris", "Pakaian", "Tenda");
         loadProdukItems();
         txtIDProduk.setEditable(false);
@@ -279,7 +290,7 @@ public class HomeController implements Initializable {
             return;
         }
 
-        // Query insert
+        // Insert Produk
         String query = "INSERT INTO Produk VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
@@ -306,6 +317,7 @@ public class HomeController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Database Error", ex.getMessage());
         }
     }
+
 
     @FXML
     protected void onClearProduk() {

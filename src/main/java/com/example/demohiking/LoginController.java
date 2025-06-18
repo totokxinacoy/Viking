@@ -62,7 +62,7 @@ public class LoginController implements Initializable {
 
                 showAlert(Alert.AlertType.INFORMATION, "Login Berhasil", "Selamat datang, " + nama + "!");
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("homeKasir.fxml"));
                 Parent root = loader.load();
 
                 Stage stage = (Stage) btnLogin.getScene().getWindow();

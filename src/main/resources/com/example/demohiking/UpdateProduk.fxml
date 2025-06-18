@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.demohiking.UpdateProdukController" spacing="10" alignment="CENTER">
+    <TextField fx:id="txtNama" promptText="Nama Produk" />
+    <TextField fx:id="txtKategori" promptText="Kategori" />
+    <TextField fx:id="txtHarga" promptText="Harga" />
+    <TextField fx:id="txtStock" promptText="Stok" />
+    <TextArea fx:id="txtDeskripsi" promptText="Deskripsi" />
+    <Button text="Simpan Perubahan" onAction="#handleSimpan" />
+</VBox>
+
