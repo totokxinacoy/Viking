@@ -2,34 +2,84 @@ package com.example.demohiking;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UpdateProdukController {
     @FXML
     private TextField txtNama, txtKategori, txtHarga, txtStock;
     @FXML
+    private ComboBox<String> cmbKategori;
+    @FXML
     private TextArea txtDeskripsi;
 
     private Produk produk;
 
+    // Static stage untuk kontrol satu jendela saja
+    private static Stage updateStage = null;
+
+    public static boolean isWindowOpen() {
+        return updateStage != null;
+    }
+
+    public static void setWindow(Stage stage) {
+        updateStage = stage;
+    }
+
+    public static void clearWindow() {
+        updateStage = null;
+    }
+
+    public static void bringToFront() {
+        if (updateStage != null) {
+            updateStage.toFront();
+            updateStage.requestFocus();
+        }
+    }
+
     public void setProduk(Produk produk) {
         this.produk = produk;
-        txtNama.setText(produk.getNama());
-        txtKategori.setText(produk.getKategori());
-        txtHarga.setText(String.valueOf((int) produk.getHarga()));
-        txtStock.setText(String.valueOf(produk.getStok()));
-        txtDeskripsi.setText(produk.getDeskripsi());
+
+        try {
+            DBConnect db = new DBConnect();
+            Connection conn = db.getConnection();
+
+            String query = "SELECT * FROM Produk WHERE ID_Produk = ?";
+            PreparedStatement pstat = conn.prepareStatement(query);
+            pstat.setString(1, produk.getId());
+
+            ResultSet rs = pstat.executeQuery();
+            if (rs.next()) {
+                txtNama.setText(rs.getString("Nama_Produk"));
+                cmbKategori.getItems().setAll("Tas", "Sepatu", "Aksessoris", "Pakaian", "Tenda");
+                cmbKategori.setValue(rs.getString("Kategori"));
+                txtHarga.setText(String.valueOf(rs.getDouble("Harga")));
+                txtStock.setText(String.valueOf(rs.getInt("Stok")));
+                txtDeskripsi.setText(rs.getString("Deskripsi"));
+            } else {
+                showAlert(Alert.AlertType.WARNING, "Tidak Ditemukan", "Produk tidak ditemukan.");
+            }
+
+            rs.close();
+            pstat.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+        }
     }
 
     @FXML
     private void handleSimpan() {
         String nama = txtNama.getText().trim();
-        String kategori = txtKategori.getText().trim();
+        String kategori = cmbKategori.getValue();
         String deskripsi = txtDeskripsi.getText().trim();
         String hargaStr = txtHarga.getText().trim();
         String stokStr = txtStock.getText().trim();
@@ -55,18 +105,18 @@ public class UpdateProdukController {
             pstat.setInt(5, stok);
             pstat.setString(6, produk.getId());
 
-            int rowsAffected = pstat.executeUpdate();
+            int rows = pstat.executeUpdate();
             pstat.close();
             conn.close();
 
-            if (rowsAffected > 0) {
-                showAlert(Alert.AlertType.INFORMATION, "Sukses", "Data produk berhasil diperbarui!");
+            if (rows > 0) {
+                showAlert(Alert.AlertType.INFORMATION, "Sukses", "Produk berhasil diperbarui!");
             } else {
-                showAlert(Alert.AlertType.ERROR, "Gagal", "Data produk tidak ditemukan.");
+                showAlert(Alert.AlertType.ERROR, "Gagal", "Data tidak ditemukan.");
             }
 
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Error Input", "Harga dan stok harus berupa angka.");
+            showAlert(Alert.AlertType.ERROR, "Format Salah", "Harga dan stok harus angka.");
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
         }

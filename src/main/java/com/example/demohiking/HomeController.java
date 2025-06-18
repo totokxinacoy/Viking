@@ -127,7 +127,7 @@ public class HomeController implements Initializable {
         try (
                 Connection conn = connection.getConnection();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT ID_Produk, Nama_Produk FROM produk")
+                ResultSet rs = stmt.executeQuery("SELECT ID_Produk, Nama_Produk FROM produk WHERE status = 'Aktif'");
         ) {
             while (rs.next()) {
                 list.add(new Produk(

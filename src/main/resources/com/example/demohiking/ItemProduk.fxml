@@ -38,7 +38,7 @@
             <Insets left="240.0" />
          </HBox.margin>
       </Button>
-      <Button fx:id="btnDelete" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" stylesheets="@style.css" textFill="#0d2857">
+      <Button fx:id="btnDelete" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleDeleteButtonClick" stylesheets="@style.css" textFill="#0d2857">
          <graphic>
             <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
