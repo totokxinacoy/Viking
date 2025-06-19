@@ -1,5 +1,6 @@
 package com.example.demohiking;
 
+import com.example.demohiking.ADT.Customer;
 import com.example.demohiking.Connection.DBConnect;
 import com.example.demohiking.ADT.Produk;
 import javafx.application.Platform;
@@ -30,6 +31,9 @@ import java.util.ResourceBundle;
 public class HomeController implements Initializable {
     @FXML
     private ImageView imgProduk;
+
+    @FXML
+    private ImageView imgCustomer;
 
     private File selectedImageFile;
 
@@ -95,7 +99,21 @@ public class HomeController implements Initializable {
     @FXML
     private TextArea txtDeskripsi;
 
-    // PRODUK CRUD
+    //CUSTOMER ITEMS
+    @FXML
+    private TextField txtIDCustomer;
+    @FXML
+    private TextField txtNamaCustomer;
+    @FXML
+    private ComboBox<String> cmbJenisKelamin;
+    @FXML
+    private TextField txtNoTelephone;
+    @FXML
+    private TextField txtEmail;
+    @FXML
+    private TextArea txtAlamat;
+
+    /* --- PRODUK METHOD --- */
     private String generateProdukID() {
         String id = "PRD001";
         String query = "SELECT MAX(ID_Produk) as max_id FROM Produk";
@@ -189,6 +207,100 @@ public class HomeController implements Initializable {
         txtStock.setText(String.valueOf(produk.getStok()));
     }
 
+
+    /* --- CUSTOMER METHOD --- */
+    private String generateCustomerID() {
+        String id = "CST001";
+        String query = "SELECT MAX(ID_Customer) as max_id FROM Customer";
+
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                String maxID = rs.getString("max_id");
+
+                // Validasi agar tidak error saat null atau format tidak sesuai
+                if (maxID != null && maxID.length() >= 4) {
+                    String numberPart = maxID.substring(3);
+                    if (!numberPart.isEmpty() && numberPart.matches("\\d+")) {
+                        int nextID = Integer.parseInt(numberPart) + 1;
+                        id = String.format("CST%03d", nextID);
+                    }
+                }
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
+    public List<Customer> getDataCustomer() {
+        List<Customer> list = new ArrayList<>();
+        DBConnect connection = new DBConnect();
+
+        try (
+                Connection conn = connection.getConnection();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT ID_Customer, Nama_Customer FROM Customer WHERE status = 'Aktif'");
+        ) {
+            while (rs.next()) {
+                list.add(new Customer(
+                        rs.getString("ID_Customer"),
+                        rs.getString("Nama_Customer")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    private void loadCustomerItems() {
+        pnItemsCustomer.getChildren().clear();
+        List<Customer> dataCustomer = getDataCustomer();
+
+        for (int i = 0; i < dataCustomer.size(); i++) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemCustomer.fxml"));
+                Node node = loader.load();
+
+                ItemCustomerController controller = loader.getController();
+                controller.setData(dataCustomer.get(i));
+                controller.setHomeController(this); // <-- penting!
+
+                final int j = i;
+                node.setOnMouseEntered(event -> {
+                    node.setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                node.setOnMouseExited(event -> {
+                    node.setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+
+                pnItemsCustomer.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setDetailCustomer(Customer customer) {
+        txtIDCustomer.setText(customer.getId());
+        txtNamaCustomer.setText(customer.getNama());
+        cmbJenisKelamin.setValue(customer.getJeniskelamin());
+        txtAlamat.setText(customer.getAlamat());
+        txtNoTelephone.setText(customer.getNomortelephone());
+        txtEmail.setText(customer.getEmail());
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Inisalisasi Component Produk
@@ -196,6 +308,12 @@ public class HomeController implements Initializable {
         loadProdukItems();
         txtIDProduk.setEditable(false);
         txtIDProduk.setText(generateProdukID());
+
+        // Inisalisasi Component Customer
+        cmbJenisKelamin.getItems().addAll("Laki-Laki", "Perempuan", "Boti");
+        loadCustomerItems();
+        txtIDCustomer.setEditable(false);
+        txtIDCustomer.setText(generateCustomerID());
 
         // Tunda pengecekan session sampai setelah UI tampil
         Platform.runLater(this::cekSession);
@@ -248,23 +366,7 @@ public class HomeController implements Initializable {
         }
     }
 
-    @FXML
-    private void handleChooseImage() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Pilih Gambar Produk");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg")
-        );
-
-        File file = fileChooser.showOpenDialog(null);
-        if (file != null) {
-            selectedImageFile = file;
-            Image image = new Image(file.toURI().toString());
-            imgProduk.setImage(image);
-        }
-    }
-
-
+    // GENERAL METHOD
     @FXML
     private void handleLogout() {
         Session.clearSession();
@@ -286,6 +388,33 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
+    /* --- PRODUK CRUD --- */
+    @FXML
+    private void handleChooseImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Pilih Gambar Produk");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            selectedImageFile = file;
+            Image image = new Image(file.toURI().toString());
+            imgProduk.setImage(image);
+        }
+    }
+
 
     @FXML
     protected void onAddProduk() {
@@ -357,14 +486,6 @@ public class HomeController implements Initializable {
         RefreshData();
     }
 
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
 
     public void RefreshData() {
         txtIDProduk.setText(generateProdukID());
@@ -375,5 +496,105 @@ public class HomeController implements Initializable {
         txtDeskripsi.setText("");
         imgProduk.setImage(null);
         loadProdukItems();
+    }
+
+    /* --- CUSTOMER CRUD --- */
+    @FXML
+    private void handleChooseImageCustomer() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Pilih Gambar Customer");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            selectedImageFile = file;
+            Image image = new Image(file.toURI().toString());
+            imgCustomer.setImage(image);
+        }
+    }
+
+
+    @FXML
+    protected void onAddCustomer() {
+        String idCustomer = txtIDCustomer.getText().trim();
+        String nama = txtNamaCustomer.getText().trim();
+        String jenisKelamin = cmbJenisKelamin.getValue();
+        String noTelp = txtNoTelephone.getText().trim();
+        String email = txtEmail.getText().trim();
+        String alamat = txtAlamat.getText().trim();
+        String status = "Aktif";
+
+        if (idCustomer.isEmpty() || nama.isEmpty() || jenisKelamin == null || jenisKelamin.isEmpty()
+                || noTelp.isEmpty() || email.isEmpty() || alamat.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validasi Input", "Semua field harus diisi!");
+            return;
+        }
+
+        // Validasi gambar wajib
+        if (selectedImageFile == null) {
+            showAlert(Alert.AlertType.WARNING, "Validasi Gambar", "Silakan pilih foto customer terlebih dahulu.");
+            return;
+        }
+
+        // Validasi format nomor telepon
+        if (!noTelp.matches("\\d{10,15}")) {
+            showAlert(Alert.AlertType.WARNING, "Validasi Nomor", "Nomor telepon harus terdiri dari 10–15 digit angka.");
+            return;
+        }
+
+// Validasi format email sederhana
+        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
+            showAlert(Alert.AlertType.WARNING, "Validasi Email", "Format email tidak valid (contoh: user@example.com).");
+            return;
+        }
+
+        String query = "INSERT INTO Customer VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            PreparedStatement pstat = conn.prepareStatement(query);
+
+            pstat.setString(1, idCustomer);
+            pstat.setString(2, nama);
+            pstat.setString(3, jenisKelamin);
+            pstat.setString(4, noTelp);
+            pstat.setString(5, email);
+            pstat.setString(6, alamat);
+            pstat.setString(7, status);
+
+            InputStream fotoStream = new FileInputStream(selectedImageFile);
+            pstat.setBinaryStream(8, fotoStream, (int) selectedImageFile.length());
+
+            pstat.executeUpdate();
+            pstat.close();
+            conn.close();
+
+            RefreshDataCustomer();
+            JOptionPane.showMessageDialog(null, "Data customer berhasil ditambahkan!");
+        } catch (SQLException ex) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", ex.getMessage());
+        } catch (FileNotFoundException e) {
+            showAlert(Alert.AlertType.ERROR, "File Foto Tidak Ditemukan", e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void onClearCustomer() {
+        RefreshDataCustomer();
+    }
+
+
+    public void RefreshDataCustomer() {
+        txtIDCustomer.setText(generateCustomerID());
+        txtNamaCustomer.setText("");
+        cmbJenisKelamin.setValue("");
+        txtNoTelephone.setText("");
+        txtEmail.setText("");
+        txtAlamat.setText("");
+        imgProduk.setImage(null);
+        loadCustomerItems();
     }
 }
