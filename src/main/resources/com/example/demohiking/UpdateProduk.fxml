@@ -1,18 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.demohiking.UpdateProdukController" spacing="10" alignment="CENTER">
-    <TextField fx:id="txtNama" promptText="Nama Produk" />
-    <ComboBox fx:id="cmbKategori" promptText="Kategori" />
-    <TextField fx:id="txtHarga" promptText="Harga" />
-    <TextField fx:id="txtStock" promptText="Stok" />
-    <TextArea fx:id="txtDeskripsi" promptText="Deskripsi" />
-    <Button text="Simpan Perubahan" onAction="#handleSimpan" />
-</VBox>
-
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="739.0" style="-fx-background-color: #0D2857; -fx-background-radius: 2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.UpdateProdukController">
+   <children>
+      <VBox prefHeight="593.0" prefWidth="739.0" style="-fx-background-color: #0D2857; -fx-background-radius: 10;">
+         <children>
+            <HBox alignment="CENTER" prefHeight="91.0" prefWidth="677.0" style="-fx-background-color: #0D2857; -fx-background-radius: 10;">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="UPDATE PRODUK" textFill="WHITE">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="36.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="468.0" prefWidth="701.0">
+               <children>
+                  <VBox prefHeight="468.0" prefWidth="490.0">
+                     <children>
+                        <Label text="NAMA" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="txtNama" prefHeight="39.0" prefWidth="309.0" promptText="Masukkan Nama">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <DropShadow offsetX="4.0" offsetY="4.0" />
+                           </effect>
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label text="KATEGORI" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="cmbKategori" prefHeight="39.0" prefWidth="451.0" promptText="Pilih Kategori" style="-fx-background-color: #ffffff;">
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <Label text="HARGA" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="txtHarga" prefHeight="39.0" prefWidth="309.0" promptText="Masukkan Harga">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <DropShadow offsetX="4.0" offsetY="4.0" />
+                           </effect>
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label text="STOK" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="txtStock" prefHeight="39.0" prefWidth="277.0" promptText="Masukkan Stok">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <effect>
+                              <DropShadow offsetX="4.0" offsetY="4.0" />
+                           </effect>
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label text="DESKRIPSI" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextArea fx:id="txtDeskripsi" prefHeight="129.0" prefWidth="448.0" promptText="Masukkan Deskripsi">
+                           <effect>
+                              <DropShadow offsetX="4.0" offsetY="4.0" />
+                           </effect>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </VBox.margin>
+                        </TextArea>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="389.0" prefWidth="253.0">
+                     <children>
+                        <Pane prefHeight="191.0" prefWidth="174.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-color: #577bc1; -fx-border-radius: 7; -fx-border-width: 5;">
+                           <children>
+                              <ImageView fx:id="imgProduk" fitHeight="175.0" fitWidth="175.0" layoutX="9.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                           <VBox.margin>
+                              <Insets left="30.0" right="30.0" top="10.0" />
+                           </VBox.margin>
+                        </Pane>
+                        <Button fx:id="btnUpload" mnemonicParsing="false" onAction="#handleChooseImage" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="UPLOAD">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="55.0" top="15.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btnUpdate" layoutX="65.0" layoutY="226.0" mnemonicParsing="false" onAction="#handleUpdate" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="SUBMIT">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="55.0" top="80.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btnCancel" layoutX="65.0" layoutY="290.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="CANCEL">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="55.0" top="15.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

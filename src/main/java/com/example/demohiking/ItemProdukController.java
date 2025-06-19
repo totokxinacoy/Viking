@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -57,8 +58,10 @@ public class ItemProdukController {
 
             UpdateProdukController controller = loader.getController();
             controller.setProduk(produk);
+            controller.setHomeController(homeController);
 
             Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.setTitle("Update Produk");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
