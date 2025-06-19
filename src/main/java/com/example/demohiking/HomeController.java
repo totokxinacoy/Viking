@@ -38,6 +38,13 @@ public class HomeController implements Initializable {
     private File selectedImageFile;
 
     @FXML
+    private RadioButton rdLaki;
+    @FXML
+    private RadioButton rdPerempuan;
+    @FXML
+    private ToggleGroup genderGroup;
+
+    @FXML
     private VBox pnItemsProduk = null;
 
     @FXML
@@ -310,10 +317,12 @@ public class HomeController implements Initializable {
         txtIDProduk.setText(generateProdukID());
 
         // Inisalisasi Component Customer
-        cmbJenisKelamin.getItems().addAll("Laki-Laki", "Perempuan", "Boti");
         loadCustomerItems();
         txtIDCustomer.setEditable(false);
         txtIDCustomer.setText(generateCustomerID());
+        genderGroup = new ToggleGroup();
+        rdLaki.setToggleGroup(genderGroup);
+        rdPerempuan.setToggleGroup(genderGroup);
 
         // Tunda pengecekan session sampai setelah UI tampil
         Platform.runLater(this::cekSession);
@@ -520,36 +529,45 @@ public class HomeController implements Initializable {
     protected void onAddCustomer() {
         String idCustomer = txtIDCustomer.getText().trim();
         String nama = txtNamaCustomer.getText().trim();
-        String jenisKelamin = cmbJenisKelamin.getValue();
         String noTelp = txtNoTelephone.getText().trim();
         String email = txtEmail.getText().trim();
         String alamat = txtAlamat.getText().trim();
         String status = "Aktif";
 
-        if (idCustomer.isEmpty() || nama.isEmpty() || jenisKelamin == null || jenisKelamin.isEmpty()
+        // Validasi pilihan jenis kelamin dari radio button
+        String jenisKelamin = "";
+        if (rdLaki.isSelected()) {
+            jenisKelamin = "Laki-laki";
+        } else if (rdPerempuan.isSelected()) {
+            jenisKelamin = "Perempuan";
+        }
+
+        // Validasi input kosong
+        if (idCustomer.isEmpty() || nama.isEmpty() || jenisKelamin.isEmpty()
                 || noTelp.isEmpty() || email.isEmpty() || alamat.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Validasi Input", "Semua field harus diisi!");
             return;
         }
 
-        // Validasi gambar wajib
+        // Validasi gambar
         if (selectedImageFile == null) {
             showAlert(Alert.AlertType.WARNING, "Validasi Gambar", "Silakan pilih foto customer terlebih dahulu.");
             return;
         }
 
-        // Validasi format nomor telepon
+        // Validasi nomor telepon
         if (!noTelp.matches("\\d{10,15}")) {
             showAlert(Alert.AlertType.WARNING, "Validasi Nomor", "Nomor telepon harus terdiri dari 10–15 digit angka.");
             return;
         }
 
-// Validasi format email sederhana
+        // Validasi email
         if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
             showAlert(Alert.AlertType.WARNING, "Validasi Email", "Format email tidak valid (contoh: user@example.com).");
             return;
         }
 
+        // Simpan ke database
         String query = "INSERT INTO Customer VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
@@ -574,6 +592,7 @@ public class HomeController implements Initializable {
 
             RefreshDataCustomer();
             JOptionPane.showMessageDialog(null, "Data customer berhasil ditambahkan!");
+
         } catch (SQLException ex) {
             showAlert(Alert.AlertType.ERROR, "Database Error", ex.getMessage());
         } catch (FileNotFoundException e) {
