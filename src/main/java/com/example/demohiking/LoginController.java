@@ -85,11 +85,11 @@ public class LoginController implements Initializable {
 
 
 
+    @FXML
     private void handleCancel() {
-        txtUsername.clear();
-        txtPassword.clear();
+        Stage stage = (Stage) txtUsername.getScene().getWindow();
+        stage.close();
     }
-
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
