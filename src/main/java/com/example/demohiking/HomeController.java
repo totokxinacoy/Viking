@@ -94,6 +94,10 @@ public class HomeController implements Initializable {
 
     //PRODUK ITEMS
     @FXML
+    private Button btnSearchProduk;
+    @FXML
+    private TextField txtSearchProduk;
+    @FXML
     private TextField txtIDProduk;
     @FXML
     private TextField txtNama;
@@ -107,6 +111,10 @@ public class HomeController implements Initializable {
     private TextArea txtDeskripsi;
 
     //CUSTOMER ITEMS
+    @FXML
+    private Button btnSearchCustomer;
+    @FXML
+    private TextField txtSearchCustomer;
     @FXML
     private TextField txtIDCustomer;
     @FXML
@@ -176,10 +184,13 @@ public class HomeController implements Initializable {
         return list;
     }
 
-
     private void loadProdukItems() {
-        pnItemsProduk.getChildren().clear();
         List<Produk> dataProduk = getDataProduk();
+        loadProdukItems(dataProduk);
+    }
+
+    private void loadProdukItems(List<Produk> dataProduk) {
+        pnItemsProduk.getChildren().clear();
 
         for (int i = 0; i < dataProduk.size(); i++) {
             try {
@@ -272,8 +283,12 @@ public class HomeController implements Initializable {
     }
 
     private void loadCustomerItems() {
-        pnItemsCustomer.getChildren().clear();
         List<Customer> dataCustomer = getDataCustomer();
+        loadCustomerItems(dataCustomer);
+    }
+
+    private void loadCustomerItems(List<Customer> dataCustomer) {
+        pnItemsCustomer.getChildren().clear();
 
         for (int i = 0; i < dataCustomer.size(); i++) {
             try {
@@ -302,7 +317,14 @@ public class HomeController implements Initializable {
     public void setDetailCustomer(Customer customer) {
         txtIDCustomer.setText(customer.getId());
         txtNamaCustomer.setText(customer.getNama());
-        cmbJenisKelamin.setValue(customer.getJeniskelamin());
+
+        // Pilih radio button berdasarkan jenis kelamin
+        if ("Laki-laki".equalsIgnoreCase(customer.getJeniskelamin())) {
+            rdLaki.setSelected(true);
+        } else if ("Perempuan".equalsIgnoreCase(customer.getJeniskelamin())) {
+            rdPerempuan.setSelected(true);
+        }
+
         txtAlamat.setText(customer.getAlamat());
         txtNoTelephone.setText(customer.getNomortelephone());
         txtEmail.setText(customer.getEmail());
@@ -323,6 +345,11 @@ public class HomeController implements Initializable {
         genderGroup = new ToggleGroup();
         rdLaki.setToggleGroup(genderGroup);
         rdPerempuan.setToggleGroup(genderGroup);
+        txtSearchCustomer.textProperty().addListener((observable, oldValue, newValue) -> {
+            btnSearchCustomer.setDisable(newValue.trim().isEmpty());
+        });
+        btnSearchCustomer.setDisable(true);
+
 
         // Tunda pengecekan session sampai setelah UI tampil
         Platform.runLater(this::cekSession);
@@ -495,6 +522,48 @@ public class HomeController implements Initializable {
         RefreshData();
     }
 
+    @FXML
+    private void handleSearchProduk(ActionEvent event) {
+        String keyword = txtSearchProduk.getText().trim();
+
+        String query = "SELECT * FROM Produk WHERE (ID_Produk = ? OR LOWER(Nama_Produk) LIKE ?) AND status = 'Aktif'";
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, keyword);
+            pstmt.setString(2, "%" + keyword.toLowerCase() + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+            List<Produk> foundList = new ArrayList<>();
+
+            while (rs.next()) {
+                Produk produk = new Produk(
+                        rs.getString("ID_Produk"),
+                        rs.getString("Nama_Produk")
+                );
+                foundList.add(produk);
+            }
+
+            if (!foundList.isEmpty()) {
+                setDetailProduk(foundList.get(0)); // tampilkan detail pertama
+                loadProdukItems(foundList);        // tampilkan hasil pencarian
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Pencarian Produk");
+                alert.setHeaderText(null);
+                alert.setContentText("Produk tidak ditemukan.");
+                alert.showAndWait();
+                txtSearchProduk.clear();
+            }
+
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void RefreshData() {
         txtIDProduk.setText(generateProdukID());
@@ -605,11 +674,54 @@ public class HomeController implements Initializable {
         RefreshDataCustomer();
     }
 
+    @FXML
+    private void handleSearchCustomer(ActionEvent event) {
+        String keyword = txtSearchCustomer.getText().trim();
+
+        String query = "SELECT * FROM Customer WHERE (ID_Customer = ? OR LOWER(Nama_Customer) LIKE ?) AND status = 'Aktif'";
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, keyword);
+            pstmt.setString(2, "%" + keyword.toLowerCase() + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+            List<Customer> foundList = new ArrayList<>();
+
+            while (rs.next()) {
+                Customer customer = new Customer(
+                        rs.getString("ID_Customer"),
+                        rs.getString("Nama_Customer")
+                );
+                foundList.add(customer);
+            }
+
+            if (!foundList.isEmpty()) {
+                setDetailCustomer(foundList.get(0)); // tampilkan detail pertama
+                loadCustomerItems(foundList);        // tampilkan hasil pencarian
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Pencarian Customer");
+                alert.setHeaderText(null);
+                alert.setContentText("Customer tidak ditemukan.");
+                alert.showAndWait();
+                txtSearchCustomer.clear();
+            }
+
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void RefreshDataCustomer() {
         txtIDCustomer.setText(generateCustomerID());
         txtNamaCustomer.setText("");
-        cmbJenisKelamin.setValue("");
+        genderGroup.selectToggle(null);
         txtNoTelephone.setText("");
         txtEmail.setText("");
         txtAlamat.setText("");

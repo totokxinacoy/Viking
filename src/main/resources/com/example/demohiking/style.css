@@ -11,10 +11,21 @@
 -fx-background-color : #1620A1;
 }
 
+.button-search {
+    -fx-background-color: #FFFFFF;
+}
+
+.button-search:hover{
+    -fx-background-color : #D4EBF8;
+}
+.button-search:pressed
+{
+    -fx-background-color : #1620A1;
+}
+
 .scroll-pane-color {
     -fx-background-color: #D4EBF8;
 }
-
 
 .scroll-bar:horizontal, .scroll-bar:vertical{
     -fx-background-color:transparent;
