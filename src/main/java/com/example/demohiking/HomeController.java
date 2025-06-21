@@ -337,6 +337,10 @@ public class HomeController implements Initializable {
         loadProdukItems();
         txtIDProduk.setEditable(false);
         txtIDProduk.setText(generateProdukID());
+        txtSearchProduk.textProperty().addListener((observable, oldValue, newValue) -> {
+            btnSearchProduk.setDisable(newValue.trim().isEmpty());
+        });
+        btnSearchProduk.setDisable(true);
 
         // Inisalisasi Component Customer
         loadCustomerItems();
