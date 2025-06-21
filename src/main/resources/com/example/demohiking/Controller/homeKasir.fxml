@@ -23,7 +23,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.HomeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.HomeController">
     <children>
         <StackPane layoutX="251.0" prefHeight="1080.0" prefWidth="1670.0" style="-fx-background-color: #02030A;">
             <children>
@@ -80,7 +80,7 @@
                   </Pane>
                   <ImageView fitHeight="32.0" fitWidth="25.0" layoutX="1163.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/search.png" />
+                        <Image url="@../images/search.png" />
                      </image>
                   </ImageView>
                   <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
@@ -236,7 +236,7 @@
                      <children>
                         <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/tent.png" />
+                              <Image url="@../images/tent.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="40.0" />
@@ -252,7 +252,7 @@
                         </Label>
                         <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/home-icon-silhouette.png" />
+                              <Image url="@../images/home-icon-silhouette.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="1320.0" />
@@ -315,7 +315,7 @@
                   </Pane>
                   <ImageView fitHeight="32.0" fitWidth="25.0" layoutX="1163.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/search.png" />
+                        <Image url="@../images/search.png" />
                      </image>
                   </ImageView>
                   <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
@@ -471,7 +471,7 @@
                      <children>
                         <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/tent.png" />
+                              <Image url="@../images/tent.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="40.0" />
@@ -487,7 +487,7 @@
                         </Label>
                         <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/home-icon-silhouette.png" />
+                              <Image url="@../images/home-icon-silhouette.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="1320.0" />
@@ -550,7 +550,7 @@
                   </Pane>
                   <ImageView fitHeight="32.0" fitWidth="25.0" layoutX="1163.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/search.png" />
+                        <Image url="@../images/search.png" />
                      </image>
                   </ImageView>
                   <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
@@ -703,7 +703,7 @@
                      <children>
                         <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/tent.png" />
+                              <Image url="@../images/tent.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="40.0" />
@@ -719,7 +719,7 @@
                         </Label>
                         <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/home-icon-silhouette.png" />
+                              <Image url="@../images/home-icon-silhouette.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="1320.0" />
@@ -751,7 +751,7 @@
                      <graphic>
                         <ImageView fitHeight="32.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/search.png" />
+                              <Image url="@../images/search.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -943,7 +943,7 @@
                      <children>
                         <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/user.png" />
+                              <Image url="@../images/user.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="40.0" />
@@ -959,7 +959,7 @@
                         </Label>
                         <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/home-icon-silhouette.png" />
+                              <Image url="@../images/home-icon-silhouette.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="1270.0" />
@@ -1170,7 +1170,7 @@
                      <children>
                         <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/tent.png" />
+                              <Image url="@../images/tent.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="40.0" />
@@ -1186,7 +1186,7 @@
                         </Label>
                         <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/home-icon-silhouette.png" />
+                              <Image url="@../images/home-icon-silhouette.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="1320.0" />
@@ -1198,7 +1198,7 @@
                      <graphic>
                         <ImageView fitHeight="32.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/search.png" />
+                              <Image url="@../images/search.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -1211,7 +1211,7 @@
             <children>
                 <ImageView fitHeight="225.0" fitWidth="211.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@images/Logo.png" />
+                        <Image url="@../images/Logo.png" />
                     </image>
                     <VBox.margin>
                         <Insets bottom="10.0" top="50.0" />
@@ -1228,7 +1228,7 @@
                     <graphic>
                         <ImageView fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@images/tent.png" />
+                                <Image url="@../images/tent.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -1258,7 +1258,7 @@
                <graphic>
                   <ImageView fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/box.png" />
+                        <Image url="@../images/box.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -1279,7 +1279,7 @@
                <graphic>
                   <ImageView fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/punishment.png" />
+                        <Image url="@../images/punishment.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -1300,7 +1300,7 @@
                <graphic>
                   <ImageView fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/user.png" />
+                        <Image url="@../images/user.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -1321,7 +1321,7 @@
                <graphic>
                   <ImageView fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/transaction.png" />
+                        <Image url="@../images/transaction.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -1342,7 +1342,7 @@
                <graphic>
                   <ImageView fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/transaction.png" />
+                        <Image url="@../images/transaction.png" />
                      </image>
                   </ImageView>
                </graphic>

@@ -1,6 +1,7 @@
-package com.example.demohiking;
+package com.example.demohiking.Controller;
 
 import com.example.demohiking.Connection.DBConnect;
+import com.example.demohiking.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;

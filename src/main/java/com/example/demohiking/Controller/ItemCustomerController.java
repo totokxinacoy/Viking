@@ -1,7 +1,8 @@
-package com.example.demohiking;
+package com.example.demohiking.Controller;
 
+
+import com.example.demohiking.ADT.Customer;
 import com.example.demohiking.Connection.DBConnect;
-import com.example.demohiking.ADT.Produk;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,30 +18,28 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+public class ItemCustomerController {
+    @FXML private Label lblNama;
+    @FXML private Label lblHarga;
+    @FXML private Button btnUpdate;
+    @FXML private Button btnDelete;
 
-public class ItemProdukController {
-        @FXML private Label lblNama;
-        @FXML private Label lblHarga;
-        @FXML private Button btnUpdate;
-        @FXML private Button btnDelete;
-
-        private Produk produk;
-        private HomeController homeController;
+    private Customer customer;
+    private HomeController homeController;
 
     public void setHomeController(HomeController controller) {
         this.homeController = controller;
     }
 
-        public void setData(Produk produk) {
-            this.produk = produk;
-            lblNama.setText(produk.getId());
-            lblHarga.setText(produk.getNama());
-        }
-
+    public void setData(Customer customer) {
+        this.customer = customer;
+        lblNama.setText(customer.getId());
+        lblHarga.setText(customer.getNama());
+    }
 
     @FXML
     private void handleUpdateButtonClick() {
-        if (UpdateProdukController.isWindowOpen()) {
+        if (UpdateCustomerController.isWindowOpen()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Info");
             alert.setHeaderText(null);
@@ -48,28 +47,28 @@ public class ItemProdukController {
             alert.showAndWait();
 
             // Setelah user menekan OK, tampilkan jendela yang sedang dibuka
-            UpdateProdukController.bringToFront();
+            UpdateCustomerController.bringToFront();
             return;
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("UpdateProduk.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("UpdateCustomer.fxml"));
             Parent root = loader.load();
 
-            UpdateProdukController controller = loader.getController();
-            controller.setProduk(produk);
+            UpdateCustomerController controller = loader.getController();
+            controller.setCustomer(customer);
             controller.setHomeController(homeController);
 
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
-            stage.setTitle("Update Produk");
+            stage.setTitle("Update Customer");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
 
             // Simpan referensi stage
-            UpdateProdukController.setWindow(stage);
+            UpdateCustomerController.setWindow(stage);
 
-            stage.setOnCloseRequest(event -> UpdateProdukController.clearWindow());
+            stage.setOnCloseRequest(event -> UpdateCustomerController.clearWindow());
 
             stage.show();
         } catch (IOException e) {
@@ -79,15 +78,15 @@ public class ItemProdukController {
 
     @FXML
     private void handleDeleteButtonClick() {
-        if (produk == null) {
-            showAlert(Alert.AlertType.ERROR, "Kesalahan", "Produk tidak ditemukan.");
+        if (customer == null) {
+            showAlert(Alert.AlertType.ERROR, "Kesalahan", "Customer tidak ditemukan.");
             return;
         }
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Konfirmasi Hapus");
         confirm.setHeaderText(null);
-        confirm.setContentText("Apakah Anda yakin ingin menghapus produk ini?");
+        confirm.setContentText("Apakah Anda yakin ingin menghapus Customer ini?");
 
         confirm.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
@@ -95,23 +94,23 @@ public class ItemProdukController {
                     DBConnect db = new DBConnect();
                     Connection conn = db.getConnection();
 
-                    String query = "UPDATE Produk SET status = 'Non Aktif' WHERE ID_Produk = ?";
+                    String query = "UPDATE Customer SET status = 'Non Aktif' WHERE ID_Customer = ?";
                     PreparedStatement pstat = conn.prepareStatement(query);
-                    pstat.setString(1, produk.getId());
+                    pstat.setString(1, customer.getId());
 
                     int rows = pstat.executeUpdate();
                     pstat.close();
                     conn.close();
 
                     if (rows > 0) {
-                        showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Produk telah dihapus.");
+                        showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Customer telah dihapus.");
 
                         // Langsung panggil refresh tanpa menunggu konfirmasi tambahan
                         if (homeController != null) {
-                            homeController.RefreshData();
+                            homeController.RefreshDataCustomer();
                         }
                     } else {
-                        showAlert(Alert.AlertType.WARNING, "Gagal", "Produk tidak ditemukan di database.");
+                        showAlert(Alert.AlertType.WARNING, "Gagal", "Customer tidak ditemukan di database.");
                     }
 
                 } catch (SQLException e) {
@@ -128,13 +127,11 @@ public class ItemProdukController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-        @FXML
-        private void handleSelectItem() {
-            if (homeController != null && produk != null) {
-                homeController.setDetailProduk(produk); // Kirim data ke form
-            }
+    @FXML
+    private void handleSelectItem() {
+        if (homeController != null && customer != null) {
+            homeController.setDetailCustomer(customer); // Kirim data ke form
         }
-
     }
 
-
+}

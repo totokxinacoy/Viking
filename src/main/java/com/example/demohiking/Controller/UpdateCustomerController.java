@@ -1,7 +1,7 @@
-package com.example.demohiking;
+package com.example.demohiking.Controller;
 
+import com.example.demohiking.ADT.Customer;
 import com.example.demohiking.Connection.DBConnect;
-import com.example.demohiking.ADT.Produk;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -21,19 +21,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UpdateProdukController {
+public class UpdateCustomerController {
     @FXML
-    private ImageView imgProduk;
+    private ImageView imgCustomer;
 
     private File selectedImageFile;
     @FXML
-    private TextField txtNama, txtKategori, txtHarga, txtStock;
+    private TextField txtNama, txtNoTelephone, txtEmail;
     @FXML
-    private ComboBox<String> cmbKategori;
+    private ComboBox<String> cmbJenisKelamin;
     @FXML
-    private TextArea txtDeskripsi;
+    private TextArea txtAlamat;
 
-    private Produk produk;
+    private Customer customer;
 
     // Static stage untuk kontrol satu jendela saja
     private static Stage updateStage = null;
@@ -57,9 +57,7 @@ public class UpdateProdukController {
         }
     }
 
-    private String initialNama, initialKategori, initialDeskripsi;
-    private double initialHarga;
-    private int initialStok;
+    private String initialNama, initialJenisKelamin, initialAlamat, initialEmail, initialNoTelephone;
     private Image initialImage;
 
     private HomeController homeController;
@@ -68,47 +66,48 @@ public class UpdateProdukController {
         this.homeController = controller;
     }
 
-    public void setProduk(Produk produk) {
-        this.produk = produk;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
 
         try {
             DBConnect db = new DBConnect();
             Connection conn = db.getConnection();
 
-            String query = "SELECT * FROM Produk WHERE ID_Produk = ?";
+            String query = "SELECT * FROM Customer WHERE ID_Customer = ?";
             PreparedStatement pstat = conn.prepareStatement(query);
-            pstat.setString(1, produk.getId());
+            pstat.setString(1, customer.getId());
 
             ResultSet rs = pstat.executeQuery();
             if (rs.next()) {
-                String nama = rs.getString("Nama_Produk");
-                String kategori = rs.getString("Kategori");
-                String deskripsi = rs.getString("Deskripsi");
-                double harga = rs.getDouble("Harga");
-                int stok = rs.getInt("Stok");
+                String nama = rs.getString("Nama_Customer");
+                String jenisKelamin = rs.getString("Jenis_Kelamin");
+                String  telpon = rs.getString("Nomor_Telephone");
+                String email = rs.getString("Email");
+                String alamat = rs.getString("Alamat");
+
 
                 txtNama.setText(nama);
-                cmbKategori.getItems().setAll("Tas", "Sepatu", "Aksessoris", "Pakaian", "Tenda");
-                cmbKategori.setValue(kategori);
-                txtDeskripsi.setText(deskripsi);
-                txtHarga.setText(String.valueOf(harga));
-                txtStock.setText(String.valueOf(stok));
+                cmbJenisKelamin.getItems().setAll("Laki-Laki", "Perempuan");
+                cmbJenisKelamin.setValue(jenisKelamin);
+                txtNoTelephone.setText(String.valueOf(telpon));
+                txtEmail.setText(email);
+                txtAlamat.setText(alamat);
 
                 InputStream is = rs.getBinaryStream("Image");
                 if (is != null) {
                     Image image = new Image(is);
-                    imgProduk.setImage(image);
+                    imgCustomer.setImage(image);
                 }
 
                 // Simpan data awal
                 initialNama = nama;
-                initialKategori = kategori;
-                initialDeskripsi = deskripsi;
-                initialHarga = harga;
-                initialStok = stok;
-                initialImage = imgProduk.getImage();
+                initialJenisKelamin = jenisKelamin;
+                initialNoTelephone = telpon;
+                initialEmail = email;
+                initialAlamat= alamat;
+                initialImage = imgCustomer.getImage();
             } else {
-                showAlert(Alert.AlertType.WARNING, "Tidak Ditemukan", "Produk tidak ditemukan.");
+                showAlert(Alert.AlertType.WARNING, "Tidak Ditemukan", "Customer tidak ditemukan.");
             }
 
             rs.close();
@@ -123,7 +122,7 @@ public class UpdateProdukController {
     @FXML
     private void handleChooseImage() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Pilih Gambar Produk");
+        fileChooser.setTitle("Pilih Gambar Customer");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg")
         );
@@ -132,33 +131,32 @@ public class UpdateProdukController {
         if (file != null) {
             selectedImageFile = file;
             Image image = new Image(file.toURI().toString());
-            imgProduk.setImage(image);
+            imgCustomer.setImage(image);
         }
     }
 
     @FXML
     private void handleUpdate() {
         String nama = txtNama.getText().trim();
-        String kategori = cmbKategori.getValue();
-        String deskripsi = txtDeskripsi.getText().trim();
-        String hargaStr = txtHarga.getText().trim();
-        String stokStr = txtStock.getText().trim();
+        String jenisKelamin = cmbJenisKelamin.getValue();
+        String telpon = txtNoTelephone.getText().trim();
+        String email = txtEmail.getText().trim();
+        String alamat = txtAlamat.getText().trim();
 
-        if (nama.isEmpty() || kategori.isEmpty() || deskripsi.isEmpty()
-                || hargaStr.isEmpty() || stokStr.isEmpty()) {
+        if (nama.isEmpty() || jenisKelamin.isEmpty() || telpon.isEmpty()
+                || email.isEmpty() || alamat.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Validasi", "Semua field wajib diisi.");
             return;
         }
 
         try {
-            double harga = Double.parseDouble(hargaStr);
-            int stok = Integer.parseInt(stokStr);
+
 
             boolean adaPerubahan = !nama.equals(initialNama)
-                    || !kategori.equals(initialKategori)
-                    || !deskripsi.equals(initialDeskripsi)
-                    || harga != initialHarga
-                    || stok != initialStok
+                    || !jenisKelamin.equals(initialJenisKelamin)
+                    || !telpon.equals(initialNoTelephone)
+                    || !email.equals(initialEmail)
+                    || !alamat.equals(initialAlamat)
                     || selectedImageFile != null;
 
             if (!adaPerubahan) {
@@ -173,25 +171,25 @@ public class UpdateProdukController {
             PreparedStatement pstat;
 
             if (selectedImageFile != null) {
-                query = "UPDATE Produk SET Nama_Produk=?, Kategori=?, Deskripsi=?, Harga=?, Stok=?, Image=? WHERE ID_Produk=?";
+                query = "UPDATE Customer SET Nama_Customer=?, Jenis_Kelamin=?, Nomor_Telephone=?, Email=?, Alamat=?, Image=? WHERE ID_Customer=?";
                 pstat = conn.prepareStatement(query);
                 pstat.setString(1, nama);
-                pstat.setString(2, kategori);
-                pstat.setString(3, deskripsi);
-                pstat.setDouble(4, harga);
-                pstat.setInt(5, stok);
+                pstat.setString(2, jenisKelamin);
+                pstat.setString(3, telpon);
+                pstat.setString(4, email);
+                pstat.setString(5, alamat);
                 InputStream imageStream = new FileInputStream(selectedImageFile);
                 pstat.setBinaryStream(6, imageStream, (int) selectedImageFile.length());
-                pstat.setString(7, produk.getId());
+                pstat.setString(7, customer.getId());
             } else {
-                query = "UPDATE Produk SET Nama_Produk=?, Kategori=?, Deskripsi=?, Harga=?, Stok=? WHERE ID_Produk=?";
+                query = "UPDATE Customer SET Nama_Customer=?, Jenis_Kelamin=?, Nomor_Telephone=?, Email=?, Alamat=? WHERE ID_Customer=?";
                 pstat = conn.prepareStatement(query);
                 pstat.setString(1, nama);
-                pstat.setString(2, kategori);
-                pstat.setString(3, deskripsi);
-                pstat.setDouble(4, harga);
-                pstat.setInt(5, stok);
-                pstat.setString(6, produk.getId());
+                pstat.setString(2, jenisKelamin);
+                pstat.setString(3, telpon);
+                pstat.setString(4, email);
+                pstat.setString(5, alamat);
+                pstat.setString(6, customer.getId());
             }
 
             int rows = pstat.executeUpdate();
@@ -199,10 +197,10 @@ public class UpdateProdukController {
             conn.close();
 
             if (rows > 0) {
-                showAlert(Alert.AlertType.INFORMATION, "Sukses", "Produk berhasil diperbarui!");
+                showAlert(Alert.AlertType.INFORMATION, "Sukses", "Customer berhasil diperbarui!");
 
                 if (homeController != null) {
-                    homeController.RefreshData();
+                    homeController.RefreshDataCustomer();
                 }
 
                 if (updateStage != null) {
@@ -213,8 +211,6 @@ public class UpdateProdukController {
                 showAlert(Alert.AlertType.ERROR, "Gagal", "Data tidak ditemukan.");
             }
 
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Format Salah", "Harga dan stok harus angka.");
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
         } catch (FileNotFoundException e) {
@@ -228,15 +224,6 @@ public class UpdateProdukController {
             updateStage.close();
             clearWindow();
         }
-    }
-
-    public void RefreshData() {
-        txtNama.setText("");
-        cmbKategori.setValue("");
-        txtHarga.setText("");
-        txtStock.setText("");
-        txtDeskripsi.setText("");
-        imgProduk.setImage(null);
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {

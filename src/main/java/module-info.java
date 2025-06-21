@@ -12,4 +12,6 @@ module com.example.demohiking {
     opens com.example.demohiking.ADT to javafx.fxml;
     exports com.example.demohiking.Connection;
     opens com.example.demohiking.Connection to javafx.fxml;
+    exports com.example.demohiking.Controller;
+    opens com.example.demohiking.Controller to javafx.fxml;
 }

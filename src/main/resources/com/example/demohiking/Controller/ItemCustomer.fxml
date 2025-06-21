@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="itemD" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1095.0" style="-fx-background-color: #0D2857; -fx-background-radius: 15; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.ItemCustomerController">
+<HBox fx:id="itemD" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1095.0" style="-fx-background-color: #0D2857; -fx-background-radius: 15; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.ItemCustomerController">
    <children>
       <Label fx:id="lblNama" prefHeight="22.0" prefWidth="129.0" text="ID Customer" textFill="WHITE">
          <HBox.margin>
@@ -31,7 +31,7 @@
          <graphic>
             <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/edit-button.png" />
+                  <Image url="@../images/edit-button.png" />
                </image>
             </ImageView>
          </graphic>
@@ -43,7 +43,7 @@
          <graphic>
             <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/trash.png" />
+                  <Image url="@../images/trash.png" />
                </image>
             </ImageView>
          </graphic>
