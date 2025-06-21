@@ -1,7 +1,7 @@
 package com.example.demohiking.Controller;
 
-import com.example.demohiking.Connection.DBConnect;
 import com.example.demohiking.ADT.Produk;
+import com.example.demohiking.Connection.DBConnect;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;

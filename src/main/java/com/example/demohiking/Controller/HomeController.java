@@ -1,8 +1,8 @@
 package com.example.demohiking.Controller;
 
 import com.example.demohiking.ADT.Customer;
-import com.example.demohiking.Connection.DBConnect;
 import com.example.demohiking.ADT.Produk;
+import com.example.demohiking.Connection.DBConnect;
 import com.example.demohiking.Session;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,8 +19,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.StageStyle;
 
 import javax.swing.*;
