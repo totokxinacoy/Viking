@@ -6,10 +6,10 @@ public class Denda {
     private String deskripsi;
     private double nominal;
 
-    public Denda(String id, String jenis, String deskripsi) {
+    public Denda(String id, String jenis) {
         this.id = id;
         this.jenis = jenis;
-        this.deskripsi = deskripsi;
+        this.deskripsi = null;
         this.nominal = 0;
     }
 

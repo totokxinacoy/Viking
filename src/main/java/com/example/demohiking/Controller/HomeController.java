@@ -1,6 +1,7 @@
 package com.example.demohiking.Controller;
 
 import com.example.demohiking.ADT.Customer;
+import com.example.demohiking.ADT.Denda;
 import com.example.demohiking.ADT.Produk;
 import com.example.demohiking.Connection.DBConnect;
 import com.example.demohiking.Session;
@@ -30,70 +31,55 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
+    // IMAGE ALL
     @FXML
     private ImageView imgProduk;
-
     @FXML
     private ImageView imgCustomer;
-
+    @FXML
+    private ImageView imgDenda;
+    private boolean isImageSelected = false;
     private File selectedImageFile;
 
-    @FXML
-    private RadioButton rdLaki;
-    @FXML
-    private RadioButton rdPerempuan;
-    @FXML
-    private ToggleGroup genderGroup;
-
+    // ITEM ALL
     @FXML
     private VBox pnItemsProduk = null;
-
     @FXML
     private VBox pnItemsDenda = null;
-
     @FXML
     private VBox pnItemsCustomer = null;
-
     @FXML
     private VBox pnItemsPaket = null;
-
     @FXML
     private VBox pnItemsTransaksi = null;
 
+    // BUTTON MENU ALL
     @FXML
     private Button btnProduk;
-
     @FXML
     private Button btnPaket;
-
     @FXML
     private Button btnDenda;
-
     @FXML
     private Button btnCustomer;
-
     @FXML
     private Button btnTransaksi;
-
     @FXML
     private Button btnLogout;
 
+    // PANEL ALL
     @FXML
     private Pane pnlProduk;
-
     @FXML
     private Pane pnlPaket;
-
     @FXML
     private Pane pnlDenda;
-
     @FXML
     private Pane pnlCustomer;
-
     @FXML
     private Pane pnlTransaksi;
 
-    //PRODUK ITEMS
+    // PRODUK ITEMS
     @FXML
     private Button btnSearchProduk;
     @FXML
@@ -111,7 +97,7 @@ public class HomeController implements Initializable {
     @FXML
     private TextArea txtDeskripsi;
 
-    //CUSTOMER ITEMS
+    // CUSTOMER ITEMS
     @FXML
     private Button btnSearchCustomer;
     @FXML
@@ -120,14 +106,36 @@ public class HomeController implements Initializable {
     private TextField txtIDCustomer;
     @FXML
     private TextField txtNamaCustomer;
-    @FXML
-    private ComboBox<String> cmbJenisKelamin;
+//    @FXML
+//    private ComboBox<String> cmbJenisKelamin;
     @FXML
     private TextField txtNoTelephone;
     @FXML
     private TextField txtEmail;
     @FXML
     private TextArea txtAlamat;
+    @FXML
+    private RadioButton rdLaki;
+    @FXML
+    private RadioButton rdPerempuan;
+    @FXML
+    private ToggleGroup genderGroup;
+
+    // DENDA ITEMS
+    @FXML
+    private Button btnSearchDenda;
+    @FXML
+    private TextField txtSearchDenda;
+    @FXML
+    private TextField txtIDDenda;
+    @FXML
+    private ComboBox<String> cmbJenisDenda;
+    @FXML
+    private TextArea txtDeskripsiDenda;
+    @FXML
+    private TextField txtNominal;
+
+
 
     /* --- PRODUK METHOD --- */
     private String generateProdukID() {
@@ -224,6 +232,102 @@ public class HomeController implements Initializable {
         txtDeskripsi.setText(produk.getDeskripsi());
         txtHarga.setText(String.valueOf((int) produk.getHarga()));
         txtStock.setText(String.valueOf(produk.getStok()));
+    }
+
+
+    /* --- DENDA METHOD --- */
+    private String generateDendaID() {
+        String id = "DND001";
+        String query = "SELECT MAX(ID_Denda) as max_id FROM Denda";
+
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                String maxID = rs.getString("max_id");
+
+                // Validasi agar tidak error saat null atau format tidak sesuai
+                if (maxID != null && maxID.length() >= 4) {
+                    String numberPart = maxID.substring(3);
+                    if (!numberPart.isEmpty() && numberPart.matches("\\d+")) {
+                        int nextID = Integer.parseInt(numberPart) + 1;
+                        id = String.format("DND%03d", nextID);
+                    }
+                }
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
+    public List<Denda> getDataDenda() {
+        List<Denda> list = new ArrayList<>();
+        DBConnect connection = new DBConnect();
+
+        try (
+                Connection conn = connection.getConnection();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT ID_Denda, Jenis_Denda FROM Denda WHERE status = 'Aktif'");
+        ) {
+            while (rs.next()) {
+                list.add(new Denda(
+                        rs.getString("ID_Denda"),
+                        rs.getString("Jenis_Denda")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    private void loadDendaItems() {
+        List<Denda> dataDenda = getDataDenda();
+        loadDendaItems(dataDenda);
+    }
+
+    private void loadDendaItems(List<Denda> dataDenda) {
+        pnItemsDenda.getChildren().clear();
+
+        for (int i = 0; i < dataDenda.size(); i++) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemDenda.fxml"));
+                Node node = loader.load();
+
+                ItemDendaController controller = loader.getController();
+                controller.setData(dataDenda.get(i));
+                controller.setHomeController(this);
+
+                final int j = i;
+                node.setOnMouseEntered(event -> {
+                    node.setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                node.setOnMouseExited(event -> {
+                    node.setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+
+                pnItemsDenda.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setDetailDenda(Denda denda) {
+        txtIDDenda.setText(denda.getId());
+        cmbJenisDenda.setValue(denda.getJenis());
+        txtDeskripsiDenda.setText(denda.getDeskripsi());
+        txtNominal.setText(String.valueOf((int) denda.getNominal()));
     }
 
 
@@ -355,6 +459,15 @@ public class HomeController implements Initializable {
         });
         btnSearchCustomer.setDisable(true);
 
+        // Inisialisasi ComboBox jenis denda
+        cmbJenisDenda.getItems().addAll("Kehilangan", "Kerusakan", "Terlambat");
+        loadDendaItems();
+        txtIDDenda.setEditable(false);
+        txtIDDenda.setText(generateDendaID());        btnSearchDenda.setDisable(true); // tombol nonaktif awalnya
+        txtSearchDenda.textProperty().addListener((observable, oldValue, newValue) -> {
+            btnSearchDenda.setDisable(newValue.trim().isEmpty());
+        });
+        txtSearchDenda.setDisable(false);
 
         // Tunda pengecekan session sampai setelah UI tampil
         Platform.runLater(this::cekSession);
@@ -442,6 +555,11 @@ public class HomeController implements Initializable {
     /* --- PRODUK CRUD --- */
     @FXML
     private void handleChooseImage() {
+        if (isImageSelected) {
+            showAlert(Alert.AlertType.INFORMATION, "Gambar Sudah Dipilih", "Gambar hanya bisa dipilih satu kali dalam sesi ini.");
+            return;
+        }
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Pilih Gambar Produk");
         fileChooser.getExtensionFilters().addAll(
@@ -453,6 +571,7 @@ public class HomeController implements Initializable {
             selectedImageFile = file;
             Image image = new Image(file.toURI().toString());
             imgProduk.setImage(image);
+            isImageSelected = true;
         }
     }
 
@@ -577,13 +696,21 @@ public class HomeController implements Initializable {
         txtHarga.setText("");
         txtStock.setText("");
         txtDeskripsi.setText("");
+        isImageSelected = false;
+        selectedImageFile = null;
         imgProduk.setImage(null);
         loadProdukItems();
     }
 
+
     /* --- CUSTOMER CRUD --- */
     @FXML
     private void handleChooseImageCustomer() {
+        if (isImageSelected) {
+            showAlert(Alert.AlertType.INFORMATION, "Gambar Sudah Dipilih", "Gambar hanya bisa dipilih satu kali dalam sesi ini.");
+            return;
+        }
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Pilih Gambar Customer");
         fileChooser.getExtensionFilters().addAll(
@@ -595,6 +722,7 @@ public class HomeController implements Initializable {
             selectedImageFile = file;
             Image image = new Image(file.toURI().toString());
             imgCustomer.setImage(image);
+            isImageSelected = true;
         }
     }
 
@@ -730,7 +858,151 @@ public class HomeController implements Initializable {
         txtNoTelephone.setText("");
         txtEmail.setText("");
         txtAlamat.setText("");
-        imgProduk.setImage(null);
+        isImageSelected = false;
+        selectedImageFile = null;
+        imgCustomer.setImage(null);
         loadCustomerItems();
+    }
+
+
+    /* --- DENDA CRUD --- */
+    @FXML
+    private void handleChooseImageDenda() {
+        if (isImageSelected) {
+            showAlert(Alert.AlertType.INFORMATION, "Gambar Sudah Dipilih", "Gambar hanya bisa dipilih satu kali dalam sesi ini.");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Pilih Gambar Denda");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            selectedImageFile = file;
+            Image image = new Image(file.toURI().toString());
+            imgDenda.setImage(image);
+            isImageSelected = true; // lock sampai form direset
+        }
+    }
+
+    @FXML
+    protected void onAddDenda() {
+        String idDenda = txtIDDenda.getText().trim();
+        String jenisDenda = cmbJenisDenda.getValue();
+        String deskripsi = txtDeskripsiDenda.getText().trim();
+        String nominalStr = txtNominal.getText().trim();
+
+        if (idDenda.isEmpty() || jenisDenda == null || deskripsi.isEmpty() || nominalStr.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validasi Input", "Semua field harus diisi!");
+            return;
+        }
+
+        if (selectedImageFile == null) {
+            showAlert(Alert.AlertType.WARNING, "Validasi Gambar", "Silakan pilih gambar terlebih dahulu.");
+            return;
+        }
+
+        double nominal;
+        try {
+            nominal = Double.parseDouble(nominalStr);
+            if (nominal < 0) {
+                showAlert(Alert.AlertType.WARNING, "Validasi Nominal", "Nominal tidak boleh negatif.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Validasi Nominal", "Nominal harus berupa angka.");
+            return;
+        }
+
+        String query = "INSERT INTO Denda (ID_Denda, Jenis_Denda, Deskripsi, Nominal, Image) VALUES (?, ?, ?, ?, ?)";
+
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            PreparedStatement pstat = conn.prepareStatement(query);
+
+            pstat.setString(1, idDenda);
+            pstat.setString(2, jenisDenda);
+            pstat.setString(3, deskripsi);
+            pstat.setDouble(4, nominal);
+
+            InputStream imgStream = new FileInputStream(selectedImageFile);
+            pstat.setBinaryStream(5, imgStream, (int) selectedImageFile.length());
+
+            pstat.executeUpdate();
+            pstat.close();
+            conn.close();
+
+            RefreshDataDenda();
+            JOptionPane.showMessageDialog(null, "Data denda berhasil ditambahkan!");
+
+        } catch (SQLException ex) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", ex.getMessage());
+        } catch (FileNotFoundException e) {
+            showAlert(Alert.AlertType.ERROR, "File Gambar Tidak Ditemukan", e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleSearchDenda(ActionEvent event) {
+        String keyword = txtSearchDenda.getText().trim().toLowerCase();
+
+        String query = "SELECT * FROM Denda WHERE LOWER(ID_Denda) = ? OR LOWER(Jenis_Denda) LIKE ?";
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, keyword);
+            pstmt.setString(2, "%" + keyword + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+            List<Denda> foundList = new ArrayList<>();
+
+            while (rs.next()) {
+                Denda denda = new Denda(
+                        rs.getString("ID_Denda"),
+                        rs.getString("Jenis_Denda")
+                );
+                foundList.add(denda);
+            }
+
+            if (!foundList.isEmpty()) {
+                setDetailDenda(foundList.get(0)); // tampilkan detail pertama
+                loadDendaItems(foundList);        // tampilkan hasil pencarian dalam list/tabel
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Pencarian Denda");
+                alert.setHeaderText(null);
+                alert.setContentText("Denda tidak ditemukan.");
+                alert.showAndWait();
+                txtSearchDenda.clear();
+            }
+
+            rs.close();
+            pstmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void onClearDenda() {
+        RefreshDataDenda();
+    }
+
+    public void RefreshDataDenda() {
+        txtIDDenda.setText(generateDendaID());
+        cmbJenisDenda.getSelectionModel().clearSelection();
+        txtDeskripsiDenda.clear();
+        txtNominal.clear();
+        isImageSelected = false;
+        imgDenda.setImage(null);
+        selectedImageFile = null;
+        loadDendaItems();
     }
 }

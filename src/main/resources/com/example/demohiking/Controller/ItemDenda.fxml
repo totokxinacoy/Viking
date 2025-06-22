@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox fx:id="itemD" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1095.0" style="-fx-background-color: #0D2857; -fx-background-radius: 15; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.ItemDendaController">
+   <children>
+      <Label fx:id="lblNama" prefHeight="22.0" prefWidth="129.0" text="ID Denda" textFill="WHITE">
+         <HBox.margin>
+            <Insets left="70.0" />
+         </HBox.margin>
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblHarga" prefHeight="22.0" prefWidth="486.0" text="Nama Denda" textFill="WHITE" wrapText="true">
+         <HBox.margin>
+            <Insets left="25.0" />
+         </HBox.margin>
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#handleUpdateButtonClick" stylesheets="@style.css" textFill="#0d2857">
+         <graphic>
+            <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/edit-button.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <HBox.margin>
+            <Insets left="240.0" />
+         </HBox.margin>
+      </Button>
+      <Button fx:id="btnDelete" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleDeleteButtonClick" stylesheets="@style.css" textFill="#0d2857">
+         <graphic>
+            <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/trash.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <HBox.margin>
+            <Insets left="30.0" />
+         </HBox.margin>
+      </Button>
+   </children>
+   <effect>
+      <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
+   </effect>
+</HBox>
