@@ -490,6 +490,8 @@ public class HomeController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            System.out.println("Login sebagai: " + Session.getNama() + " (" + Session.getRole() + ")");
         }
     }
 

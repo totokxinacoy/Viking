@@ -39,36 +39,43 @@ public class LoginController implements Initializable {
         btnBatal.setOnAction(event -> handleCancel());
     }
 
+    @FXML
     private void handleLogin() {
-        String nama = txtUsername.getText();    // Nama_Karyawan
+        String nama = txtUsername.getText();
         String password = txtPassword.getText();
 
-        String query = "SELECT * FROM Karyawan WHERE Nama_Karyawan = ? AND Password = ?";
+        String query = """
+        SELECT k.NPK, k.Nama_Karyawan, j.Nama_Jabatan
+        FROM Karyawan k
+        JOIN Jabatan j ON k.ID_Jabatan = j.ID_Jabatan
+        WHERE LOWER(k.Nama_Karyawan) LIKE ? AND k.Password = ?
+    """;
 
         try {
             DBConnect connection = new DBConnect();
             Connection conn = connection.getConnection();
 
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, nama);      // parameter pertama
-            statement.setString(2, password);  // parameter kedua
+            statement.setString(1, nama.toLowerCase() + "%");
+            statement.setString(2, password);
 
             ResultSet result = statement.executeQuery();
 
             if (result.next()) {
-                // Simpan session
                 String npk = result.getString("NPK");
-                Session.setSession(npk, nama);
+                String namaJabatan = result.getString("Nama_Jabatan");
 
-                showAlert(Alert.AlertType.INFORMATION, "Login Berhasil", "Selamat datang, " + nama + "!");
+                Session.setSession(npk, nama, namaJabatan);
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("homeKasir.fxml"));
-                Parent root = loader.load();
+                showAlert(Alert.AlertType.INFORMATION, "Login Berhasil",
+                        "Selamat datang, " + nama + " (" + namaJabatan + ")!");
 
+                Parent root = FXMLLoader.load(getClass().getResource("loading.fxml"));
                 Stage stage = (Stage) btnLogin.getScene().getWindow();
                 stage.setScene(new Scene(root));
-                stage.setTitle("Halaman Utama");
+                stage.setTitle("Loading...");
                 stage.show();
+
             } else {
                 showAlert(Alert.AlertType.ERROR, "Login Gagal", "Nama atau password salah.");
                 txtUsername.clear();

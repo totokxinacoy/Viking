@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.LoadingController">
+
+   <children>
+      <ImageView fx:id="landingImage" fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/backgrounds.png" />
+         </image>
+      </ImageView>
+
+      <Label fx:id="loadingText" layoutX="881.0" layoutY="909.0" style="-fx-font-size: 28px; -fx-text-fill: black; -fx-font-weight: bold;" text="Sabar Bolo..">
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="24.0" />
+         </font>
+      </Label>
+
+      <Label fx:id="progressLabel" layoutX="1159.0" layoutY="989.0" style="-fx-text-fill: #0D2857; -fx-font-weight: bold;" text="0%" />
+
+      <ProgressBar fx:id="progressBar" layoutX="750.0" layoutY="985.0" prefHeight="25.0" prefWidth="400" progress="0.0" style="-fx-accent: #4682B4; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: white; -fx-border-width: 2;" />
+
+      <ImageView fx:id="hikerIcon" fitHeight="40" fitWidth="40" layoutX="750.0" layoutY="953.0">
+         <image>
+            <Image url="@../images/hiker.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

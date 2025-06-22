@@ -41,7 +41,7 @@
                               <Insets left="150.0" right="10.0" />
                            </HBox.margin>
                         </Rectangle>
-                        <Label text="LOGIN KASIR" textFill="WHITE">
+                        <Label text="LOGIN" textFill="WHITE">
                            <font>
                               <Font name="Franklin Gothic Demi Cond" size="64.0" />
                            </font>
@@ -113,7 +113,7 @@
                                     <GaussianBlur radius="4.0" />
                                  </effect>
                               </Button>
-                              <Button fx:id="btnBatal" layoutX="69.0" layoutY="42.0" mnemonicParsing="false" prefHeight="105.0" prefWidth="350.0" style="-fx-background-radius: 15;" stylesheets="@style.css" text="BATAL" textAlignment="CENTER" textFill="WHITE">
+                              <Button fx:id="btnBatal" layoutX="69.0" layoutY="42.0" mnemonicParsing="false" prefHeight="105.0" prefWidth="350.0" style="-fx-background-radius: 15;" stylesheets="@style.css" text="KELUAR" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="Franklin Gothic Demi Cond" size="44.0" />
                                  </font>

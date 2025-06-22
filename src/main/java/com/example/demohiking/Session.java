@@ -2,27 +2,34 @@ package com.example.demohiking;
 
 public class Session {
     private static String npk;
-    private static String namaKaryawan;
+    private static String nama;
+    private static String role;
 
-    public static void setSession(String npk, String namaKaryawan) {
-        Session.npk = npk;
-        Session.namaKaryawan = namaKaryawan;
+    public static void setSession(String npkValue, String namaValue, String roleValue) {
+        npk = npkValue;
+        nama = namaValue;
+        role = roleValue;
+    }
+
+    public static boolean isLoggedIn() {
+        return npk != null && nama != null && role != null;
     }
 
     public static String getNpk() {
         return npk;
     }
 
-    public static String getNamaKaryawan() {
-        return namaKaryawan;
+    public static String getNama() {
+        return nama;
     }
 
-    public static boolean isLoggedIn() {
-        return npk != null && namaKaryawan != null;
+    public static String getRole() {
+        return role;
     }
 
     public static void clearSession() {
         npk = null;
-        namaKaryawan = null;
+        nama = null;
+        role = null;
     }
 }
