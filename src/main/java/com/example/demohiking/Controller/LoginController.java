@@ -41,7 +41,7 @@ public class LoginController implements Initializable {
 
     @FXML
     private void handleLogin() {
-        String nama = txtUsername.getText();
+        String inputNama = txtUsername.getText();
         String password = txtPassword.getText();
 
         String query = """
@@ -55,31 +55,44 @@ public class LoginController implements Initializable {
             DBConnect connection = new DBConnect();
             Connection conn = connection.getConnection();
 
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, nama.toLowerCase() + "%");
+            PreparedStatement statement = conn.prepareStatement(query,
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            statement.setString(1, inputNama.toLowerCase() + "%");
             statement.setString(2, password);
 
             ResultSet result = statement.executeQuery();
 
-            if (result.next()) {
-                String npk = result.getString("NPK");
-                String namaJabatan = result.getString("Nama_Jabatan");
+            // Hitung jumlah kemungkinan sama
+            result.last();
+            int rowCount = result.getRow();
+            result.beforeFirst();
 
-                Session.setSession(npk, nama, namaJabatan);
-
-                showAlert(Alert.AlertType.INFORMATION, "Login Berhasil",
-                        "Selamat datang, " + nama + " (" + namaJabatan + ")!");
-
-                Parent root = FXMLLoader.load(getClass().getResource("loading.fxml"));
-                Stage stage = (Stage) btnLogin.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Loading...");
-                stage.show();
-
-            } else {
+            if (rowCount == 0) {
                 showAlert(Alert.AlertType.ERROR, "Login Gagal", "Nama atau password salah.");
                 txtUsername.clear();
                 txtPassword.clear();
+            } else if (rowCount > 1) {
+                showAlert(Alert.AlertType.WARNING, "Nama Tidak Spesifik",
+                        "Ditemukan lebih dari satu karyawan dengan nama tersebut.\nSilakan masukkan nama lengkap.");
+                txtUsername.clear();
+                txtPassword.clear();
+            } else {
+                if (result.next()) {
+                    String npk = result.getString("NPK");
+                    String namaLengkap = result.getString("Nama_Karyawan");
+                    String namaJabatan = result.getString("Nama_Jabatan");
+
+                    Session.setSession(npk, namaLengkap, namaJabatan);
+
+                    showAlert(Alert.AlertType.INFORMATION, "Login Berhasil",
+                            "Halo, " + namaLengkap + "\nJabatan: " + namaJabatan);
+
+                    Parent root = FXMLLoader.load(getClass().getResource("loading.fxml"));
+                    Stage stage = (Stage) btnLogin.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.setTitle("Loading...");
+                    stage.show();
+                }
             }
 
             conn.close();
