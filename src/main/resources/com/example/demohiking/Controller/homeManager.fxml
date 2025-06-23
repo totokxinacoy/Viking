@@ -1,14 +1,522 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.demohiking.Controller.HomeManagerController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.HomeManagerController">
+   <children>
+      <StackPane layoutX="251.0" prefHeight="1080.0" prefWidth="1670.0" style="-fx-background-color: #02030A;">
+         <children>
+            <Pane fx:id="pnlKaryawan" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
+                  <TextField fx:id="txtSearchKaryawan" layoutX="85.0" layoutY="100.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI KARYAWAN" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
+                     <font>
+                        <Font name="Segoe UI Bold" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" top="5.0" />
+                     </padding>
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="2.0" offsetX="4.0" offsetY="4.0" radius="0.5" width="2.0">
+                           <color>
+                              <Color opacity="0.5" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </TextField>
+                  <Button fx:id="btnSearchKaryawan" layoutX="1147.0" layoutY="108.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="44.0" styleClass="button-search" stylesheets="@style.css">
+                     <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/search.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Pane layoutX="85.0" layoutY="171.0" prefHeight="837.0" prefWidth="1126.0" style="-fx-background-radius: 15; -fx-background-color: #D4EBF8;" stylesheets="@style.css">
+                     <children>
+                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0">
+                           <content>
+                              <VBox fx:id="pnItemsKaryawan" prefHeight="764.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                        <HBox prefHeight="74.0" prefWidth="1126.0">
+                           <children>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="70.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA CUSTOMER" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="130.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
+                     <children>
+                        <VBox alignment="TOP_CENTER" layoutY="1.0" prefHeight="938.0" prefWidth="392.0" spacing="3.0">
+                           <children>
+                              <Pane prefHeight="227.0" prefWidth="232.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-color: #577bc1; -fx-border-radius: 5; -fx-border-width: 5;">
+                                 <VBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <ImageView fx:id="imgKaryawan" fitHeight="179.0" fitWidth="215.0" layoutX="9.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </Pane>
+                              <Button fx:id="btnUploadKaryawan" mnemonicParsing="false" prefHeight="29.0" prefWidth="93.0" stylesheets="@style.css" text="UPLOAD">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="16.0" />
+                                 </font>
+                              </Button>
+                              <Label text="ID" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="255.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="txtIDKaryawan" prefHeight="5.0" prefWidth="277.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" />
+                                 </VBox.margin>
+                                 <effect>
+                                    <DropShadow offsetX="4.0" offsetY="4.0" />
+                                 </effect>
+                              </TextField>
+                              <Label layoutX="71.0" layoutY="384.0" text="NAMA" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="230.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="txtNamaKaryawan" layoutX="70.0" layoutY="417.0" prefHeight="39.0" prefWidth="277.0" promptText="Masukkan Nama">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" />
+                                 </VBox.margin>
+                                 <effect>
+                                    <DropShadow offsetX="4.0" offsetY="4.0" />
+                                 </effect>
+                              </TextField>
+                              <Label layoutX="70.0" layoutY="368.0" text="PASSWORD" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="190.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <PasswordField fx:id="txtPassword" prefHeight="46.0" prefWidth="277.0" promptText="Masukkan Password">
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                                 </font>
+                              </PasswordField>
+                              <Label layoutX="70.0" layoutY="358.0" text="JABATAN" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="210.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <ComboBox fx:id="cmbJabatan" prefHeight="35.0" prefWidth="277.0" promptText="Pilih Jabatan">
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" />
+                                 </VBox.margin>
+                              </ComboBox>
+                              <Label layoutX="72.0" layoutY="536.0" text="EMAIL" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="230.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="txtEmailKaryawan" layoutX="70.0" layoutY="567.0" prefHeight="39.0" prefWidth="309.0" promptText="Masukkan Email">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" />
+                                 </VBox.margin>
+                                 <effect>
+                                    <DropShadow offsetX="4.0" offsetY="4.0" />
+                                 </effect>
+                              </TextField>
+                              <Label layoutX="71.0" layoutY="606.0" text="ALAMAT" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="215.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextArea fx:id="txtAlamatKaryawan" prefHeight="159.0" prefWidth="277.0" promptText="Masukkan Alamat">
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" />
+                                 </VBox.margin>
+                              </TextArea>
+                              <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
+                                 <children>
+                                    <Button fx:id="btnAddKaryawan" mnemonicParsing="false" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="ADD" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btnClearKaryawan" layoutX="164.0" layoutY="46.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="CLEAR" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </Pane>
+                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
+                     <children>
+                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/user.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label prefHeight="38.0" prefWidth="206.0" text="MENU KARYAWAN" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/home-icon-silhouette.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="1270.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </Pane>
+            <Pane fx:id="pnlJabatan" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
+                  <TextField fx:id="txtSearchJabatan" layoutX="85.0" layoutY="100.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI JABATAN" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
+                     <font>
+                        <Font name="Segoe UI Bold" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" top="5.0" />
+                     </padding>
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="2.0" offsetX="4.0" offsetY="4.0" radius="0.5" width="2.0">
+                           <color>
+                              <Color opacity="0.5" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </TextField>
+                  <Pane layoutX="85.0" layoutY="171.0" prefHeight="837.0" prefWidth="1126.0" style="-fx-background-radius: 15; -fx-background-color: #D4EBF8;" stylesheets="@style.css">
+                     <children>
+                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0">
+                           <content>
+                              <VBox fx:id="pnItemsJabatan" prefHeight="764.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                        <HBox prefHeight="74.0" prefWidth="1126.0">
+                           <children>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="70.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="150.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" layoutX="237.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JENIS" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="150.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" layoutX="382.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NOMINAL" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="150.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
+                     <children>
+                        <VBox alignment="TOP_CENTER" layoutY="1.0" prefHeight="938.0" prefWidth="392.0" spacing="3.0">
+                           <children>
+                              <Pane prefHeight="227.0" prefWidth="232.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-color: #577bc1; -fx-border-radius: 5; -fx-border-width: 5;">
+                                 <children>
+                                    <ImageView fx:id="imgJabatan" fitHeight="211.0" fitWidth="215.0" layoutX="9.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="80.0" right="80.0" top="30.0" />
+                                 </VBox.margin>
+                              </Pane>
+                              <Label text="ID" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="255.0" top="40.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="txtIDJabatan" prefHeight="39.0" prefWidth="309.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" />
+                                 </VBox.margin>
+                                 <effect>
+                                    <DropShadow offsetX="4.0" offsetY="4.0" />
+                                 </effect>
+                              </TextField>
+                              <Label layoutX="71.0" layoutY="384.0" text="NAMA" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="230.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="txtNamaJabatan" layoutX="70.0" layoutY="567.0" prefHeight="39.0" prefWidth="309.0" promptText="Masukkan Nama Jabatan">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" />
+                                 </VBox.margin>
+                                 <effect>
+                                    <DropShadow offsetX="4.0" offsetY="4.0" />
+                                 </effect>
+                              </TextField>
+                              <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
+                                 <children>
+                                    <Button fx:id="btnAddJabatan" mnemonicParsing="false" onAction="#onAddJabatan" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="ADD" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btnClearJabatan" layoutX="164.0" layoutY="46.0" mnemonicParsing="false" onAction="#onClearJabatan" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="CLEAR" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </Pane>
+                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
+                     <children>
+                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/punishment.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label prefHeight="38.0" prefWidth="158.0" text="MENU JABATAN" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/home-icon-silhouette.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="1320.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <Button fx:id="btnSearchJabatan" layoutX="1149.0" layoutY="108.0" mnemonicParsing="false" onAction="#handleSearchJabatan" styleClass="button-search" stylesheets="@style.css">
+                     <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/search.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </Pane>
+         </children>
+      </StackPane>
+      <VBox alignment="TOP_CENTER" layoutX="-9.0" prefHeight="1080.0" prefWidth="295.0" style="-fx-background-color: #051036;" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-9.0" AnchorPane.rightAnchor="1635.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="225.0" fitWidth="211.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Logo.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="50.0" />
+               </VBox.margin>
+            </ImageView>
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets bottom="40.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Separator>
+            <Button fx:id="btnKaryawan" alignment="BASELINE_LEFT" graphicTextGap="22.0" layoutX="13.0" layoutY="467.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="74.0" prefWidth="315.0" stylesheets="@style.css" text="KARYAWAN" textFill="#e7e5e5">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <font>
+                  <Font name="Franklin Gothic Demi Cond" size="28.0" />
+               </font>
+               <padding>
+                  <Insets left="40.0" />
+               </padding>
+               <graphic>
+                  <ImageView fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/user.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="btnJabatan" alignment="BASELINE_LEFT" graphicTextGap="22.0" layoutX="13.0" layoutY="561.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="74.0" prefWidth="295.0" stylesheets="@style.css" text="JABATAN" textFill="#e7e5e5">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <font>
+                  <Font name="Franklin Gothic Demi Cond" size="28.0" />
+               </font>
+               <padding>
+                  <Insets left="40.0" />
+               </padding>
+               <graphic>
+                  <ImageView fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/transaction.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="btnPeminjaman" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="74.0" prefWidth="315.0" stylesheets="@style.css" text="LAPORAN" textFill="#e7e5e5">
+               <graphic>
+                  <ImageView fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/tent.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Franklin Gothic Demi Cond" size="28.0" />
+               </font>
+               <padding>
+                  <Insets left="40.0" />
+               </padding>
+            </Button>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </VBox>
+   </children>
+   <effect>
+      <DropShadow color="#1b1eeb" />
+   </effect>
 </AnchorPane>
