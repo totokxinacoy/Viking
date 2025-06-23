@@ -283,12 +283,13 @@ public class HomeController implements Initializable {
         try (
                 Connection conn = connection.getConnection();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT ID_Denda, Jenis_Denda FROM Denda WHERE status = 'Aktif'");
+                ResultSet rs = stmt.executeQuery("SELECT ID_Denda, Jenis_Denda, Nominal FROM Denda WHERE status = 'Aktif'");
         ) {
             while (rs.next()) {
                 list.add(new Denda(
                         rs.getString("ID_Denda"),
-                        rs.getString("Jenis_Denda")
+                        rs.getString("Jenis_Denda"),
+                        rs.getDouble("Nominal")
                 ));
             }
         } catch (SQLException e) {
@@ -976,7 +977,8 @@ public class HomeController implements Initializable {
             while (rs.next()) {
                 Denda denda = new Denda(
                         rs.getString("ID_Denda"),
-                        rs.getString("Jenis_Denda")
+                        rs.getString("Jenis_Denda"),
+                        rs.getDouble("Nominal")
                 );
                 foundList.add(denda);
             }

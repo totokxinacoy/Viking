@@ -18,8 +18,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class ItemDendaController {
-    @FXML private Label lblNama;
-    @FXML private Label lblHarga;
+    @FXML private Label lblJenis;
+    @FXML private Label lblID;
+    @FXML private Label lblNominal;
     @FXML private Button btnUpdate;
     @FXML private Button btnDelete;
 
@@ -32,8 +33,16 @@ public class ItemDendaController {
 
     public void setData(Denda denda) {
         this.denda = denda;
-        lblNama.setText(denda.getId());
-        lblHarga.setText(denda.getJenis());
+
+        if (denda != null) {
+            lblID.setText(denda.getId() != null ? denda.getId() : "-");
+            lblJenis.setText(denda.getJenis() != null ? denda.getJenis() : "-");
+            lblNominal.setText(String.valueOf(denda.getNominal()));
+        } else {
+            lblID.setText("-");
+            lblJenis.setText("-");
+            lblNominal.setText("0");
+        }
     }
 
     @FXML
