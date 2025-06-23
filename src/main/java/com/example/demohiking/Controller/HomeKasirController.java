@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -135,6 +136,12 @@ public class HomeKasirController implements Initializable {
     private TextArea txtDeskripsiDenda;
     @FXML
     private TextField txtNominal;
+
+    // PAKET ITEMS
+    @FXML
+    private Button btnItemPaket;
+    @FXML
+    private Button btnItemProduk;
 
 
 
@@ -556,6 +563,30 @@ public class HomeKasirController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void ScaleUpPaket(MouseEvent event) {
+        btnItemPaket.setScaleX(0.95);
+        btnItemPaket.setScaleY(0.95);
+    }
+
+    @FXML
+    private void ScaleDownPaket(MouseEvent event) {
+        btnItemPaket.setScaleX(1.0);
+        btnItemPaket.setScaleY(1.0);
+    }
+
+    @FXML
+    private void ScaleUpProduk(MouseEvent event) {
+        btnItemProduk.setScaleX(0.95);
+        btnItemProduk.setScaleY(0.95);
+    }
+
+    @FXML
+    private void ScaleDownProduk(MouseEvent event) {
+        btnItemProduk.setScaleX(1.0);
+        btnItemProduk.setScaleY(1.0);
     }
 
 
