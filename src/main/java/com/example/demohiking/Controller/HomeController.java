@@ -28,7 +28,11 @@ import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 
 public class HomeController implements Initializable {
     // IMAGE ALL

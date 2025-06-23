@@ -8,14 +8,6 @@ public class Produk {
     private double harga;
     private int stok;
 
-    public Produk(String id, String nama, String kategori, double harga, int stok) {
-        this.id = id;
-        this.nama = nama;
-        this.kategori = kategori;
-        this.deskripsi = null;
-        this.harga = harga;
-        this.stok = stok;
-    }
     public Produk(String id, String nama, String kategori, String deskripsi, double harga, int stok) {
         this.id = id;
         this.nama = nama;
@@ -25,7 +17,14 @@ public class Produk {
         this.stok = stok;
     }
 
-
+    public Produk(String id, String nama, String kategori, double harga, int stok) {
+        this.id = id;
+        this.nama = nama;
+        this.kategori = kategori;
+        this.deskripsi = null;
+        this.harga = harga;
+        this.stok = stok;
+    }
 
 
     public String getId() {

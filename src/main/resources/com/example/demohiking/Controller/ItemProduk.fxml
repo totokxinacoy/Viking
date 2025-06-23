@@ -26,7 +26,7 @@
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
         </Label>
-      <Label fx:id="lblKategori" layoutX="201.0" layoutY="26.0" prefHeight="22.0" prefWidth="171.0" text="Kategori Produk" textFill="WHITE" wrapText="true">
+      <Label fx:id="lblKategori" layoutX="201.0" layoutY="26.0" prefHeight="22.0" prefWidth="160.0" text="Kategori Produk" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
@@ -34,12 +34,20 @@
             <Insets left="25.0" />
          </HBox.margin>
       </Label>
-      <Label fx:id="lblHarga" layoutX="406.0" layoutY="26.0" prefHeight="22.0" prefWidth="137.0" text="Harga Produk" textFill="WHITE" wrapText="true">
+      <Label fx:id="lblHarga1" alignment="CENTER_RIGHT" layoutX="585.0" layoutY="26.0" prefHeight="22.0" prefWidth="61.0" text="Rp." textFill="WHITE" wrapText="true">
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
          <HBox.margin>
-            <Insets left="25.0" />
+            <Insets left="30.0" />
+         </HBox.margin>
+      </Label>
+      <Label fx:id="lblHarga" layoutX="406.0" layoutY="26.0" prefHeight="22.0" prefWidth="120.0" text="  Harga Produk" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+         <HBox.margin>
+            <Insets />
          </HBox.margin>
       </Label>
       <Label fx:id="lblStok" alignment="CENTER" layoutX="582.0" layoutY="26.0" prefHeight="22.0" prefWidth="139.0" text="Stok Produk" textFill="WHITE" wrapText="true">
