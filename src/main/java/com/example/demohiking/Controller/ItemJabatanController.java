@@ -15,6 +15,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ItemJabatanController {
@@ -84,39 +85,69 @@ public class ItemJabatanController {
             return;
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Konfirmasi Hapus");
-        confirm.setHeaderText(null);
-        confirm.setContentText("Apakah Anda yakin ingin menghapus Jabatan ini?");
+        try {
+            DBConnect db = new DBConnect();
+            Connection conn = db.getConnection();
 
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == javafx.scene.control.ButtonType.OK) {
-                try {
-                    DBConnect db = new DBConnect();
-                    Connection conn = db.getConnection();
+            // Cek apakah masih ada karyawan aktif dengan ID_Jabatan tersebut
+            String cekQuery = "SELECT COUNT(*) FROM Karyawan WHERE ID_Jabatan = ? AND Status = 'Aktif'";
+            PreparedStatement cekStmt = conn.prepareStatement(cekQuery);
+            cekStmt.setString(1, jabatan.getId());
+            ResultSet rs = cekStmt.executeQuery();
 
-                    String query = "UPDATE Jabatan SET status = 'Non Aktif' WHERE ID_Jabatan = ?";
-                    PreparedStatement pstat = conn.prepareStatement(query);
-                    pstat.setString(1, jabatan.getId());
+            rs.next();
+            int jumlahAktif = rs.getInt(1);
 
-                    int rows = pstat.executeUpdate();
-                    pstat.close();
-                    conn.close();
+            rs.close();
+            cekStmt.close();
 
-                    if (rows > 0) {
-                        showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Jabatan telah dihapus.");
-                        if (homeManagerController != null) {
-                            homeManagerController.RefreshDataJabatan();
-                        }
-                    } else {
-                        showAlert(Alert.AlertType.WARNING, "Gagal", "Jabatan tidak ditemukan di database.");
-                    }
-
-                } catch (SQLException e) {
-                    showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
-                }
+            if (jumlahAktif > 0) {
+                showAlert(Alert.AlertType.WARNING, "Tidak Bisa Dihapus",
+                        "Jabatan ini masih digunakan oleh " + jumlahAktif + " karyawan aktif. Nonaktifkan karyawan terlebih dahulu.");
+                conn.close();
+                return;
             }
-        });
+
+            // Tampilkan dialog konfirmasi
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Konfirmasi Hapus");
+            confirm.setHeaderText(null);
+            confirm.setContentText("Apakah Anda yakin ingin menghapus Jabatan ini?");
+
+            confirm.showAndWait().ifPresent(response -> {
+                if (response == javafx.scene.control.ButtonType.OK) {
+                    try {
+                        String query = "UPDATE Jabatan SET status = 'Non Aktif' WHERE ID_Jabatan = ?";
+                        PreparedStatement pstat = conn.prepareStatement(query);
+                        pstat.setString(1, jabatan.getId());
+
+                        int rows = pstat.executeUpdate();
+                        pstat.close();
+                        conn.close();
+
+                        if (rows > 0) {
+                            showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Jabatan telah dihapus.");
+                            if (homeManagerController != null) {
+                                homeManagerController.RefreshDataJabatan();
+                            }
+                        } else {
+                            showAlert(Alert.AlertType.WARNING, "Gagal", "Jabatan tidak ditemukan di database.");
+                        }
+                    } catch (SQLException e) {
+                        showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+                    }
+                } else {
+                    try {
+                        conn.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+        }
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {

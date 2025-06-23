@@ -17,6 +17,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UpdateKaryawanController {
     @FXML private ImageView imgKaryawan;
@@ -24,6 +26,9 @@ public class UpdateKaryawanController {
     @FXML private PasswordField txtPassword;
     @FXML private ComboBox<String> cmbJabatan;
     @FXML private TextArea txtAlamat;
+    @FXML private TextField txtPasswordVisible;
+    @FXML private CheckBox chkShowPassword;
+    private Map<String, String> jabatanMap = new HashMap<>();
 
     private File selectedImageFile;
     private Karyawan karyawan;
@@ -62,6 +67,24 @@ public class UpdateKaryawanController {
         return email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
     }
 
+    @FXML
+    private void togglePasswordVisibility() {
+        boolean show = chkShowPassword.isSelected();
+        if (show) {
+            txtPasswordVisible.setText(txtPassword.getText());
+            txtPasswordVisible.setVisible(true);
+            txtPasswordVisible.setManaged(true);
+            txtPassword.setVisible(false);
+            txtPassword.setManaged(false);
+        } else {
+            txtPassword.setText(txtPasswordVisible.getText());
+            txtPassword.setVisible(true);
+            txtPassword.setManaged(true);
+            txtPasswordVisible.setVisible(false);
+            txtPasswordVisible.setManaged(false);
+        }
+    }
+
     public void setKaryawan(Karyawan karyawan) {
         this.karyawan = karyawan;
 
@@ -69,7 +92,10 @@ public class UpdateKaryawanController {
             DBConnect db = new DBConnect();
             Connection conn = db.getConnection();
 
-            String query = "SELECT * FROM Karyawan WHERE NPK = ?";
+            String query = "SELECT K.*, J.Nama_Jabatan FROM Karyawan K " +
+                    "JOIN Jabatan J ON K.ID_Jabatan = J.ID_Jabatan " +
+                    "WHERE K.ID_Karyawan = ?";
+
             PreparedStatement pstat = conn.prepareStatement(query);
             pstat.setString(1, karyawan.getId());
 
@@ -79,11 +105,15 @@ public class UpdateKaryawanController {
                 String email = rs.getString("Email");
                 String alamat = rs.getString("Alamat");
                 String idJabatan = rs.getString("ID_Jabatan");
+                String namaJabatan = rs.getString("Nama_Jabatan");
+                String password = rs.getString("Password");
 
                 txtNama.setText(nama);
                 txtEmail.setText(email);
                 txtAlamat.setText(alamat);
-                cmbJabatan.setValue(idJabatan);
+                txtPassword.setText(password);
+                cmbJabatan.setValue(namaJabatan);
+                initialIDJabatan = idJabatan;
 
                 InputStream is = rs.getBinaryStream("Image");
                 if (is != null) {
@@ -127,8 +157,9 @@ public class UpdateKaryawanController {
 
     private void loadNamaJabatanToComboBox() {
         cmbJabatan.getItems().clear();
+        jabatanMap.clear();
 
-        String query = "SELECT Nama_Jabatan FROM Jabatan WHERE status = 'Aktif'";
+        String query = "SELECT ID_Jabatan, Nama_Jabatan FROM Jabatan WHERE Status = 'Aktif'";
         try {
             DBConnect connect = new DBConnect();
             Connection conn = connect.getConnection();
@@ -136,7 +167,10 @@ public class UpdateKaryawanController {
             ResultSet rs = pstat.executeQuery();
 
             while (rs.next()) {
-                cmbJabatan.getItems().add(rs.getString("Nama_Jabatan"));
+                String id = rs.getString("ID_Jabatan");
+                String nama = rs.getString("Nama_Jabatan");
+                cmbJabatan.getItems().add(nama);
+                jabatanMap.put(nama, id);
             }
 
             rs.close();
@@ -150,6 +184,15 @@ public class UpdateKaryawanController {
     @FXML
     public void initialize() {
         loadNamaJabatanToComboBox();
+
+        // Sinkronisasi real-time antar field
+        txtPassword.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!chkShowPassword.isSelected()) txtPasswordVisible.setText(newVal);
+        });
+
+        txtPasswordVisible.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (chkShowPassword.isSelected()) txtPassword.setText(newVal);
+        });
     }
 
     @FXML
@@ -157,9 +200,12 @@ public class UpdateKaryawanController {
         String nama = txtNama.getText().trim();
         String email = txtEmail.getText().trim();
         String alamat = txtAlamat.getText().trim();
-        String idJabatan = cmbJabatan.getValue();
+        String jabatanDipilih = jabatanMap.get(cmbJabatan.getValue());
+        String password = chkShowPassword.isSelected()
+                ? txtPasswordVisible.getText().trim()
+                : txtPassword.getText().trim();
 
-        if (nama.isEmpty() || email.isEmpty() || alamat.isEmpty() || idJabatan == null) {
+        if (nama.isEmpty() || email.isEmpty() || alamat.isEmpty() || jabatanDipilih == null) {
             showAlert(Alert.AlertType.WARNING, "Validasi", "Semua field wajib diisi.");
             return;
         }
@@ -169,13 +215,12 @@ public class UpdateKaryawanController {
             return;
         }
 
-        boolean adaPerubahan = !nama.equals(initialNama)
-                || !email.equals(initialEmail)
-                || !alamat.equals(initialAlamat)
-                || !idJabatan.equals(initialIDJabatan)
-                || selectedImageFile != null;
+        boolean updatePassword = !password.isEmpty();
+        boolean updateImage = selectedImageFile != null;
 
-        if (!adaPerubahan && txtPassword.getText().trim().isEmpty()) {
+        if (!updatePassword && !updateImage &&
+                nama.equals(initialNama) && email.equals(initialEmail) &&
+                alamat.equals(initialAlamat) && jabatanDipilih.equals(initialIDJabatan)) {
             showAlert(Alert.AlertType.INFORMATION, "Info", "Belum ada perubahan data.");
             return;
         }
@@ -184,50 +229,29 @@ public class UpdateKaryawanController {
             DBConnect db = new DBConnect();
             Connection conn = db.getConnection();
 
-            String query;
-            PreparedStatement pstat;
+            StringBuilder sb = new StringBuilder("UPDATE Karyawan SET ");
+            if (!nama.equals(initialNama)) sb.append("Nama_Karyawan=?, ");
+            if (!email.equals(initialEmail)) sb.append("Email=?, ");
+            if (!alamat.equals(initialAlamat)) sb.append("Alamat=?, ");
+            if (!jabatanDipilih.equals(initialIDJabatan)) sb.append("ID_Jabatan=?, ");
+            if (updatePassword) sb.append("Password=?, ");
+            if (updateImage) sb.append("Image=?, ");
+            sb.setLength(sb.length() - 2); // buang koma terakhir
+            sb.append(" WHERE ID_Karyawan=?");
 
-            boolean updatePassword = !txtPassword.getText().trim().isEmpty();
+            PreparedStatement pstat = conn.prepareStatement(sb.toString());
 
-            if (selectedImageFile != null && updatePassword) {
-                query = "UPDATE Karyawan SET Nama_Karyawan=?, Email=?, Alamat=?, ID_Jabatan=?, Password=?, Image=? WHERE NPK=?";
-                pstat = conn.prepareStatement(query);
-                pstat.setString(1, nama);
-                pstat.setString(2, email);
-                pstat.setString(3, alamat);
-                pstat.setString(4, idJabatan);
-                pstat.setString(5, txtPassword.getText().trim());
-                InputStream imageStream = new FileInputStream(selectedImageFile);
-                pstat.setBinaryStream(6, imageStream, (int) selectedImageFile.length());
-                pstat.setString(7, karyawan.getId());
-            } else if (selectedImageFile != null) {
-                query = "UPDATE Karyawan SET Nama_Karyawan=?, Email=?, Alamat=?, ID_Jabatan=?, Image=? WHERE NPK=?";
-                pstat = conn.prepareStatement(query);
-                pstat.setString(1, nama);
-                pstat.setString(2, email);
-                pstat.setString(3, alamat);
-                pstat.setString(4, idJabatan);
-                InputStream imageStream = new FileInputStream(selectedImageFile);
-                pstat.setBinaryStream(5, imageStream, (int) selectedImageFile.length());
-                pstat.setString(6, karyawan.getId());
-            } else if (updatePassword) {
-                query = "UPDATE Karyawan SET Nama_Karyawan=?, Email=?, Alamat=?, ID_Jabatan=?, Password=? WHERE NPK=?";
-                pstat = conn.prepareStatement(query);
-                pstat.setString(1, nama);
-                pstat.setString(2, email);
-                pstat.setString(3, alamat);
-                pstat.setString(4, idJabatan);
-                pstat.setString(5, txtPassword.getText().trim());
-                pstat.setString(6, karyawan.getId());
-            } else {
-                query = "UPDATE Karyawan SET Nama_Karyawan=?, Email=?, Alamat=?, ID_Jabatan=? WHERE NPK=?";
-                pstat = conn.prepareStatement(query);
-                pstat.setString(1, nama);
-                pstat.setString(2, email);
-                pstat.setString(3, alamat);
-                pstat.setString(4, idJabatan);
-                pstat.setString(5, karyawan.getId());
+            int index = 1;
+            if (!nama.equals(initialNama)) pstat.setString(index++, nama);
+            if (!email.equals(initialEmail)) pstat.setString(index++, email);
+            if (!alamat.equals(initialAlamat)) pstat.setString(index++, alamat);
+            if (!jabatanDipilih.equals(initialIDJabatan)) pstat.setString(index++, jabatanDipilih);
+            if (updatePassword) pstat.setString(index++, password);
+            if (updateImage) {
+                InputStream is = new FileInputStream(selectedImageFile);
+                pstat.setBinaryStream(index++, is, (int) selectedImageFile.length());
             }
+            pstat.setString(index, karyawan.getId());
 
             int rows = pstat.executeUpdate();
             pstat.close();
@@ -235,9 +259,7 @@ public class UpdateKaryawanController {
 
             if (rows > 0) {
                 showAlert(Alert.AlertType.INFORMATION, "Sukses", "Data karyawan berhasil diperbarui!");
-                if (homeManagerController != null) {
-                    homeManagerController.RefreshDataKaryawan();
-                }
+                if (homeManagerController != null) homeManagerController.RefreshDataKaryawan();
                 if (updateStage != null) {
                     updateStage.close();
                     clearWindow();
@@ -252,6 +274,7 @@ public class UpdateKaryawanController {
             showAlert(Alert.AlertType.ERROR, "File Gambar Tidak Ditemukan", e.getMessage());
         }
     }
+
 
     @FXML
     protected void handleCancel() {

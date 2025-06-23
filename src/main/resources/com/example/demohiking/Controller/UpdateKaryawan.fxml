@@ -15,6 +15,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.CheckBox?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="739.0" style="-fx-background-color: #0D2857; -fx-background-radius: 2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.UpdateKaryawanController">
    <children>
       <VBox prefHeight="593.0" prefWidth="739.0" style="-fx-background-color: #0D2857; -fx-background-radius: 10;">
@@ -65,14 +67,20 @@
                               <Insets left="20.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <PasswordField fx:id="txtPassword" prefHeight="46.0" prefWidth="277.0" promptText="Masukkan Password">
-                           <font>
-                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
-                           </font>
+
+                        <StackPane>
+                           <PasswordField fx:id="txtPassword" promptText="Masukkan Password" prefHeight="46.0" prefWidth="277.0"
+                                          style="-fx-font-size: 18px; -fx-font-family: 'Franklin Gothic Demi Cond';"/>
+                           <TextField fx:id="txtPasswordVisible" promptText="Masukkan Password" prefHeight="46.0" prefWidth="277.0"
+                                      visible="false" managed="false"
+                                      style="-fx-font-size: 18px; -fx-font-family: 'Franklin Gothic Demi Cond';"/>
+                        </StackPane>
+
+                        <CheckBox fx:id="chkShowPassword" text="👁 Tampilkan Password" onAction="#togglePasswordVisibility">
                            <VBox.margin>
-                              <Insets left="20.0" right="20.0" />
+                              <Insets left="20.0" top="5.0" />
                            </VBox.margin>
-                        </PasswordField>
+                        </CheckBox>
                         <Label text="JABATAN" textFill="WHITE">
                            <font>
                               <Font name="Franklin Gothic Demi Cond" size="18.0" />
