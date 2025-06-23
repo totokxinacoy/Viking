@@ -25,10 +25,10 @@ public class ItemCustomerController {
     @FXML private Button btnDelete;
 
     private Customer customer;
-    private HomeController homeController;
+    private HomeKasirController homeKasirController;
 
-    public void setHomeController(HomeController controller) {
-        this.homeController = controller;
+    public void setHomeController(HomeKasirController controller) {
+        this.homeKasirController = controller;
     }
 
     public void setData(Customer customer) {
@@ -57,7 +57,7 @@ public class ItemCustomerController {
 
             UpdateCustomerController controller = loader.getController();
             controller.setCustomer(customer);
-            controller.setHomeController(homeController);
+            controller.setHomeController(homeKasirController);
 
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
@@ -106,8 +106,8 @@ public class ItemCustomerController {
                         showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Customer telah dihapus.");
 
                         // Langsung panggil refresh tanpa menunggu konfirmasi tambahan
-                        if (homeController != null) {
-                            homeController.RefreshDataCustomer();
+                        if (homeKasirController != null) {
+                            homeKasirController.RefreshDataCustomer();
                         }
                     } else {
                         showAlert(Alert.AlertType.WARNING, "Gagal", "Customer tidak ditemukan di database.");
@@ -129,8 +129,8 @@ public class ItemCustomerController {
     }
     @FXML
     private void handleSelectItem() {
-        if (homeController != null && customer != null) {
-            homeController.setDetailCustomer(customer); // Kirim data ke form
+        if (homeKasirController != null && customer != null) {
+            homeKasirController.setDetailCustomer(customer); // Kirim data ke form
         }
     }
 

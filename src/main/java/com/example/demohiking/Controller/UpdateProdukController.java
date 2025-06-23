@@ -62,10 +62,10 @@ public class UpdateProdukController {
     private int initialStok;
     private Image initialImage;
 
-    private HomeController homeController;
+    private HomeKasirController homeKasirController;
 
-    public void setHomeController(HomeController controller) {
-        this.homeController = controller;
+    public void setHomeController(HomeKasirController controller) {
+        this.homeKasirController = controller;
     }
 
     public void setProduk(Produk produk) {
@@ -201,8 +201,8 @@ public class UpdateProdukController {
             if (rows > 0) {
                 showAlert(Alert.AlertType.INFORMATION, "Sukses", "Produk berhasil diperbarui!");
 
-                if (homeController != null) {
-                    homeController.RefreshData();
+                if (homeKasirController != null) {
+                    homeKasirController.RefreshData();
                 }
 
                 if (updateStage != null) {

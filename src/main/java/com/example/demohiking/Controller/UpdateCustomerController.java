@@ -60,10 +60,10 @@ public class UpdateCustomerController {
     private String initialNama, initialJenisKelamin, initialAlamat, initialEmail, initialNoTelephone;
     private Image initialImage;
 
-    private HomeController homeController;
+    private HomeKasirController homeKasirController;
 
-    public void setHomeController(HomeController controller) {
-        this.homeController = controller;
+    public void setHomeController(HomeKasirController controller) {
+        this.homeKasirController = controller;
     }
 
     public void setCustomer(Customer customer) {
@@ -199,8 +199,8 @@ public class UpdateCustomerController {
             if (rows > 0) {
                 showAlert(Alert.AlertType.INFORMATION, "Sukses", "Customer berhasil diperbarui!");
 
-                if (homeController != null) {
-                    homeController.RefreshDataCustomer();
+                if (homeKasirController != null) {
+                    homeKasirController.RefreshDataCustomer();
                 }
 
                 if (updateStage != null) {

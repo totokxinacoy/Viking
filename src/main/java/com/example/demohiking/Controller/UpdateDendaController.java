@@ -58,11 +58,11 @@ public class UpdateDendaController {
 
     private String initialJenis, initialDeskripsi;
     private double initialNominal;
-    private HomeController homeController;
+    private HomeKasirController homeKasirController;
     private Image initialImage;
 
-    public void setHomeController(HomeController controller) {
-        this.homeController = controller;
+    public void setHomeController(HomeKasirController controller) {
+        this.homeKasirController = controller;
     }
 
     public void setDenda(Denda denda) {
@@ -192,8 +192,8 @@ public class UpdateDendaController {
 
             if (rows > 0) {
                 showAlert(Alert.AlertType.INFORMATION, "Sukses", "Data denda berhasil diperbarui!");
-                if (homeController != null) {
-                    homeController.RefreshDataDenda();
+                if (homeKasirController != null) {
+                    homeKasirController.RefreshDataDenda();
                 }
                 if (updateStage != null) {
                     updateStage.close();

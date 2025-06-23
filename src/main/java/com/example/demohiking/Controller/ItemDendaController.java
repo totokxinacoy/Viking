@@ -25,10 +25,10 @@ public class ItemDendaController {
     @FXML private Button btnDelete;
 
     private Denda denda;
-    private HomeController homeController;
+    private HomeKasirController homeKasirController;
 
-    public void setHomeController(HomeController controller) {
-        this.homeController = controller;
+    public void setHomeController(HomeKasirController controller) {
+        this.homeKasirController = controller;
     }
 
     public void setData(Denda denda) {
@@ -65,7 +65,7 @@ public class ItemDendaController {
 
             UpdateDendaController controller = loader.getController();
             controller.setDenda(denda);
-            controller.setHomeController(homeController);
+            controller.setHomeController(homeKasirController);
 
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
@@ -114,8 +114,8 @@ public class ItemDendaController {
                         showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Denda telah dihapus.");
 
                         // Langsung panggil refresh tanpa menunggu konfirmasi tambahan
-                        if (homeController != null) {
-                            homeController.RefreshDataDenda();
+                        if (homeKasirController != null) {
+                            homeKasirController.RefreshDataDenda();
                         }
                     } else {
                         showAlert(Alert.AlertType.WARNING, "Gagal", "Denda tidak ditemukan di database.");
@@ -137,8 +137,8 @@ public class ItemDendaController {
     }
     @FXML
     private void handleSelectItem() {
-        if (homeController != null && denda != null) {
-            homeController.setDetailDenda(denda); // Kirim data ke form
+        if (homeKasirController != null && denda != null) {
+            homeKasirController.setDetailDenda(denda); // Kirim data ke form
         }
     }
 }
