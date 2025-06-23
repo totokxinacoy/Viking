@@ -1,22 +1,22 @@
 package com.example.demohiking;
 
 public class Session {
-    private static String npk;
+    private static String id;
     private static String nama;
     private static String role;
 
     public static void setSession(String npkValue, String namaValue, String roleValue) {
-        npk = npkValue;
+        id = npkValue;
         nama = namaValue;
         role = roleValue;
     }
 
     public static boolean isLoggedIn() {
-        return npk != null && nama != null && role != null;
+        return id != null && nama != null && role != null;
     }
 
-    public static String getNpk() {
-        return npk;
+    public static String getId() {
+        return id;
     }
 
     public static String getNama() {
@@ -28,7 +28,7 @@ public class Session {
     }
 
     public static void clearSession() {
-        npk = null;
+        id = null;
         nama = null;
         role = null;
     }

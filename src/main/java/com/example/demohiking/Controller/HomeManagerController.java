@@ -1,6 +1,7 @@
 package com.example.demohiking.Controller;
 
 import com.example.demohiking.ADT.Jabatan;
+import com.example.demohiking.ADT.Karyawan;
 import com.example.demohiking.ADT.Produk;
 import com.example.demohiking.Connection.DBConnect;
 import com.example.demohiking.Session;
@@ -25,9 +26,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class HomeManagerController implements Initializable {
     // IMAGE ALL
@@ -79,6 +78,8 @@ public class HomeManagerController implements Initializable {
     private TextField txtEmailKaryawan;
     @FXML
     private TextArea txtAlamatKaryawan;
+    @FXML
+    private Map<String, String> jabatanMap = new HashMap<>();
 
     // JABATAN ITEMS
     @FXML
@@ -182,9 +183,135 @@ public class HomeManagerController implements Initializable {
         txtNamaJabatan.setText(jabatan.getNama());
     }
 
+    /* --- KARYAWAN METHOD --- */
+    private String generateKaryawanID() {
+        String id = "KRY001";
+        String query = "SELECT MAX(ID_Karyawan) as max_id FROM Karyawan";
+
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                String maxID = rs.getString("max_id");
+
+                if (maxID != null && maxID.length() >= 4) {
+                    String numberPart = maxID.substring(3);
+                    if (!numberPart.isEmpty() && numberPart.matches("\\d+")) {
+                        int nextID = Integer.parseInt(numberPart) + 1;
+                        id = String.format("KRY%03d", nextID);
+                    }
+                }
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
+    public List<Karyawan> getDataKaryawan() {
+        List<Karyawan> list = new ArrayList<>();
+        DBConnect connection = new DBConnect();
+
+        try (
+                Connection conn = connection.getConnection();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(
+                        "SELECT ID_Karyawan, Nama_Karyawan, ID_Jabatan, Email FROM Karyawan WHERE Status = 'Aktif'"
+                );
+        ) {
+            while (rs.next()) {
+                list.add(new Karyawan(
+                        rs.getString("ID_Karyawan"),
+                        rs.getString("Nama_Karyawan"),
+                        rs.getString("ID_Jabatan"),
+                        rs.getString("Email")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    private void loadKaryawanItems() {
+        List<Karyawan> dataKaryawan = getDataKaryawan();
+        loadKaryawanItems(dataKaryawan);
+    }
+
+    private void loadKaryawanItems(List<Karyawan> dataKaryawan) {
+        pnItemsKaryawan.getChildren().clear();
+
+        for (int i = 0; i < dataKaryawan.size(); i++) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemKaryawan.fxml"));
+                Node node = loader.load();
+
+                ItemKaryawanController controller = loader.getController();
+                controller.setData(dataKaryawan.get(i));
+                controller.setHomeController(this);
+
+                node.setOnMouseEntered(event -> {
+                    node.setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                node.setOnMouseExited(event -> {
+                    node.setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+
+                pnItemsKaryawan.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void loadNamaJabatanKeComboBox() {
+        cmbJabatan.getItems().clear();  // pastikan kosong dulu
+        jabatanMap.clear();
+
+        String query = "SELECT ID_Jabatan, Nama_Jabatan FROM Jabatan WHERE Status = 'Aktif'";
+
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String idJabatan = rs.getString("ID_Jabatan");
+                String namaJabatan = rs.getString("Nama_Jabatan");
+
+                // tambahkan ke ComboBox dan Map
+                cmbJabatan.getItems().add(namaJabatan);
+                jabatanMap.put(namaJabatan, idJabatan);
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setDetailKaryawan(Karyawan karyawan) {
+        txtIDKaryawan.setText(karyawan.getId());
+        txtNamaKaryawan.setText(karyawan.getNama());
+        txtEmailKaryawan.setText(karyawan.getEmail());
+        cmbJabatan.setValue(karyawan.getId_jabatan());
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Inisalisasi Component Produk
+        // Inisalisasi Component Jabatan
         loadJabatanItems();
         txtIDJabatan.setEditable(false);
         txtIDJabatan.setText(generateJabatanID());
@@ -192,6 +319,16 @@ public class HomeManagerController implements Initializable {
             btnSearchJabatan.setDisable(newValue.trim().isEmpty());
         });
         btnSearchJabatan.setDisable(true);
+
+        // Inisalisasi Component Karyawan
+        loadKaryawanItems();
+        loadNamaJabatanKeComboBox();
+        txtIDKaryawan.setEditable(false);
+        txtIDKaryawan.setText(generateKaryawanID());
+        txtSearchKaryawan.textProperty().addListener((observable, oldValue, newValue) -> {
+            btnSearchKaryawan.setDisable(newValue.trim().isEmpty());
+        });
+        btnSearchKaryawan.setDisable(true);
 
         // Tunda pengecekan session sampai setelah UI tampil
         Platform.runLater(this::cekSession);
@@ -356,4 +493,146 @@ public class HomeManagerController implements Initializable {
         txtSearchJabatan.setText("");
         loadJabatanItems();
     }
-}
+
+
+    /* --- KARYAWAN CRUD --- */
+        @FXML
+        private void handleChooseImageKaryawan() {
+            if (isImageSelected) {
+                showAlert(Alert.AlertType.INFORMATION, "Gambar Sudah Dipilih", "Gambar hanya bisa dipilih satu kali dalam sesi ini.");
+                return;
+            }
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Pilih Gambar Karyawan");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg")
+            );
+
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null) {
+                selectedImageFile = file;
+                Image image = new Image(file.toURI().toString());
+                imgKaryawan.setImage(image);
+                isImageSelected = true;
+            }
+        }
+
+        @FXML
+        protected void onAddKaryawan() {
+            String id = txtIDKaryawan.getText().trim();
+            String nama = txtNamaKaryawan.getText().trim();
+            String password = txtPassword.getText().trim();
+            String namaJabatanDipilih = cmbJabatan.getValue();
+            String jabatan = jabatanMap.get(namaJabatanDipilih);
+            String email = txtEmailKaryawan.getText().trim();
+            String alamat = txtAlamatKaryawan.getText().trim();
+            String status = "Aktif";
+
+            if (id.isEmpty() || nama.isEmpty() || password.isEmpty() || jabatan == null
+                    || email.isEmpty() || alamat.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validasi", "Semua field wajib diisi!");
+                return;
+            }
+
+            if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
+                showAlert(Alert.AlertType.WARNING, "Validasi Email", "Format email tidak valid.");
+                return;
+            }
+
+            if (selectedImageFile == null) {
+                showAlert(Alert.AlertType.WARNING, "Validasi Gambar", "Silakan pilih foto karyawan terlebih dahulu.");
+                return;
+            }
+
+            String query = "INSERT INTO Karyawan VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+            try {
+                DBConnect connect = new DBConnect();
+                Connection conn = connect.getConnection();
+                PreparedStatement pstat = conn.prepareStatement(query);
+
+                pstat.setString(1, id);
+                pstat.setString(2, password);
+                pstat.setString(3, jabatan);
+                pstat.setString(4, nama);
+                pstat.setString(5, email);
+                pstat.setString(6, alamat);
+                pstat.setString(7, status);
+                InputStream foto = new FileInputStream(selectedImageFile);
+                pstat.setBinaryStream(8, foto, (int) selectedImageFile.length());
+
+                pstat.executeUpdate();
+                pstat.close();
+                conn.close();
+
+                RefreshDataKaryawan();
+                JOptionPane.showMessageDialog(null, "Data karyawan berhasil ditambahkan!");
+
+            } catch (SQLException ex) {
+                showAlert(Alert.AlertType.ERROR, "Database Error", ex.getMessage());
+            } catch (FileNotFoundException e) {
+                showAlert(Alert.AlertType.ERROR, "File Gambar Tidak Ditemukan", e.getMessage());
+            }
+        }
+
+        @FXML
+        protected void onClearKaryawan() {
+            RefreshDataKaryawan();
+        }
+
+        @FXML
+        private void handleSearchKaryawan() {
+            String keyword = txtSearchKaryawan.getText().trim();
+
+            String query = "SELECT * FROM Karyawan WHERE (ID_Karyawan = ? OR LOWER(Nama_Karyawan) LIKE ?) AND status = 'Aktif'";
+            try {
+                DBConnect connect = new DBConnect();
+                Connection conn = connect.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(query);
+                pstmt.setString(1, keyword);
+                pstmt.setString(2, "%" + keyword.toLowerCase() + "%");
+
+                ResultSet rs = pstmt.executeQuery();
+                List<Karyawan> foundList = new ArrayList<>();
+
+                while (rs.next()) {
+                    Karyawan karyawan = new Karyawan(
+                            rs.getString("ID_Karyawan"),
+                            rs.getString("Nama_Karyawan"),
+                            rs.getString("ID_Jabatan"),
+                            rs.getString("Email")
+                    );
+                    foundList.add(karyawan);
+                }
+
+                if (!foundList.isEmpty()) {
+                    setDetailKaryawan(foundList.get(0));
+                    loadKaryawanItems(foundList);
+                } else {
+                    showAlert(Alert.AlertType.INFORMATION, "Pencarian", "Karyawan tidak ditemukan.");
+                    txtSearchKaryawan.clear();
+                }
+
+                rs.close();
+                pstmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void RefreshDataKaryawan() {
+            txtIDKaryawan.setText(generateKaryawanID());
+            txtNamaKaryawan.setText("");
+            txtPassword.setText("");
+            cmbJabatan.setValue(null);
+            txtEmailKaryawan.setText("");
+            txtAlamatKaryawan.setText("");
+            txtSearchKaryawan.setText("");
+            isImageSelected = false;
+            selectedImageFile = null;
+            imgKaryawan.setImage(null);
+            loadKaryawanItems();
+        }
+    }

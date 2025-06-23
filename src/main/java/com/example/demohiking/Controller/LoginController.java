@@ -45,7 +45,7 @@ public class LoginController implements Initializable {
         String password = txtPassword.getText();
 
         String query = """
-        SELECT k.NPK, k.Nama_Karyawan, j.Nama_Jabatan
+        SELECT k.ID_Karyawan, k.Nama_Karyawan, j.Nama_Jabatan
         FROM Karyawan k
         JOIN Jabatan j ON k.ID_Jabatan = j.ID_Jabatan
         WHERE LOWER(k.Nama_Karyawan) LIKE ? AND k.Password = ?
@@ -78,11 +78,11 @@ public class LoginController implements Initializable {
                 txtPassword.clear();
             } else {
                 if (result.next()) {
-                    String npk = result.getString("NPK");
+                    String id = result.getString("ID_Karyawan");
                     String namaLengkap = result.getString("Nama_Karyawan");
                     String namaJabatan = result.getString("Nama_Jabatan");
 
-                    Session.setSession(npk, namaLengkap, namaJabatan);
+                    Session.setSession(id, namaLengkap, namaJabatan);
 
                     showAlert(Alert.AlertType.INFORMATION, "Login Berhasil",
                             "Halo, " + namaLengkap + "\nJabatan: " + namaJabatan);
