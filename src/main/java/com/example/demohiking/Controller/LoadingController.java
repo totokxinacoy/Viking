@@ -8,14 +8,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.sound.sampled.*;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URL;
 
 public class LoadingController {
 
@@ -34,41 +36,22 @@ public class LoadingController {
     @FXML
     private ImageView hikerIcon;
 
-    private Clip loadingClip;
-
     @FXML
     private void initialize() {
         Platform.runLater(() -> {
-            playWavSound();
+            playSoundEffect();
             startLoadingAnimation();
         });
     }
 
-    private void playWavSound() {
-        try {
-            InputStream audioSrc = getClass().getResourceAsStream("/sounds/cinematicTunel.wav");
-            if (audioSrc == null) {
-                System.err.println("Audio file not found.");
-                return;
-            }
-
-            InputStream bufferedIn = new java.io.BufferedInputStream(audioSrc);
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn);
-            loadingClip = AudioSystem.getClip();
-            loadingClip.open(audioStream);
-            loadingClip.start();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void playSoundEffect() {
+        URL soundURL = getClass().getResource("/sounds/cinematicTunel.wav");
+        if (soundURL != null) {
+            AudioClip clip = new AudioClip(soundURL.toExternalForm());
+            clip.play();
         }
     }
 
-    private void stopWavSound() {
-        if (loadingClip != null && loadingClip.isRunning()) {
-            loadingClip.stop();
-            loadingClip.close();
-        }
-    }
 
     private void startLoadingAnimation() {
         progressBar.setProgress(0);
@@ -96,7 +79,6 @@ public class LoadingController {
         }
 
         timeline.setOnFinished(event -> {
-            stopWavSound();
             try {
                 goToHomePage();
             } catch (IOException e) {

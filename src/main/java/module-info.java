@@ -5,6 +5,8 @@ module com.example.demohiking {
     requires com.dlsc.formsfx;
     requires java.sql;
     requires java.desktop;
+    requires javafx.media;
+
 
     opens com.example.demohiking to javafx.fxml;
     exports com.example.demohiking;
