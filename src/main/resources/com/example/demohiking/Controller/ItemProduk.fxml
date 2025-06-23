@@ -11,21 +11,45 @@
 
 <HBox fx:id="itemC" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1095.0" style="-fx-background-color: #0D2857; -fx-background-radius: 15; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.ItemProdukController">
     <children>
-        <Label fx:id="lblNama" prefHeight="22.0" prefWidth="129.0" text="ID Produk" textFill="WHITE">
+        <Label fx:id="lblID" prefHeight="22.0" prefWidth="96.0" text="ID Produk" textFill="WHITE">
          <HBox.margin>
-            <Insets left="70.0" />
+            <Insets left="60.0" />
          </HBox.margin>
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font></Label>
-        <Label fx:id="lblHarga" prefHeight="22.0" prefWidth="486.0" text="Nama Produk" textFill="WHITE" wrapText="true">
+        <Label fx:id="lblNama" prefHeight="22.0" prefWidth="158.0" text="Nama Produk" textFill="WHITE" wrapText="true">
             <HBox.margin>
-                <Insets left="25.0" />
+                <Insets left="40.0" />
             </HBox.margin>
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
         </Label>
+      <Label fx:id="lblKategori" layoutX="201.0" layoutY="26.0" prefHeight="22.0" prefWidth="171.0" text="Kategori Produk" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+         <HBox.margin>
+            <Insets left="25.0" />
+         </HBox.margin>
+      </Label>
+      <Label fx:id="lblHarga" layoutX="406.0" layoutY="26.0" prefHeight="22.0" prefWidth="137.0" text="Harga Produk" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+         <HBox.margin>
+            <Insets left="25.0" />
+         </HBox.margin>
+      </Label>
+      <Label fx:id="lblStok" alignment="CENTER" layoutX="582.0" layoutY="26.0" prefHeight="22.0" prefWidth="139.0" text="Stok Produk" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+         <HBox.margin>
+            <Insets left="25.0" />
+         </HBox.margin>
+      </Label>
       <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#handleUpdateButtonClick" stylesheets="@style.css" textFill="#0d2857">
          <graphic>
             <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -35,7 +59,7 @@
             </ImageView>
          </graphic>
          <HBox.margin>
-            <Insets left="240.0" />
+            <Insets left="75.0" right="20.0" />
          </HBox.margin>
       </Button>
       <Button fx:id="btnDelete" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleDeleteButtonClick" stylesheets="@style.css" textFill="#0d2857">
@@ -47,7 +71,7 @@
             </ImageView>
          </graphic>
          <HBox.margin>
-            <Insets left="30.0" />
+            <Insets left="10.0" right="30.0" />
          </HBox.margin>
       </Button>
     </children>

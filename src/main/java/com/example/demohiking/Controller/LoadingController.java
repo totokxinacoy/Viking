@@ -8,12 +8,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.sound.sampled.*;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class LoadingController {
 
@@ -32,17 +34,46 @@ public class LoadingController {
     @FXML
     private ImageView hikerIcon;
 
+    private Clip loadingClip;
+
     @FXML
     private void initialize() {
-        // Jalankan animasi setelah UI siap
-        Platform.runLater(this::startLoadingAnimation);
+        Platform.runLater(() -> {
+            playWavSound();
+            startLoadingAnimation();
+        });
+    }
+
+    private void playWavSound() {
+        try {
+            InputStream audioSrc = getClass().getResourceAsStream("/sounds/cinematicTunel.wav");
+            if (audioSrc == null) {
+                System.err.println("Audio file not found.");
+                return;
+            }
+
+            InputStream bufferedIn = new java.io.BufferedInputStream(audioSrc);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn);
+            loadingClip = AudioSystem.getClip();
+            loadingClip.open(audioStream);
+            loadingClip.start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void stopWavSound() {
+        if (loadingClip != null && loadingClip.isRunning()) {
+            loadingClip.stop();
+            loadingClip.close();
+        }
     }
 
     private void startLoadingAnimation() {
         progressBar.setProgress(0);
         hikerIcon.setLayoutX(760);
 
-        // Animasi teks berkedip
         FadeTransition fade = new FadeTransition(Duration.seconds(1), loadingText);
         fade.setFromValue(0.0);
         fade.setToValue(1.0);
@@ -50,9 +81,8 @@ public class LoadingController {
         fade.setAutoReverse(true);
         fade.play();
 
-        // Progress timeline
         Timeline timeline = new Timeline();
-        int duration = 5; // detik
+        int duration = 5;
         double startX = 760;
         double endX = startX + 360;
 
@@ -66,6 +96,7 @@ public class LoadingController {
         }
 
         timeline.setOnFinished(event -> {
+            stopWavSound();
             try {
                 goToHomePage();
             } catch (IOException e) {

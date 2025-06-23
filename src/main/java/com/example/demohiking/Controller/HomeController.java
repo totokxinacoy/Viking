@@ -178,12 +178,15 @@ public class HomeController implements Initializable {
         try (
                 Connection conn = connection.getConnection();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT ID_Produk, Nama_Produk FROM produk WHERE status = 'Aktif'");
+                ResultSet rs = stmt.executeQuery("SELECT ID_Produk, Nama_Produk, Kategori, Harga, Stok FROM produk WHERE status = 'Aktif'");
         ) {
             while (rs.next()) {
                 list.add(new Produk(
                         rs.getString("ID_Produk"),
-                        rs.getString("Nama_Produk")
+                        rs.getString("Nama_Produk"),
+                        rs.getString("Kategori"),
+                        rs.getDouble("Harga"),
+                        rs.getInt("Stok")
                 ));
             }
         } catch (SQLException e) {
@@ -666,7 +669,10 @@ public class HomeController implements Initializable {
             while (rs.next()) {
                 Produk produk = new Produk(
                         rs.getString("ID_Produk"),
-                        rs.getString("Nama_Produk")
+                        rs.getString("Nama_Produk"),
+                        rs.getString("Kategori"),
+                        rs.getDouble("Harga"),
+                        rs.getInt("Stok")
                 );
                 foundList.add(produk);
             }

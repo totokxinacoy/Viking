@@ -20,6 +20,9 @@ import java.sql.SQLException;
 
 public class ItemProdukController {
         @FXML private Label lblNama;
+        @FXML private Label lblID;
+        @FXML private Label lblStok;
+        @FXML private Label lblKategori;
         @FXML private Label lblHarga;
         @FXML private Button btnUpdate;
         @FXML private Button btnDelete;
@@ -31,12 +34,23 @@ public class ItemProdukController {
         this.homeController = controller;
     }
 
-        public void setData(Produk produk) {
-            this.produk = produk;
-            lblNama.setText(produk.getId());
-            lblHarga.setText(produk.getNama());
-        }
+    public void setData(Produk produk) {
+        this.produk = produk;
 
+        if (produk != null) {
+            lblID.setText(produk.getId() != null ? produk.getId() : "-");
+            lblNama.setText(produk.getNama() != null ? produk.getNama() : "-");
+            lblKategori.setText(produk.getKategori() != null ? produk.getKategori() : "-");
+            lblHarga.setText(produk.getHarga() != 0 ? String.valueOf((int) produk.getHarga()) : "0");
+            lblStok.setText(String.valueOf(produk.getStok()));
+        } else {
+            lblID.setText("-");
+            lblNama.setText("-");
+            lblKategori.setText("-");
+            lblHarga.setText("0");
+            lblStok.setText("0");
+        }
+    }
 
     @FXML
     private void handleUpdateButtonClick() {
