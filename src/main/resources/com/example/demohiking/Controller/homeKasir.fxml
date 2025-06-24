@@ -716,7 +716,7 @@
                   </Button>
                   <HBox alignment="CENTER_LEFT" layoutX="85.0" layoutY="149.0" prefHeight="74.0" prefWidth="1126.0">
                      <children>
-                        <Button fx:id="btnAktifDenda" onMousePressed="#ScaleUpDenda" onMouseReleased="#ScaleDownDenda" prefHeight="45" prefWidth="148.0" style="-fx-background-color: linear-gradient(to right, #4D80E4, #3554D1); -fx-text-fill: white; -fx-font-family: 'Franklin Gothic Demi Cond'; -fx-font-size: 20; -fx-background-radius: 8; -fx-border-radius: 8; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 4, 0, 2, 2);" text="AKTIFKAN">
+                        <Button fx:id="btnAktifDenda" onMouseClicked="#handleAktifkanDenda" onMousePressed="#ScaleUpDenda" onMouseReleased="#ScaleDownDenda" prefHeight="45" prefWidth="148.0" style="-fx-background-color: linear-gradient(to right, #4D80E4, #3554D1); -fx-text-fill: white; -fx-font-family: 'Franklin Gothic Demi Cond'; -fx-font-size: 20; -fx-background-radius: 8; -fx-border-radius: 8; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 4, 0, 2, 2);" text="AKTIFKAN">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" preserveRatio="true">
                                  <image>
@@ -1102,7 +1102,7 @@
                   </ImageView>
                   <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
                      <children>
-                        <VBox alignment="TOP_CENTER" layoutY="1.0" prefHeight="938.0" prefWidth="392.0" spacing="3.0">
+                        <VBox alignment="TOP_CENTER" blendMode="SRC_ATOP" layoutY="1.0" prefHeight="938.0" prefWidth="392.0" spacing="3.0">
                            <children>
                               <Label layoutX="71.0" layoutY="20.0" text="ISI PAKET" textFill="WHITE">
                                  <font>
@@ -1121,7 +1121,7 @@
                               </Label>
                               <HBox alignment="CENTER" prefHeight="23.0" prefWidth="392.0" spacing="10.0">
                                  <children>
-                                    <Separator prefHeight="23.0" prefWidth="251.0" />
+                                    <Separator prefHeight="23.0" prefWidth="268.0" />
                                     <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="67.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/plus-separator.png" />
@@ -1129,114 +1129,14 @@
                                     </ImageView>
                                  </children>
                               </HBox>
-                              <Label text="ID" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
-                                 </font>
+                              <ScrollPane prefHeight="706.0" prefWidth="303.0" style="-fx-background-color: #FFFFFF;" stylesheets="@style.css">
                                  <VBox.margin>
-                                    <Insets right="255.0" top="10.0" />
+                                    <Insets left="50.0" right="40.0" top="15.0" />
                                  </VBox.margin>
-                              </Label>
-                              <TextField fx:id="txtIDProduk1" prefHeight="39.0" prefWidth="309.0">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="60.0" right="55.0" />
-                                 </VBox.margin>
-                                 <effect>
-                                    <DropShadow offsetX="4.0" offsetY="4.0" />
-                                 </effect>
-                              </TextField>
-                              <Label layoutX="71.0" layoutY="384.0" text="NAMA" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets right="230.0" top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <TextField fx:id="txtNama1" layoutX="70.0" layoutY="417.0" prefHeight="39.0" prefWidth="309.0" promptText="Masukkan Nama">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="60.0" right="55.0" />
-                                 </VBox.margin>
-                                 <effect>
-                                    <DropShadow offsetX="4.0" offsetY="4.0" />
-                                 </effect>
-                              </TextField>
-                              <Label layoutX="196.0" layoutY="461.0" text="KATEGORI" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets right="205.0" top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <ComboBox fx:id="cmbKategori1" prefHeight="39.0" prefWidth="309.0" promptText="Pilih Kategori" style="-fx-background-color: #ffffff;">
-                                 <VBox.margin>
-                                    <Insets left="60.0" right="55.0" />
-                                 </VBox.margin>
-                              </ComboBox>
-                              <Label layoutX="72.0" layoutY="536.0" text="HARGA" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets right="225.0" top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <TextField fx:id="txtHarga1" layoutX="70.0" layoutY="567.0" prefHeight="39.0" prefWidth="309.0" promptText="Masukkan Harga">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="60.0" right="55.0" />
-                                 </VBox.margin>
-                                 <effect>
-                                    <DropShadow offsetX="4.0" offsetY="4.0" />
-                                 </effect>
-                              </TextField>
-                              <Label layoutX="71.0" layoutY="572.0" text="STOK" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets right="235.0" top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <TextField fx:id="txtStock1" layoutX="70.0" layoutY="603.0" prefHeight="39.0" prefWidth="277.0" promptText="Masukkan Stok">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="60.0" right="55.0" />
-                                 </VBox.margin>
-                                 <effect>
-                                    <DropShadow offsetX="4.0" offsetY="4.0" />
-                                 </effect>
-                              </TextField>
-                              <Label layoutX="71.0" layoutY="606.0" text="DESKRIPSI" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets right="195.0" top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <TextArea fx:id="txtDeskripsi1" prefHeight="117.0" prefWidth="275.0" promptText="Masukkan Deskripsi">
-                                 <VBox.margin>
-                                    <Insets left="60.0" right="55.0" />
-                                 </VBox.margin>
-                                 <effect>
-                                    <DropShadow offsetX="4.0" offsetY="4.0" />
-                                 </effect>
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </TextArea>
+                                 <content>
+                                    <VBox fx:id="pnCartProduk" blendMode="SRC_ATOP" prefHeight="741.0" prefWidth="312.0" style="-fx-background-color: #051038;" />
+                                 </content>
+                              </ScrollPane>
                               <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
                                  <children>
                                     <Button fx:id="btnAdd1" mnemonicParsing="false" onAction="#onAddProduk" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="ADD" textAlignment="CENTER" textFill="WHITE">

@@ -48,10 +48,10 @@
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
          <HBox.margin>
-            <Insets left="40.0" />
+            <Insets left="30.0" />
          </HBox.margin>
       </Label>
-      <Button fx:id="btnAddProduk" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleTambahKeKeranjang" prefHeight="38.0" prefWidth="41.0" style="-fx-background-radius: 25;" stylesheets="@style.css" textFill="#0d2857">
+      <Button fx:id="btnTambah" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="8.0" style="-fx-background-radius: 25;" stylesheets="@style.css" textFill="#0d2857">
          <graphic>
             <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -60,7 +60,19 @@
             </ImageView>
          </graphic>
          <HBox.margin>
-            <Insets left="100.0" right="30.0" />
+            <Insets left="80.0" right="30.0" />
+         </HBox.margin>
+      </Button>
+      <Button fx:id="btnTambah1" layoutX="1024.0" layoutY="18.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="8.0" style="-fx-background-radius: 25;" stylesheets="@style.css" textFill="#0d2857">
+         <graphic>
+            <ImageView fx:id="btnHapus" fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/trash.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <HBox.margin>
+            <Insets right="20.0" />
          </HBox.margin>
       </Button>
    </children>

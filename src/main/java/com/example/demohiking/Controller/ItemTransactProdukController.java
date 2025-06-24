@@ -4,6 +4,7 @@ import com.example.demohiking.ADT.detailPaket;
 import com.example.demohiking.ADT.Produk;
 import com.example.demohiking.ADT.detailPaket;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -27,12 +28,10 @@ public class ItemTransactProdukController {
     private Label lblStok;
 
     @FXML
-    private TextField txtJumlah;
-
-    @FXML
     private Button btnTambah;
 
     private Produk produk;
+    private detailPaket item;
     private HomeKasirController homeKasirController; // reference ke parent controller
 
     public void setHomeController(HomeKasirController controller) {
@@ -49,17 +48,26 @@ public class ItemTransactProdukController {
         lblStok.setText(String.valueOf(produk.getStok()));
     }
 
-    @FXML
-    private void handleTambahKeKeranjang(ActionEvent event) {
-        try {
-            int jumlah = Integer.parseInt(txtJumlah.getText());
-            if (jumlah <= 0) return;
+//    @FXML
+//    private void handleTambahKeKeranjang(ActionEvent event) {
+//        if (produk.getStok() <= 0) {
+//            showAlert("Stok tidak mencukupi.");
+//            return;
+//        }
+//
+//        // Simpan nama produk + jumlah = 1
+//        detailPaket item = new detailPaket(produk.getNama(), produk.getId(), 1);
+//
+//        // Tambah ke keranjang via controller utama
+//        homeKasirController.tambahKeKeranjang(item);
+//    }
 
-            detailPaket item = new detailPaket(null, produk.getId(), jumlah);
-            homeKasirController.tambahKeKeranjang(item);
-
-        } catch (NumberFormatException e) {
-            System.out.println("Jumlah tidak valid");
-        }
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Peringatan");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
+

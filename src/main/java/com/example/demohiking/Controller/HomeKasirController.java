@@ -26,9 +26,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class HomeKasirController implements Initializable {
@@ -53,6 +51,8 @@ public class HomeKasirController implements Initializable {
     private VBox pnItemsPaket = null;
     @FXML
     private VBox pnItemsTransaksi = null;
+    @FXML
+    private VBox pnCartProduk = null;
 
     // HBOX ALL
     @FXML
@@ -151,6 +151,8 @@ public class HomeKasirController implements Initializable {
     private Button btnItemPaket;
     @FXML
     private Button btnItemProduk;
+
+
 
 
 
@@ -581,20 +583,6 @@ public class HomeKasirController implements Initializable {
 //    }
 
     private List<detailPaket> keranjangProduk = new ArrayList<>();
-
-    public void tambahKeKeranjang(detailPaket item) {
-        for (detailPaket dp : keranjangProduk) {
-            if (dp.getIdProduk().equals(item.getIdProduk())) {
-                dp.setJumlah(dp.getJumlah() + item.getJumlah());
-                return;
-            }
-        }
-        keranjangProduk.add(item);
-        System.out.println("Ditambahkan ke keranjang: " + item.getIdProduk() + " x" + item.getJumlah());
-    }
-
-
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -1160,43 +1148,119 @@ public class HomeKasirController implements Initializable {
         String keyword = txtSearchDenda.getText().trim().toLowerCase();
 
         String query = "SELECT * FROM Denda WHERE LOWER(ID_Denda) = ? OR LOWER(Jenis_Denda) LIKE ?";
-        try {
-            DBConnect connect = new DBConnect();
-            Connection conn = connect.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query);
+        List<Denda> foundList = new ArrayList<>();
+        DBConnect connect = new DBConnect();
+        try (
+
+                Connection conn = connect.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(query)
+        ) {
             pstmt.setString(1, keyword);
             pstmt.setString(2, "%" + keyword + "%");
 
-            ResultSet rs = pstmt.executeQuery();
-            List<Denda> foundList = new ArrayList<>();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Denda denda = new Denda(
+                            rs.getString("ID_Denda"),
+                            rs.getString("Jenis_Denda"),
+                            rs.getDouble("Nominal")
+                    );
+                    foundList.add(denda);
+                }
+            }
 
-            while (rs.next()) {
-                Denda denda = new Denda(
+            if (!foundList.isEmpty()) {
+                setDetailDenda(foundList.get(0));
+                loadDendaItems(foundList);
+            } else {
+                showAlert(Alert.AlertType.INFORMATION, "Pencarian Denda", "Denda tidak ditemukan.");
+                txtSearchDenda.clear();
+            }
+
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Kesalahan Database", "Gagal memuat data: " + e.getMessage());
+        }
+    }
+
+    private Denda getDendaById(String id) {
+        String query = "SELECT * FROM Denda WHERE ID_Denda = ?";
+        try (
+                Connection conn = new DBConnect().getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(query)
+        ) {
+            pstmt.setString(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new Denda(
                         rs.getString("ID_Denda"),
                         rs.getString("Jenis_Denda"),
                         rs.getDouble("Nominal")
                 );
-                foundList.add(denda);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-            if (!foundList.isEmpty()) {
-                setDetailDenda(foundList.get(0)); // tampilkan detail pertama
-                loadDendaItems(foundList);        // tampilkan hasil pencarian dalam list/tabel
+    @FXML
+    private void handleAktifkanDenda(MouseEvent event) {
+        String id = txtSearchDenda.getText().trim();
+
+        if (id.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Aktivasi Denda", "ID Denda tidak boleh kosong.");
+            return;
+        }
+
+        String checkQuery = "SELECT Status FROM Denda WHERE ID_Denda = ?";
+        String updateQuery = "UPDATE Denda SET Status = 'Aktif' WHERE ID_Denda = ?";
+
+        DBConnect connect = new DBConnect();
+        Connection conn = null;
+        PreparedStatement pstmtCheck = null;
+        PreparedStatement pstmtUpdate = null;
+
+        try {
+            conn = connect.getConnection();
+
+            pstmtCheck = conn.prepareStatement(checkQuery);
+            pstmtCheck.setString(1, id);
+            ResultSet rs = pstmtCheck.executeQuery();
+
+            if (rs.next()) {
+                String status = rs.getString("Status");
+                if ("Aktif".equalsIgnoreCase(status)) {
+                    showAlert(Alert.AlertType.INFORMATION, "Status Sudah Aktif", "Denda sudah aktif. Tidak dapat diaktifkan ulang.");
+                    return;
+                }
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Pencarian Denda");
-                alert.setHeaderText(null);
-                alert.setContentText("Denda tidak ditemukan.");
-                alert.showAndWait();
-                txtSearchDenda.clear();
+                showAlert(Alert.AlertType.WARNING, "ID Tidak Ditemukan", "ID Denda tidak ditemukan.");
+                return;
             }
 
-            rs.close();
-            pstmt.close();
-            conn.close();
+            // Update jika lolos validasi
+            pstmtUpdate = conn.prepareStatement(updateQuery);
+            pstmtUpdate.setString(1, id);
+
+            int rowsAffected = pstmtUpdate.executeUpdate();
+
+            if (rowsAffected > 0) {
+                showAlert(Alert.AlertType.INFORMATION, "Aktivasi Berhasil", "Denda berhasil diaktifkan kembali.");
+                loadDendaItems();
+            } else {
+                showAlert(Alert.AlertType.WARNING, "Aktivasi Gagal", "Gagal mengaktifkan denda.");
+            }
 
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Kesalahan Database", "Terjadi kesalahan: " + e.getMessage());
+        } finally {
+            try {
+                if (pstmtCheck != null) pstmtCheck.close();
+                if (pstmtUpdate != null) pstmtUpdate.close();
+                if (conn != null && !conn.isClosed()) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
