@@ -41,7 +41,7 @@ public class ItemProdukController {
             lblID.setText(produk.getId() != null ? produk.getId() : "-");
             lblNama.setText(produk.getNama() != null ? produk.getNama() : "-");
             lblKategori.setText(produk.getKategori() != null ? produk.getKategori() : "-");
-            lblHarga.setText(produk.getHarga() != 0 ? String.valueOf((int) produk.getHarga()) : "0");
+            lblHarga.setText(String.format("Rp. %,.0f", produk.getHarga()));
             lblStok.setText(String.valueOf(produk.getStok()));
         } else {
             lblID.setText("-");

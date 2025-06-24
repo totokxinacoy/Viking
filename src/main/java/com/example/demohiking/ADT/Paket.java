@@ -1,27 +1,47 @@
 package com.example.demohiking.ADT;
 
+import java.util.List;
+
 public class Paket {
     private String id;
     private String nama;
     private String deskripsi;
     private double harga;
     private double diskon;
+    private int jumlahPaket;
+    private List<detailPaket> isiPaket; // Tambahan: daftar isi paket
 
-    public Paket(String id, String nama, double harga, double diskon) {
+    // Constructor tanpa deskripsi
+    public Paket(String id, String nama, double harga, double diskon, int jumlahPaket) {
         this.id = id;
         this.nama = nama;
         this.deskripsi = null;
         this.harga = harga;
         this.diskon = diskon;
+        this.jumlahPaket = jumlahPaket;
     }
 
-    public Paket(String id, String nama, String deskripsi, double harga, double diskon) {
+    // Constructor lengkap tanpa isiPaket
+    public Paket(String id, String nama, String deskripsi, double harga, double diskon, int jumlahPaket) {
         this.id = id;
         this.nama = nama;
         this.deskripsi = deskripsi;
         this.harga = harga;
         this.diskon = diskon;
+        this.jumlahPaket = jumlahPaket;
     }
+
+    // Constructor lengkap + isi paket
+    public Paket(String id, String nama, String deskripsi, double harga, double diskon, int jumlahPaket, List<detailPaket> isiPaket) {
+        this.id = id;
+        this.nama = nama;
+        this.deskripsi = deskripsi;
+        this.harga = harga;
+        this.diskon = diskon;
+        this.jumlahPaket = jumlahPaket;
+        this.isiPaket = isiPaket;
+    }
+
 
     public String getId() {
         return id;
@@ -63,4 +83,20 @@ public class Paket {
         this.diskon = diskon;
     }
 
+    public int getJumlahPaket() {
+        return jumlahPaket;
+    }
+
+    public void setJumlahPaket(int jumlahPaket) {
+        this.jumlahPaket = jumlahPaket;
+    }
+
+    public List<detailPaket> getIsiPaket() {
+        return isiPaket;
+    }
+
+    public void setIsiPaket(List<detailPaket> isiPaket) {
+        this.isiPaket = isiPaket;
+    }
 }
+

@@ -34,20 +34,12 @@
             <Insets left="25.0" />
          </HBox.margin>
       </Label>
-      <Label fx:id="lblHarga1" alignment="CENTER_RIGHT" layoutX="585.0" layoutY="26.0" prefHeight="22.0" prefWidth="61.0" text="Rp." textFill="WHITE" wrapText="true">
-         <font>
-            <Font name="Franklin Gothic Demi Cond" size="18.0" />
-         </font>
-         <HBox.margin>
-            <Insets left="30.0" />
-         </HBox.margin>
-      </Label>
       <Label fx:id="lblHarga" layoutX="406.0" layoutY="26.0" prefHeight="22.0" prefWidth="120.0" text="  Harga Produk" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
          <HBox.margin>
-            <Insets />
+            <Insets left="25.0" />
          </HBox.margin>
       </Label>
       <Label fx:id="lblStok" alignment="CENTER" layoutX="582.0" layoutY="26.0" prefHeight="22.0" prefWidth="139.0" text="Stok Produk" textFill="WHITE" wrapText="true">
@@ -67,7 +59,7 @@
             </ImageView>
          </graphic>
          <HBox.margin>
-            <Insets left="75.0" right="20.0" />
+            <Insets left="100.0" right="20.0" />
          </HBox.margin>
       </Button>
       <Button fx:id="btnDelete" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleDeleteButtonClick" stylesheets="@style.css" textFill="#0d2857">

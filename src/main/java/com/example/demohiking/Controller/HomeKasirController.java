@@ -1,8 +1,6 @@
 package com.example.demohiking.Controller;
 
-import com.example.demohiking.ADT.Customer;
-import com.example.demohiking.ADT.Denda;
-import com.example.demohiking.ADT.Produk;
+import com.example.demohiking.ADT.*;
 import com.example.demohiking.Connection.DBConnect;
 import com.example.demohiking.Session;
 import javafx.application.Platform;
@@ -17,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -43,7 +42,7 @@ public class HomeKasirController implements Initializable {
     private boolean isImageSelected = false;
     private File selectedImageFile;
 
-    // ITEM ALL
+    // VBOX ALL
     @FXML
     private VBox pnItemsProduk = null;
     @FXML
@@ -54,6 +53,12 @@ public class HomeKasirController implements Initializable {
     private VBox pnItemsPaket = null;
     @FXML
     private VBox pnItemsTransaksi = null;
+
+    // HBOX ALL
+    @FXML
+    private HBox papanPaket = null;
+    @FXML
+    private HBox papanProduk = null;
 
     // BUTTON MENU ALL
     @FXML
@@ -136,6 +141,10 @@ public class HomeKasirController implements Initializable {
     private TextArea txtDeskripsiDenda;
     @FXML
     private TextField txtNominal;
+    @FXML
+    private Button btnAktifDenda;
+    @FXML
+    private ComboBox<String> cmbFilterStatusDenda;
 
     // PAKET ITEMS
     @FXML
@@ -230,6 +239,36 @@ public class HomeKasirController implements Initializable {
                 });
 
                 pnItemsProduk.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void loadProdukItemsTransact(List<Produk> dataProduk) {
+        papanProduk.setVisible(true);
+        papanPaket.setVisible(false);
+        pnItemsPaket.getChildren().clear();
+
+
+        for (int i = 0; i < dataProduk.size(); i++) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemTransactProduk.fxml"));
+                Node node = loader.load();
+
+                ItemTransactProdukController controller = loader.getController();
+                controller.setData(dataProduk.get(i));
+                controller.setHomeController(this); // <-- penting!
+
+                final int j = i;
+                node.setOnMouseEntered(event -> {
+                    node.setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                node.setOnMouseExited(event -> {
+                    node.setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+
+                pnItemsPaket.getChildren().add(node);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -447,6 +486,116 @@ public class HomeKasirController implements Initializable {
         txtEmail.setText(customer.getEmail());
     }
 
+    /* --- PAKET METHOD --- */
+    @FXML
+    private void handleBtnItemProduk(MouseEvent event) {
+        List<Produk> dataProduk = getDataProduk();
+        loadProdukItemsTransact(dataProduk);
+    }
+
+    @FXML
+    private void handleBtnItemPaket(MouseEvent event) {
+        List<Paket> dataPaket = getDataPaket(); // ganti dengan data asli
+        loadItemPaket(dataPaket);
+    }
+
+    private void loadItemPaket(List<Paket> dataPaket) {
+        pnItemsPaket.getChildren().clear();
+        papanPaket.setVisible(true);
+        papanProduk.setVisible(false);
+        pnItemsPaket.getChildren().clear();
+
+        for (Paket paket : dataPaket) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemPaket.fxml"));
+                Node node = loader.load();
+
+                ItemPaketController controller = loader.getController();
+                controller.setData(paket);
+                controller.setHomeController(this); // opsional, kalau diperlukan
+
+                // Hover effect (opsional)
+                node.setOnMouseEntered(e -> node.setStyle("-fx-background-color: #051036; -fx-background-radius: 15"));
+                node.setOnMouseExited(e -> node.setStyle("-fx-background-color: #0D2857; -fx-background-radius: 15"));
+
+                pnItemsPaket.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public List<Paket> getDataPaket() {
+        List<Paket> daftarPaket = new ArrayList<>();
+        DBConnect db = new DBConnect();
+
+        String query = "SELECT ID_Paket, Nama_Paket, Harga, Diskon FROM Paket";
+
+        try (Connection conn = db.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String id = rs.getString("ID_Paket");
+                String nama = rs.getString("Nama_Paket");
+                double harga = rs.getDouble("Harga");
+                double diskon = rs.getDouble("Diskon");
+
+                int jumlah = 1;
+
+                Paket paket = new Paket(id, nama, harga, diskon, jumlah);
+                daftarPaket.add(paket);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return daftarPaket;
+    }
+
+//    public void setDetailPaket(Paket paket) {
+//        if (paket == null) return;
+//
+//        lblNamaPaket.setText(paket.getNama());
+//        lblHargaPaket.setText(String.format("Rp%,.0f", paket.getHarga()));
+//        lblDiskon.setText(String.format("%.0f%%", paket.getDiskon() * 100));
+//        lblJumlahPaket.setText(String.valueOf(paket.getJumlahPaket()));
+//
+//        // Tampilkan isi detail paket
+//        vbDetailPaket.getChildren().clear();
+//        if (paket.getIsiPaket() != null && !paket.getIsiPaket().isEmpty()) {
+//            for (detailPaket detail : paket.getIsiPaket()) {
+//                Label lbl = new Label("- " + detail.getIdProduk() + " x" + detail.getJumlah());
+//                lbl.setStyle("-fx-text-fill: white; -fx-font-size: 13;");
+//                vbDetailPaket.getChildren().add(lbl);
+//            }
+//        } else {
+//            Label kosong = new Label("Tidak ada isi paket");
+//            kosong.setStyle("-fx-text-fill: gray;");
+//            vbDetailPaket.getChildren().add(kosong);
+//        }
+
+        // (Opsional) Simpan ke keranjang jika ingin langsung ditransaksikan
+        // tambahKeKeranjangPaket(paket);
+//    }
+
+    private List<detailPaket> keranjangProduk = new ArrayList<>();
+
+    public void tambahKeKeranjang(detailPaket item) {
+        for (detailPaket dp : keranjangProduk) {
+            if (dp.getIdProduk().equals(item.getIdProduk())) {
+                dp.setJumlah(dp.getJumlah() + item.getJumlah());
+                return;
+            }
+        }
+        keranjangProduk.add(item);
+        System.out.println("Ditambahkan ke keranjang: " + item.getIdProduk() + " x" + item.getJumlah());
+    }
+
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Inisalisasi Component Produk
@@ -471,7 +620,7 @@ public class HomeKasirController implements Initializable {
         });
         btnSearchCustomer.setDisable(true);
 
-        // Inisialisasi ComboBox jenis denda
+        // Inisialisasi Component Denda
         cmbJenisDenda.getItems().addAll("Kehilangan", "Kerusakan", "Terlambat");
         loadDendaItems();
         txtIDDenda.setEditable(false);
@@ -480,6 +629,13 @@ public class HomeKasirController implements Initializable {
             btnSearchDenda.setDisable(newValue.trim().isEmpty());
         });
         txtSearchDenda.setDisable(false);
+
+        // Inisialisasi Component Paket
+        Platform.runLater(() -> {
+            papanPaket.setVisible(false);
+            papanProduk.setVisible(false);
+            pnItemsPaket.getChildren().clear();
+        });
 
         // Tunda pengecekan session sampai setelah UI tampil
         Platform.runLater(this::cekSession);
@@ -587,6 +743,18 @@ public class HomeKasirController implements Initializable {
     private void ScaleDownProduk(MouseEvent event) {
         btnItemProduk.setScaleX(1.0);
         btnItemProduk.setScaleY(1.0);
+    }
+
+    @FXML
+    private void ScaleUpDenda(MouseEvent event) {
+        btnAktifDenda.setScaleX(0.95);
+        btnAktifDenda.setScaleY(0.95);
+    }
+
+    @FXML
+    private void ScaleDownDenda(MouseEvent event) {
+        btnAktifDenda.setScaleX(1.0);
+        btnAktifDenda.setScaleY(1.0);
     }
 
 
