@@ -577,12 +577,48 @@ public class HomeKasirController implements Initializable {
 //            kosong.setStyle("-fx-text-fill: gray;");
 //            vbDetailPaket.getChildren().add(kosong);
 //        }
-
-        // (Opsional) Simpan ke keranjang jika ingin langsung ditransaksikan
-        // tambahKeKeranjangPaket(paket);
+//
+//         (Opsional) Simpan ke keranjang jika ingin langsung ditransaksikan
+//         tambahKeKeranjangPaket(paket);
 //    }
 
-    private List<detailPaket> keranjangProduk = new ArrayList<>();
+    private List<detailPaket> keranjang = new ArrayList<>();
+
+    public void updateDetailProduk(detailPaket newItem) {
+        boolean found = false;
+        for (detailPaket item : keranjang) {
+            if (item.getProduk().getId().equals(newItem.getProduk().getId())) {
+                item.setJumlah(newItem.getJumlah());
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            keranjang.add(newItem);
+        }
+
+        refreshKeranjangView();
+    }
+
+    public void refreshKeranjangView() {
+        pnCartProduk.getChildren().clear();
+
+        try {
+            for (detailPaket item : keranjang) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemTransactProduk.fxml"));
+                Node node = loader.load();
+
+
+                ItemTransactProdukController controller = loader.getController();
+                controller.setData(item.getProduk());
+//                controller.setJumlah(item.getJumlah());
+                pnCartProduk.getChildren().add(node);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

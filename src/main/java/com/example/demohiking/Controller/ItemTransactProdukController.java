@@ -2,12 +2,10 @@ package com.example.demohiking.Controller;
 
 import com.example.demohiking.ADT.detailPaket;
 import com.example.demohiking.ADT.Produk;
-import com.example.demohiking.ADT.detailPaket;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 
 public class ItemTransactProdukController {
@@ -30,9 +28,14 @@ public class ItemTransactProdukController {
     @FXML
     private Button btnTambah;
 
+    @FXML
+    private Button btnKurang;
+
+    private int jumlah = 0;
+
     private Produk produk;
     private detailPaket item;
-    private HomeKasirController homeKasirController; // reference ke parent controller
+    private HomeKasirController homeKasirController;
 
     public void setHomeController(HomeKasirController controller) {
         this.homeKasirController = controller;
@@ -40,7 +43,6 @@ public class ItemTransactProdukController {
 
     public void setData(Produk produk) {
         this.produk = produk;
-
         lblIDProduk.setText(produk.getId() != null ? produk.getId() : "-");
         lblNamaProduk.setText(produk.getNama() != null ? produk.getNama() : "-");
         lblKategori.setText(produk.getKategori() != null ? produk.getKategori() : "-");
@@ -48,19 +50,37 @@ public class ItemTransactProdukController {
         lblStok.setText(String.valueOf(produk.getStok()));
     }
 
-//    @FXML
-//    private void handleTambahKeKeranjang(ActionEvent event) {
-//        if (produk.getStok() <= 0) {
-//            showAlert("Stok tidak mencukupi.");
-//            return;
-//        }
-//
-//        // Simpan nama produk + jumlah = 1
-//        detailPaket item = new detailPaket(produk.getNama(), produk.getId(), 1);
-//
-//        // Tambah ke keranjang via controller utama
-//        homeKasirController.tambahKeKeranjang(item);
-//    }
+    @FXML
+    private void handleTambahProduk(ActionEvent event) {
+        if (produk.getStok() > jumlah) {
+            jumlah++;
+            updateDetailPaket();
+        } else {
+            showAlert("Stok tidak mencukupi!");
+        }
+    }
+
+    @FXML
+    private void handleKurangProduk(ActionEvent event) {
+        if (jumlah > 0) {
+            jumlah--;
+            updateDetailPaket();
+        } else {
+            showAlert("Jumlah tidak bisa kurang dari 0.");
+        }
+    }
+
+    private void updateDetailPaket() {
+        if (item == null) {
+            item = new detailPaket();
+            item.setProduk(produk);
+        }
+        item.setJumlah(jumlah);
+
+        if (homeKasirController != null) {
+            homeKasirController.updateDetailProduk(item);
+        }
+    }
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -70,4 +90,3 @@ public class ItemTransactProdukController {
         alert.showAndWait();
     }
 }
-

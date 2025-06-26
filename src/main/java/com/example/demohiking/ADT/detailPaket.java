@@ -4,7 +4,11 @@ public class detailPaket {
     private String idPaket;
     private String idProduk;
     private int jumlah;
+    private Produk produk;
 
+    public detailPaket() {
+
+    }
     public detailPaket(String idPaket, String idProduk, int jumlah) {
         this.idPaket = idPaket;
         this.idProduk = idProduk;
@@ -25,6 +29,15 @@ public class detailPaket {
 
     public void setIdProduk(String idProduk) {
         this.idProduk = idProduk;
+    }
+
+
+    public void setProduk(Produk produk) {
+        this.produk = produk;
+    }
+
+    public Produk getProduk() {
+        return produk;
     }
 
     public int getJumlah() {
