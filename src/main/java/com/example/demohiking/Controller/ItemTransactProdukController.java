@@ -28,8 +28,6 @@ public class ItemTransactProdukController {
     @FXML
     private Button btnTambah;
 
-    @FXML
-    private Button btnKurang;
 
     private int jumlah = 0;
 
@@ -57,16 +55,6 @@ public class ItemTransactProdukController {
             updateDetailPaket();
         } else {
             showAlert("Stok tidak mencukupi!");
-        }
-    }
-
-    @FXML
-    private void handleKurangProduk(ActionEvent event) {
-        if (jumlah > 0) {
-            jumlah--;
-            updateDetailPaket();
-        } else {
-            showAlert("Jumlah tidak bisa kurang dari 0.");
         }
     }
 
