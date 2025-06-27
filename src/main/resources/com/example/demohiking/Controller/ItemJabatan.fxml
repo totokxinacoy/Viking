@@ -9,19 +9,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="itemD" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1095.0" style="-fx-background-color: #0D2857; -fx-background-radius: 15; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.ItemJabatanController">
+<HBox fx:id="itemD" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1095.0" spacing="25.0" style="-fx-background-color: #0D2857; -fx-background-radius: 15; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.ItemJabatanController">
    <children>
-      <Label fx:id="lblID" prefHeight="22.0" prefWidth="129.0" text="ID Jabatan" textFill="WHITE">
+      <Label fx:id="lblID" alignment="CENTER" prefHeight="22.0" prefWidth="100.0" text="ID Jabatan" textFill="WHITE">
          <HBox.margin>
-            <Insets left="70.0" />
+            <Insets left="65.0" />
          </HBox.margin>
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="lblNama" alignment="CENTER" prefHeight="22.0" prefWidth="162.0" text="Nama Jabatan" textFill="WHITE" wrapText="true">
+      <Label fx:id="lblNama" alignment="CENTER" prefHeight="22.0" prefWidth="100.0" text="Nama Jabatan" textFill="WHITE" wrapText="true">
          <HBox.margin>
-            <Insets left="25.0" />
+            <Insets left="40.0" />
          </HBox.margin>
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
@@ -36,7 +36,7 @@
             </ImageView>
          </graphic>
          <HBox.margin>
-            <Insets left="550.0" />
+            <Insets left="580.0" right="10.0" />
          </HBox.margin>
       </Button>
       <Button fx:id="btnDelete" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleDeleteButtonClick" stylesheets="@style.css" textFill="#0d2857">
@@ -48,7 +48,7 @@
             </ImageView>
          </graphic>
          <HBox.margin>
-            <Insets left="30.0" />
+            <Insets />
          </HBox.margin>
       </Button>
    </children>
