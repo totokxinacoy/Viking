@@ -118,7 +118,7 @@ public class ItemKaryawanController {
                     DBConnect db = new DBConnect();
                     Connection conn = db.getConnection();
 
-                    String query = "UPDATE Karyawan SET status = 'Non Aktif' WHERE NPK = ?";
+                    String query = "UPDATE Karyawan SET status = 'Non Aktif' WHERE ID_Jabatan = ?";
                     PreparedStatement pstat = conn.prepareStatement(query);
                     pstat.setString(1, karyawan.getId());
 
