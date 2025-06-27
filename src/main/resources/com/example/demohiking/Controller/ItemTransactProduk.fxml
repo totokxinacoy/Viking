@@ -9,46 +9,46 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="itemC" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1095.0" style="-fx-background-color: #0D2857; -fx-background-radius: 15; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.ItemTransactProdukController">
+<HBox fx:id="Item1" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1095.0" spacing="50.0" style="-fx-background-color: #0D2857; -fx-background-radius: 15; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.ItemTransactProdukController">
    <children>
-      <Label fx:id="lblIDProduk" prefHeight="22.0" prefWidth="96.0" text="ID Produk" textFill="WHITE">
+      <Label fx:id="lblIDProduk" prefHeight="22.0" prefWidth="100.0" text="ID Produk" textFill="WHITE">
          <HBox.margin>
-            <Insets left="60.0" />
+            <Insets />
          </HBox.margin>
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="lblNamaProduk" prefHeight="22.0" prefWidth="158.0" text="Nama Produk" textFill="WHITE" wrapText="true">
+      <Label fx:id="lblNamaProduk" prefHeight="22.0" prefWidth="135.0" text="Nama Produk" textFill="WHITE" wrapText="true">
          <HBox.margin>
-            <Insets left="40.0" />
+            <Insets />
          </HBox.margin>
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="lblKategori" layoutX="201.0" layoutY="26.0" prefHeight="22.0" prefWidth="160.0" text="Kategori Produk" textFill="WHITE" wrapText="true">
+      <Label fx:id="lblKategori" layoutX="201.0" layoutY="26.0" prefHeight="22.0" prefWidth="125.0" text="Kategori Produk" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
          <HBox.margin>
-            <Insets left="25.0" />
+            <Insets />
          </HBox.margin>
       </Label>
-      <Label fx:id="lblHarga" alignment="CENTER" layoutX="406.0" layoutY="26.0" prefHeight="22.0" prefWidth="144.0" text="  Harga Produk" textFill="WHITE" wrapText="true">
+      <Label fx:id="lblHarga" alignment="CENTER" layoutX="406.0" layoutY="26.0" prefHeight="22.0" prefWidth="122.0" text="  Harga Produk" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
          <HBox.margin>
-            <Insets left="50.0" />
+            <Insets />
          </HBox.margin>
       </Label>
-      <Label fx:id="lblStok" alignment="CENTER" layoutX="582.0" layoutY="26.0" prefHeight="22.0" prefWidth="141.0" text="Stok Produk" textFill="WHITE" wrapText="true">
+      <Label fx:id="lblStok" alignment="CENTER" layoutX="582.0" layoutY="26.0" prefHeight="22.0" prefWidth="108.0" text="Stok Produk" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
          <HBox.margin>
-            <Insets left="30.0" />
+            <Insets />
          </HBox.margin>
       </Label>
       <Button fx:id="btnTambah" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleTambahProduk" prefHeight="38.0" prefWidth="8.0" style="-fx-background-radius: 25;" stylesheets="@style.css" textFill="#0d2857">
@@ -60,11 +60,14 @@
             </ImageView>
          </graphic>
          <HBox.margin>
-            <Insets left="110.0" right="30.0" />
+            <Insets left="40.0" />
          </HBox.margin>
       </Button>
    </children>
    <effect>
       <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
    </effect>
+   <padding>
+      <Insets left="50.0" />
+   </padding>
 </HBox>

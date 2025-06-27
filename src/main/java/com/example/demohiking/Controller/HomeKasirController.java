@@ -605,15 +605,14 @@ public class HomeKasirController implements Initializable {
         pnCartProduk.getChildren().clear();
 
         try {
+            int index = 1;
             for (detailPaket item : keranjang) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemTransactProduk.fxml"));
                 Node node = loader.load();
-
-
                 ItemTransactProdukController controller = loader.getController();
-                controller.setData(item.getProduk());
-//                controller.setJumlah(item.getJumlah());
+                controller.setData(item, index);
                 pnCartProduk.getChildren().add(node);
+                index++;
             }
         } catch (IOException e) {
             e.printStackTrace();
