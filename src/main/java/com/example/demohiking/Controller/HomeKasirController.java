@@ -50,6 +50,8 @@ public class HomeKasirController implements Initializable {
     @FXML
     private VBox pnItemsPaket = null;
     @FXML
+    private VBox pnItemsHomePaket = null;
+    @FXML
     private VBox pnItemsTransaksi = null;
     @FXML
     private VBox pnCartProduk = null;
@@ -505,11 +507,13 @@ public class HomeKasirController implements Initializable {
 
     /* --- PAKET METHOD --- */
     // NEW PAKET
+    private void loadItemPaket() {
+        List<Paket> dataPaket = getDataPaket();
+        loadItemPaket(dataPaket);
+    }
+
     private void loadItemPaket(List<Paket> dataPaket) {
-        pnItemsPaket.getChildren().clear();
-        papanPaket.setVisible(true);
-        papanProduk.setVisible(false);
-        pnItemsPaket.getChildren().clear();
+        pnItemsHomePaket.getChildren().clear();
 
         for (Paket paket : dataPaket) {
             try {
@@ -518,17 +522,20 @@ public class HomeKasirController implements Initializable {
 
                 ItemPaketController controller = loader.getController();
                 controller.setData(paket);
-                controller.setHomeController(this); // opsional, kalau diperlukan
+                controller.setHomeController(this);
 
                 // Hover effect (opsional)
                 node.setOnMouseEntered(e -> node.setStyle("-fx-background-color: #051036; -fx-background-radius: 15"));
                 node.setOnMouseExited(e -> node.setStyle("-fx-background-color: #0D2857; -fx-background-radius: 15"));
 
-                pnItemsPaket.getChildren().add(node);
+                pnItemsHomePaket.getChildren().add(node);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+    public void refreshPaket() {
+        loadItemPaket();
     }
 
     public List<Paket> getDataPaket() {
@@ -628,6 +635,10 @@ public class HomeKasirController implements Initializable {
         }
     }
 
+    public void showHomePaketPanel() {
+        pnlHomePaket.toFront();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Inisalisasi Component Produk
@@ -664,6 +675,7 @@ public class HomeKasirController implements Initializable {
 
         // Inisialisasi Component Paket
         loadProdukItemsTransact();
+        loadItemPaket();
         
 
         // Tunda pengecekan session sampai setelah UI tampil

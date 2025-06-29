@@ -40,13 +40,13 @@ public class ItemPaketController {
         if (paket != null) {
             lblID.setText(paket.getId() != null ? paket.getId() : "-");
             lblNama.setText(paket.getNama() != null ? paket.getNama() : "-");
-            lblHarga.setText(paket.getHarga() != 0 ? String.valueOf((int) paket.getHarga()) : "0");
+            lblHarga.setText(paket.getHarga() > 0 ? String.format("Rp. %,.0f", paket.getHarga()) : "Rp. 0");
             lblDiskon.setText(String.format("%.0f%%", paket.getDiskon() * 100));
-            lblJumlah.setText(String.valueOf(paket.getJumlahPaket()));
+            lblJumlah.setText(String.format("%,d", paket.getJumlahPaket()));
         } else {
             lblID.setText("-");
             lblNama.setText("-");
-            lblHarga.setText("0");
+            lblHarga.setText("Rp. 0");
             lblDiskon.setText("0%");
             lblJumlah.setText("0");
         }
@@ -54,6 +54,11 @@ public class ItemPaketController {
 
     @FXML
     private void handleUpdateButtonClick() {
+        if (paket == null) {
+            showAlert(Alert.AlertType.WARNING, "Update Gagal", "Data paket tidak tersedia.");
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("UpdatePaket.fxml"));
             Parent root = loader.load();
@@ -67,10 +72,10 @@ public class ItemPaketController {
             stage.setTitle("Update Paket");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-
             stage.show();
+
         } catch (IOException e) {
-            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Gagal Membuka Form", e.getMessage());
         }
     }
 
@@ -88,33 +93,32 @@ public class ItemPaketController {
 
         confirm.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                try {
-                    DBConnect db = new DBConnect();
-                    Connection conn = db.getConnection();
-
-                    String query = "UPDATE Paket SET status = 'Non Aktif' WHERE ID_Paket = ?";
-                    PreparedStatement pstat = conn.prepareStatement(query);
-                    pstat.setString(1, paket.getId());
-
-                    int rows = pstat.executeUpdate();
-                    pstat.close();
-                    conn.close();
-
-                    if (rows > 0) {
-                        showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Paket telah dihapus.");
-
-                        if (homeKasirController != null) {
-                            homeKasirController.RefreshData();
-                        }
-                    } else {
-                        showAlert(Alert.AlertType.WARNING, "Gagal", "Paket tidak ditemukan di database.");
-                    }
-
-                } catch (SQLException e) {
-                    showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
-                }
+                hapusPaket();
             }
         });
+    }
+
+    private void hapusPaket() {
+        String query = "UPDATE Paket SET status = 'Non Aktif' WHERE ID_Paket = ?";
+        try (
+                Connection conn = new DBConnect().getConnection();
+                PreparedStatement pstat = conn.prepareStatement(query)
+        ) {
+            pstat.setString(1, paket.getId());
+
+            int rows = pstat.executeUpdate();
+            if (rows > 0) {
+                showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Paket telah dihapus.");
+                if (homeKasirController != null) {
+                    homeKasirController.RefreshData();
+                }
+            } else {
+                showAlert(Alert.AlertType.WARNING, "Gagal", "Paket tidak ditemukan di database.");
+            }
+
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+        }
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
@@ -124,11 +128,4 @@ public class ItemPaketController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-//    @FXML
-//    private void handleSelectItem() {
-//        if (homeKasirController != null && paket != null) {
-//            homeKasirController.setDetailPaket(paket);
-//        }
-//    }
 }

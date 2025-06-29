@@ -10,8 +10,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.sql.*;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.List;
 
 public class FormIsiPaketController {
@@ -91,7 +89,7 @@ public class FormIsiPaketController {
         double hargaAwal = hitungTotalHargaProduk();
 
         try {
-            String input = txtDiskon.getText().replace(",", ".").trim();
+            String input = txtDiskon.getText().replace("%", "").replace(",", ".").trim();
             if (!input.isEmpty()) {
                 diskon = Double.parseDouble(input);
             }
@@ -114,22 +112,56 @@ public class FormIsiPaketController {
 
     @FXML
     private void handleSimpanKeDatabase(ActionEvent event) {
-        String idPaket = txtAutoID.getText();
-        String nama = txtNamaPaket.getText();
-        String deskripsi = txtDeskripsi.getText();
+        String idPaket = txtAutoID.getText().trim();
+        String nama = txtNamaPaket.getText().trim();
+        String deskripsi = txtDeskripsi.getText().trim();
+        String jumlahStr = txtJumlahPaket.getText().trim();
+        String diskonStr = txtDiskon.getText().replace("%", "").replace(",", ".").trim();
+        String hargaStr = txtHarga.getText().trim();
 
-        int jumlahPaket = Integer.parseInt(txtJumlahPaket.getText());
-        double harga = parseNominal(txtHarga.getText());
-        double diskon = Double.parseDouble(txtDiskon.getText());
-
-        if (diskon < 0 || diskon > 100) {
-            showAlert("Diskon harus bernilai antara 0% - 100%");
+        if (nama.isEmpty() || deskripsi.isEmpty() || jumlahStr.isEmpty() || diskonStr.isEmpty()) {
+            showAlert("Semua field wajib diisi.");
             return;
         }
 
-        DBConnect db = new DBConnect();
+        if (hargaStr.isEmpty() || parseNominal(hargaStr) <= 0) {
+            showAlert("Harga paket tidak valid.");
+            return;
+        }
 
-        try (Connection conn = db.getConnection()) {
+        int jumlahPaket;
+        double diskon, harga;
+
+        try {
+            jumlahPaket = Integer.parseInt(jumlahStr);
+            if (jumlahPaket <= 0) {
+                showAlert("Jumlah paket harus lebih dari 0.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Jumlah harus berupa angka.");
+            return;
+        }
+
+        try {
+            diskon = Double.parseDouble(diskonStr);
+            if (diskon < 0 || diskon > 100) {
+                showAlert("Diskon harus antara 0% - 100%");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Diskon harus berupa angka.");
+            return;
+        }
+
+        harga = parseNominal(hargaStr);
+
+        if (produkDalamPaket == null || produkDalamPaket.isEmpty()) {
+            showAlert("Minimal pilih 1 produk untuk membuat paket.");
+            return;
+        }
+
+        try (Connection conn = new DBConnect().getConnection()) {
             conn.setAutoCommit(false);
 
             String insertPaket = "INSERT INTO Paket (ID_Paket, Nama_Paket, Harga, Diskon, Deskripsi, Jumlah) VALUES (?, ?, ?, ?, ?, ?)";
@@ -151,6 +183,7 @@ public class FormIsiPaketController {
                 detailStmt.addBatch();
             }
             detailStmt.executeBatch();
+
             String updateStok = "UPDATE Produk SET Stok = Stok - ? WHERE ID_Produk = ?";
             PreparedStatement stokStmt = conn.prepareStatement(updateStok);
             for (detailPaket item : produkDalamPaket) {
@@ -159,16 +192,18 @@ public class FormIsiPaketController {
                 stokStmt.addBatch();
             }
             stokStmt.executeBatch();
-            stokStmt.close();
+
             conn.commit();
 
             if (homeKasirController != null) {
                 homeKasirController.clearKeranjang();
                 homeKasirController.refreshKeranjangView();
                 homeKasirController.refreshProdukList();
+                homeKasirController.refreshPaket();
+                homeKasirController.showHomePaketPanel();
             }
 
-            showAlert("Paket berhasil disimpan ke database!");
+            showAlert("✅ Paket berhasil disimpan ke database!");
             ((Stage) txtAutoID.getScene().getWindow()).close();
 
         } catch (SQLException e) {
@@ -187,7 +222,6 @@ public class FormIsiPaketController {
         alert.setContentText(pesan);
         alert.showAndWait();
     }
-
 
     private double parseNominal(String text) {
         String cleaned = text.replace("Rp", "").replace(".", "").replace(",", "").trim();

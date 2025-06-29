@@ -1005,163 +1005,6 @@
                   </Button>
                </children>
             </Pane>
-            <Pane fx:id="pnlHomePaket" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
-                  <TextField layoutX="85.0" layoutY="100.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI PAKET" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
-                     <font>
-                        <Font name="Segoe UI Bold" size="24.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="5.0" left="20.0" top="5.0" />
-                     </padding>
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" height="2.0" offsetX="4.0" offsetY="4.0" radius="0.5" width="2.0">
-                           <color>
-                              <Color opacity="0.5" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                  </TextField>
-                  <Pane layoutX="85.0" layoutY="225.0" prefHeight="783.0" prefWidth="1126.0" style="-fx-background-radius: 15; -fx-background-color: #D4EBF8;" stylesheets="@style.css">
-                     <children>
-                        <ScrollPane layoutY="81.0" prefHeight="705.0" prefWidth="1126.0">
-                           <content>
-                              <VBox fx:id="pnItemsPaket1" prefHeight="689.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </VBox>
-                           </content>
-                        </ScrollPane>
-                        <HBox fx:id="papanProduk1" layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="1126.0" visible="false">
-                           <children>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="70.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="100.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" layoutX="207.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="KATEGORI" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="100.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" layoutX="382.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HARGA" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="100.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" layoutX="606.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STOK" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="100.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                           </children>
-                        </HBox>
-                        <HBox fx:id="papanPaket1" prefHeight="74.0" prefWidth="1126.0" visible="false">
-                           <children>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="70.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA PAKET" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="130.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                           </children>
-                        </HBox>
-                     </children>
-                  </Pane>
-                  <ImageView fitHeight="32.0" fitWidth="25.0" layoutX="1163.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/search.png" />
-                     </image>
-                  </ImageView>
-                  <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
-                     <children>
-                        <Label layoutX="159.0" layoutY="49.0" text="DETAIL" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </Pane>
-                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
-                     <children>
-                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/box.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label prefHeight="38.0" prefWidth="158.0" text="MENU PAKET" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/home-icon-silhouette.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="1320.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="90.0" layoutY="154.0" prefHeight="65.0" prefWidth="1126.0">
-                     <children>
-                        <Button fx:id="btnNewPaket" onAction="#handleClicks" onMouseClicked="#handleClicks" onMousePressed="#ScaleUpHomePaket" onMouseReleased="#ScaleDownHomePaket" prefHeight="45" prefWidth="120" style="-fx-background-color: linear-gradient(to right, #4D80E4, #3554D1);                -fx-text-fill: white;                -fx-font-family: 'Franklin Gothic Demi Cond';                -fx-font-size: 16px;                -fx-background-radius: 8;                -fx-border-radius: 8;                -fx-cursor: hand;                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 4, 0, 2, 2);" text=" NEW">
-                           <graphic>
-                              <ImageView fitHeight="30" fitWidth="30" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/box.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <ComboBox fx:id="cmbFilterStatus1" prefHeight="36.0" prefWidth="148.0" promptText="Filter Status" style="-fx-background-color: white;                  -fx-border-color: #3554D1;                  -fx-border-radius: 6;                  -fx-background-radius: 6;                  -fx-font-family: 'Segoe UI';                  -fx-font-size: 14px;                  -fx-padding: 0 0 0 10;">
-                           <HBox.margin>
-                              <Insets left="850.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                     </children>
-                  </HBox>
-               </children>
-            </Pane>
             <Pane fx:id="pnlPaket" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
@@ -1413,6 +1256,163 @@
                      <padding>
                         <Insets right="10.0" />
                      </padding>
+                  </HBox>
+               </children>
+            </Pane>
+            <Pane fx:id="pnlHomePaket" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
+                  <TextField layoutX="85.0" layoutY="100.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI PAKET" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
+                     <font>
+                        <Font name="Segoe UI Bold" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" top="5.0" />
+                     </padding>
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="2.0" offsetX="4.0" offsetY="4.0" radius="0.5" width="2.0">
+                           <color>
+                              <Color opacity="0.5" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </TextField>
+                  <Pane layoutX="85.0" layoutY="225.0" prefHeight="783.0" prefWidth="1126.0" style="-fx-background-radius: 15; -fx-background-color: #D4EBF8;" stylesheets="@style.css">
+                     <children>
+                        <ScrollPane layoutY="81.0" prefHeight="705.0" prefWidth="1126.0">
+                           <content>
+                              <VBox fx:id="pnItemsHomePaket" prefHeight="689.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                        <HBox fx:id="papanProduk1" layoutX="10.0" layoutY="10.0" prefHeight="74.0" prefWidth="1126.0" visible="false">
+                           <children>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="70.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="100.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" layoutX="207.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="KATEGORI" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="100.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" layoutX="382.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HARGA" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="100.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" layoutX="606.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STOK" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="100.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="papanPaket1" prefHeight="74.0" prefWidth="1126.0" visible="false">
+                           <children>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="70.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA PAKET" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="130.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <ImageView fitHeight="32.0" fitWidth="25.0" layoutX="1163.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/search.png" />
+                     </image>
+                  </ImageView>
+                  <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
+                     <children>
+                        <Label layoutX="159.0" layoutY="49.0" text="DETAIL" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
+                     <children>
+                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/box.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label prefHeight="38.0" prefWidth="158.0" text="MENU PAKET" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/home-icon-silhouette.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="1320.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="90.0" layoutY="154.0" prefHeight="65.0" prefWidth="1126.0">
+                     <children>
+                        <Button fx:id="btnNewPaket" onAction="#handleClicks" onMouseClicked="#handleClicks" onMousePressed="#ScaleUpHomePaket" onMouseReleased="#ScaleDownHomePaket" prefHeight="45" prefWidth="120" style="-fx-background-color: linear-gradient(to right, #4D80E4, #3554D1);                -fx-text-fill: white;                -fx-font-family: 'Franklin Gothic Demi Cond';                -fx-font-size: 16px;                -fx-background-radius: 8;                -fx-border-radius: 8;                -fx-cursor: hand;                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 4, 0, 2, 2);" text=" NEW">
+                           <graphic>
+                              <ImageView fitHeight="30" fitWidth="30" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/box.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <ComboBox fx:id="cmbFilterStatus1" prefHeight="36.0" prefWidth="148.0" promptText="Filter Status" style="-fx-background-color: white;                  -fx-border-color: #3554D1;                  -fx-border-radius: 6;                  -fx-background-radius: 6;                  -fx-font-family: 'Segoe UI';                  -fx-font-size: 14px;                  -fx-padding: 0 0 0 10;">
+                           <HBox.margin>
+                              <Insets left="850.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                     </children>
                   </HBox>
                </children>
             </Pane>
