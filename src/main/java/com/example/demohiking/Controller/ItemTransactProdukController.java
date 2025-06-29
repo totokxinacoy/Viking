@@ -9,10 +9,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+
+import java.util.Optional;
 
 public class ItemTransactProdukController {
 
@@ -30,7 +33,10 @@ public class ItemTransactProdukController {
     private Label lblKategori;
 
     @FXML
-    private Label lblHarga;
+    private Label lblTotalHarga;
+
+    @FXML
+    private Label lblHargaSatuan;
 
     @FXML
     private Label lblStok;
@@ -38,10 +44,13 @@ public class ItemTransactProdukController {
     @FXML
     private Button btnTambah;
 
+    @FXML
+    private Button btnKurang;
+
 
 
     private int jumlah = 0;
-
+    private boolean isKeranjangView = false;
     private Produk produk;
     private detailPaket item;
     private HomeKasirController homeKasirController;
@@ -56,7 +65,9 @@ public class ItemTransactProdukController {
         lblIDProduk.setText(produk.getId() != null ? produk.getId() : "-");
         lblNamaProduk.setText(produk.getNama() != null ? produk.getNama() : "-");
         lblKategori.setText(produk.getKategori() != null ? produk.getKategori() : "-");
-        lblHarga.setText(String.format("Rp. %,.0f", produk.getHarga()));
+        lblHargaSatuan.setText(String.format("Rp. %,.0f", produk.getHarga()));
+        lblHargaSatuan.setVisible(true);
+        lblTotalHarga.setVisible(false);
         lblStok.setText(String.valueOf(produk.getStok()));
 
         btnTambah.setVisible(true);
@@ -65,45 +76,87 @@ public class ItemTransactProdukController {
     public void setData(detailPaket item, int nomorUrut) {
         this.produk = item.getProduk();
         this.jumlah = item.getJumlah();
+        this.item = item;
 
-        lblIDProduk.setText(String.valueOf(nomorUrut)); // pakai angka urut
+        lblIDProduk.setText(String.valueOf(nomorUrut));
         lblNamaProduk.setText(produk.getNama());
         lblKategori.setText("x" + jumlah);
+        double total = jumlah * produk.getHarga();
+        lblHargaSatuan.setText(String.format("Total : Rp. %,.0f", total));
+        lblHargaSatuan.setVisible(true);
+        lblTotalHarga.setVisible(false);
 
-        lblHarga.setText("");
         lblStok.setText("");
-        lblHarga.setManaged(false);
-        lblHarga.setVisible(false);
         lblStok.setManaged(false);
         lblStok.setVisible(false);
         btnTambah.setManaged(false);
         btnTambah.setVisible(false);
+        btnKurang.setManaged(false);
+        btnKurang.setVisible(false);
 
-        Item1.setPrefWidth(300);
+        Item1.setPrefWidth(800);
         Item1.setMaxWidth(600);
-
-        btnTambah.setOnAction(event -> {
-            if (produk.getStok() > jumlah) {
-                jumlah++;
-                item.setJumlah(jumlah);
-                lblKategori.setText("x" + jumlah);
-
-                if (homeKasirController != null) {
-                    homeKasirController.updateDetailProduk(item);
-                }
-            } else {
-                showAlert("Stok tidak mencukupi!");
-            }
-        });
+        HBox.setMargin(lblTotalHarga, new Insets(0, 0, 0, 5));
     }
 
     @FXML
     private void handleTambahProduk(ActionEvent event) {
-        if (produk.getStok() > jumlah) {
-            jumlah++;
-            updateDetailPaket();
-        } else {
+        if (produk.getStok() < 1) {
             showAlert("Stok tidak mencukupi!");
+            return;
+        }
+
+        produk.setStok(produk.getStok() - 1);
+        lblStok.setText(String.valueOf(produk.getStok()));
+
+        jumlah = (item == null) ? 1 : jumlah + 1;
+        updateDetailPaket();
+        updateLabelHargaTotal();
+
+        System.out.println("Tambah Produk: jumlah sekarang = " + jumlah);
+    }
+
+    @FXML
+    private void handleKurangProduk(ActionEvent event) {
+        if (jumlah > 1) {
+            jumlah--;
+            produk.setStok(produk.getStok() + 1);
+            lblStok.setText(String.valueOf(produk.getStok()));
+
+            if (item != null) {
+                item.setJumlah(jumlah);
+            }
+
+            if (homeKasirController != null) {
+                homeKasirController.updateDetailProduk(item);
+            }
+
+            updateLabelHargaTotal();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Konfirmasi");
+            alert.setHeaderText("Jumlah tinggal 1");
+            alert.setContentText("Ingin menghapus item ini dari keranjang?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // Jika user pilih YES
+                produk.setStok(produk.getStok() + 1);
+                lblStok.setText(String.valueOf(produk.getStok()));
+
+                jumlah = 0;
+                if (item != null) {
+                    item.setJumlah(jumlah);
+                }
+
+                if (homeKasirController != null && item != null) {
+                    homeKasirController.hapusItemDariKeranjang(item);
+                }
+
+                showAlert("Item dihapus dari keranjang.");
+            } else {
+                showAlert("Penghapusan dibatalkan.");
+            }
         }
     }
 
@@ -116,6 +169,13 @@ public class ItemTransactProdukController {
 
         if (homeKasirController != null) {
             homeKasirController.updateDetailProduk(item);
+        }
+    }
+
+    private void updateLabelHargaTotal() {
+        if (produk != null && isKeranjangView) {
+            double total = jumlah * produk.getHarga();
+            lblTotalHarga.setText(String.format("Rp %, .0f", total));
         }
     }
 

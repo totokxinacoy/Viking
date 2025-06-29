@@ -37,7 +37,7 @@ public class ItemDendaController {
         if (denda != null) {
             lblID.setText(denda.getId() != null ? denda.getId() : "-");
             lblJenis.setText(denda.getJenis() != null ? denda.getJenis() : "-");
-            lblNominal.setText(String.valueOf(denda.getNominal()));
+            lblNominal.setText(String.format("Rp. %,.0f", denda.getNominal()));
         } else {
             lblID.setText("-");
             lblJenis.setText("-");

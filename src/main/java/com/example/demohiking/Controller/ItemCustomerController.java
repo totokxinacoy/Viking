@@ -20,7 +20,9 @@ import java.sql.SQLException;
 
 public class ItemCustomerController {
     @FXML private Label lblNama;
-    @FXML private Label lblHarga;
+    @FXML private Label lblIDCustomer;
+    @FXML private Label lblEmail;
+    @FXML private Label lblTelpon;
     @FXML private Button btnUpdate;
     @FXML private Button btnDelete;
 
@@ -33,8 +35,11 @@ public class ItemCustomerController {
 
     public void setData(Customer customer) {
         this.customer = customer;
-        lblNama.setText(customer.getId());
-        lblHarga.setText(customer.getNama());
+
+        lblIDCustomer.setText(customer.getId());
+        lblNama.setText(customer.getNama());
+        lblEmail.setText(customer.getEmail());
+        lblTelpon.setText(customer.getNomortelephone());
     }
 
     @FXML

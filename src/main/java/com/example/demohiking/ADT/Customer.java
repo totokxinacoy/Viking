@@ -8,12 +8,12 @@ public class Customer {
     private String email;
     private String alamat;
 
-    public Customer(String id, String nama) {
+    public Customer(String id, String nama, String nomortelephone, String email) {
         this.id = id;
         this.nama = nama;
         this.jeniskelamin = null;
-        this.nomortelephone = null;
-        this.email = null;
+        this.nomortelephone = nomortelephone;
+        this.email = email;
         this.alamat = null;
     }
 

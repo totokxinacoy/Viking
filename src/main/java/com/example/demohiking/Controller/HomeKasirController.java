@@ -66,6 +66,8 @@ public class HomeKasirController implements Initializable {
     @FXML
     private Button btnPaket;
     @FXML
+    private Button btnNewPaket;
+    @FXML
     private Button btnDenda;
     @FXML
     private Button btnCustomer;
@@ -79,6 +81,8 @@ public class HomeKasirController implements Initializable {
     private Pane pnlProduk;
     @FXML
     private Pane pnlPaket;
+    @FXML
+    private Pane pnlHomePaket;
     @FXML
     private Pane pnlDenda;
     @FXML
@@ -148,9 +152,7 @@ public class HomeKasirController implements Initializable {
 
     // PAKET ITEMS
     @FXML
-    private Button btnItemPaket;
-    @FXML
-    private Button btnItemProduk;
+    private Button btnBackPaket;
 
 
 
@@ -247,9 +249,12 @@ public class HomeKasirController implements Initializable {
         }
     }
 
+    private void loadProdukItemsTransact(){
+        List<Produk> dataProduk = getDataProduk();
+        loadProdukItemsTransact(dataProduk);
+    }
+
     private void loadProdukItemsTransact(List<Produk> dataProduk) {
-        papanProduk.setVisible(true);
-        papanPaket.setVisible(false);
         pnItemsPaket.getChildren().clear();
 
 
@@ -425,12 +430,14 @@ public class HomeKasirController implements Initializable {
         try (
                 Connection conn = connection.getConnection();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT ID_Customer, Nama_Customer FROM Customer WHERE status = 'Aktif'");
+                ResultSet rs = stmt.executeQuery("SELECT ID_Customer, Nama_Customer, Nomor_Telephone, Email FROM Customer WHERE status = 'Aktif'");
         ) {
             while (rs.next()) {
                 list.add(new Customer(
                         rs.getString("ID_Customer"),
-                        rs.getString("Nama_Customer")
+                        rs.getString("Nama_Customer"),
+                        rs.getString("Nomor_Telephone"),
+                        rs.getString("Email")
                 ));
             }
         } catch (SQLException e) {
@@ -489,18 +496,7 @@ public class HomeKasirController implements Initializable {
     }
 
     /* --- PAKET METHOD --- */
-    @FXML
-    private void handleBtnItemProduk(MouseEvent event) {
-        List<Produk> dataProduk = getDataProduk();
-        loadProdukItemsTransact(dataProduk);
-    }
-
-    @FXML
-    private void handleBtnItemPaket(MouseEvent event) {
-        List<Paket> dataPaket = getDataPaket(); // ganti dengan data asli
-        loadItemPaket(dataPaket);
-    }
-
+    // NEW PAKET
     private void loadItemPaket(List<Paket> dataPaket) {
         pnItemsPaket.getChildren().clear();
         papanPaket.setVisible(true);
@@ -601,6 +597,11 @@ public class HomeKasirController implements Initializable {
         refreshKeranjangView();
     }
 
+    public void hapusItemDariKeranjang(detailPaket item) {
+        keranjang.removeIf(k -> k.getProduk().getId().equals(item.getProduk().getId()));
+        refreshKeranjangView();
+    }
+
     public void refreshKeranjangView() {
         pnCartProduk.getChildren().clear();
 
@@ -654,11 +655,8 @@ public class HomeKasirController implements Initializable {
         txtSearchDenda.setDisable(false);
 
         // Inisialisasi Component Paket
-        Platform.runLater(() -> {
-            papanPaket.setVisible(false);
-            papanProduk.setVisible(false);
-            pnItemsPaket.getChildren().clear();
-        });
+        loadProdukItemsTransact();
+        
 
         // Tunda pengecekan session sampai setelah UI tampil
         Platform.runLater(this::cekSession);
@@ -694,8 +692,16 @@ public class HomeKasirController implements Initializable {
             pnlProduk.toFront();
         }
         if (actionEvent.getSource() == btnPaket) {
+            pnlHomePaket.setStyle("-fx-background-color : #ffffff");
+            pnlHomePaket.toFront();
+        }
+        if (actionEvent.getSource() == btnNewPaket) {
             pnlPaket.setStyle("-fx-background-color : #ffffff");
             pnlPaket.toFront();
+        }
+        if (actionEvent.getSource() == btnBackPaket) {
+            pnlHomePaket.setStyle("-fx-background-color : #ffffff");
+            pnlHomePaket.toFront();
         }
         if (actionEvent.getSource() == btnDenda) {
             pnlDenda.setStyle("-fx-background-color : #ffffff");
@@ -744,40 +750,17 @@ public class HomeKasirController implements Initializable {
         alert.showAndWait();
     }
 
+
     @FXML
-    private void ScaleUpPaket(MouseEvent event) {
-        btnItemPaket.setScaleX(0.95);
-        btnItemPaket.setScaleY(0.95);
+    private void ScaleUpHomePaket(MouseEvent event) {
+        btnNewPaket.setScaleX(0.95);
+        btnNewPaket.setScaleY(0.95);
     }
 
     @FXML
-    private void ScaleDownPaket(MouseEvent event) {
-        btnItemPaket.setScaleX(1.0);
-        btnItemPaket.setScaleY(1.0);
-    }
-
-    @FXML
-    private void ScaleUpProduk(MouseEvent event) {
-        btnItemProduk.setScaleX(0.95);
-        btnItemProduk.setScaleY(0.95);
-    }
-
-    @FXML
-    private void ScaleDownProduk(MouseEvent event) {
-        btnItemProduk.setScaleX(1.0);
-        btnItemProduk.setScaleY(1.0);
-    }
-
-    @FXML
-    private void ScaleUpDenda(MouseEvent event) {
-        btnAktifDenda.setScaleX(0.95);
-        btnAktifDenda.setScaleY(0.95);
-    }
-
-    @FXML
-    private void ScaleDownDenda(MouseEvent event) {
-        btnAktifDenda.setScaleX(1.0);
-        btnAktifDenda.setScaleY(1.0);
+    private void ScaleDownHomePaket(MouseEvent event) {
+        btnNewPaket.setScaleX(1.0);
+        btnNewPaket.setScaleY(1.0);
     }
 
 
@@ -921,6 +904,30 @@ public class HomeKasirController implements Initializable {
         }
     }
 
+    protected void updateStok(String idProduk, int stokBaru) {
+        String query = "UPDATE Produk SET Stok = ? WHERE ID_Produk = ?";
+
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+
+            pstmt.setInt(1, stokBaru);
+            pstmt.setString(2, idProduk);
+
+            int result = pstmt.executeUpdate();
+            if (result == 0) {
+                System.out.println("⚠️ Stok gagal diperbarui di database.");
+            }
+
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Gagal update stok: " + e.getMessage());
+        }
+    }
+
     public void RefreshData() {
         txtIDProduk.setText(generateProdukID());
         txtNama.setText("");
@@ -1057,7 +1064,9 @@ public class HomeKasirController implements Initializable {
             while (rs.next()) {
                 Customer customer = new Customer(
                         rs.getString("ID_Customer"),
-                        rs.getString("Nama_Customer")
+                        rs.getString("Nama_Customer"),
+                        rs.getString("Nomor_Telephone"),
+                        rs.getString("Email")
                 );
                 foundList.add(customer);
             }
