@@ -132,7 +132,7 @@ public class FormIsiPaketController {
         try (Connection conn = db.getConnection()) {
             conn.setAutoCommit(false);
 
-            String insertPaket = "INSERT INTO Paket (ID_Paket, Nama_Paket, Harga, Diskon, Deskripsi, Jumlah_Paket) VALUES (?, ?, ?, ?, ?, ?)";
+            String insertPaket = "INSERT INTO Paket (ID_Paket, Nama_Paket, Harga, Diskon, Deskripsi, Jumlah) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement paketStmt = conn.prepareStatement(insertPaket);
             paketStmt.setString(1, idPaket);
             paketStmt.setString(2, nama);
@@ -151,11 +151,21 @@ public class FormIsiPaketController {
                 detailStmt.addBatch();
             }
             detailStmt.executeBatch();
+            String updateStok = "UPDATE Produk SET Stok = Stok - ? WHERE ID_Produk = ?";
+            PreparedStatement stokStmt = conn.prepareStatement(updateStok);
+            for (detailPaket item : produkDalamPaket) {
+                stokStmt.setInt(1, item.getJumlah());
+                stokStmt.setString(2, item.getProduk().getId());
+                stokStmt.addBatch();
+            }
+            stokStmt.executeBatch();
+            stokStmt.close();
             conn.commit();
 
             if (homeKasirController != null) {
                 homeKasirController.clearKeranjang();
                 homeKasirController.refreshKeranjangView();
+                homeKasirController.refreshProdukList();
             }
 
             showAlert("Paket berhasil disimpan ke database!");

@@ -285,6 +285,11 @@ public class HomeKasirController implements Initializable {
         }
     }
 
+    public void refreshProdukList() {
+        loadProdukItems();
+        loadProdukItemsTransact();
+    }
+
     public void setDetailProduk(Produk produk) {
         txtIDProduk.setText(produk.getId());
         txtNama.setText(produk.getNama());
