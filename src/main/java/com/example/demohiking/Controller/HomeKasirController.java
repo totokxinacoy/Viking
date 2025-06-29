@@ -153,6 +153,9 @@ public class HomeKasirController implements Initializable {
     // PAKET ITEMS
     @FXML
     private Button btnBackPaket;
+    @FXML
+    private Button btnAddPaket;
+
 
 
 
@@ -1322,5 +1325,91 @@ public class HomeKasirController implements Initializable {
         imgDenda.setImage(null);
         selectedImageFile = null;
         loadDendaItems();
+    }
+
+    /* --- PAKET CRUD --- */
+    private Stage stageFormIsiPaket;
+    private boolean isFormIsiPaketTerbuka = false;
+
+    public boolean isFormIsiPaketTerbuka() {
+        return isFormIsiPaketTerbuka;
+    }
+
+    public void setFormIsiPaketTerbuka(boolean status) {
+        this.isFormIsiPaketTerbuka = status;
+    }
+
+    public void tutupFormIsiPaket() {
+        if (stageFormIsiPaket != null) {
+            stageFormIsiPaket.close();
+            stageFormIsiPaket = null;
+            setFormIsiPaketTerbuka(false);
+        }
+    }
+
+    public void bringFormIsiPaketToFront() {
+        if (stageFormIsiPaket != null) {
+            javafx.application.Platform.runLater(() -> {
+                stageFormIsiPaket.setIconified(false);
+                stageFormIsiPaket.toFront();
+                stageFormIsiPaket.requestFocus();
+            });
+        }
+    }
+
+    @FXML
+    private void handleSimpanPaket(ActionEvent event) {
+        if (isFormIsiPaketTerbuka) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Form Sudah Dibuka");
+            alert.setHeaderText("Form Isi Paket sedang aktif");
+            alert.setContentText("Klik OK untuk membukanya kembali.");
+            alert.showAndWait();
+
+            if (stageFormIsiPaket != null) {
+                javafx.application.Platform.runLater(() -> {
+                    stageFormIsiPaket.setIconified(false);
+                    stageFormIsiPaket.toFront();
+                    stageFormIsiPaket.requestFocus();
+                });
+            }
+            return;
+        }
+
+        if (keranjang.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Keranjang Kosong", "Silakan tambahkan produk terlebih dahulu.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FormIsiPaket.fxml"));
+            Parent root = loader.load();
+
+            FormIsiPaketController controller = loader.getController();
+            controller.setProdukDalamPaket(new ArrayList<>(keranjang));
+            controller.setHomeController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Isi Data Paket");
+            stage.setScene(new Scene(root));
+
+            setFormIsiPaketTerbuka(true);
+            stage.setOnHiding(e -> {
+                setFormIsiPaketTerbuka(false);
+                stageFormIsiPaket = null; // clear reference
+            });
+
+            stageFormIsiPaket = stage; // simpan referensinya
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            setFormIsiPaketTerbuka(false);
+            showAlert(Alert.AlertType.ERROR, "Gagal Membuka Form", "Terjadi kesalahan:\n" + e.getMessage());
+        }
+    }
+
+    public void clearKeranjang() {
+        keranjang.clear();
     }
 }

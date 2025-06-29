@@ -1330,12 +1330,22 @@
                               </Label>
                               <HBox alignment="CENTER" prefHeight="23.0" prefWidth="392.0" spacing="10.0">
                                  <children>
-                                    <Separator prefHeight="23.0" prefWidth="268.0" />
-                                    <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="67.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/plus-separator.png" />
-                                       </image>
-                                    </ImageView>
+                                    <Separator prefHeight="23.0" prefWidth="265.0">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin></Separator>
+                                    <Button fx:id="btnClearProduk" mnemonicParsing="false" stylesheets="@style.css">
+                                       <graphic>
+                                          <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/trash.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
                                  </children>
                               </HBox>
                               <ScrollPane prefHeight="706.0" prefWidth="303.0" style="-fx-background-color: #FFFFFF;" stylesheets="@style.css">
@@ -1351,12 +1361,12 @@
                               </ScrollPane>
                               <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
                                  <children>
-                                    <Button fx:id="btnAdd1" mnemonicParsing="false" onAction="#onAddProduk" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="ADD" textAlignment="CENTER" textFill="WHITE">
+                                    <Button fx:id="btnAddPaket" mnemonicParsing="false" onAction="#handleSimpanPaket" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="ADD" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font name="Franklin Gothic Demi Cond" size="24.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="btnClear1" layoutX="164.0" layoutY="46.0" mnemonicParsing="false" onAction="#RefreshData" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="CLEAR" textAlignment="CENTER" textFill="WHITE">
+                                    <Button fx:id="btnBatal" layoutX="164.0" layoutY="46.0" mnemonicParsing="false" onAction="#RefreshData" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="BATAL" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font name="Franklin Gothic Demi Cond" size="24.0" />
                                        </font>
@@ -1389,13 +1399,6 @@
                            <HBox.margin>
                               <Insets left="1320.0" />
                            </HBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/go-back-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
                         </Button>
                      </children>
                   </HBox>

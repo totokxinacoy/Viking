@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -101,6 +98,27 @@ public class ItemTransactProdukController {
 
     @FXML
     private void handleTambahProduk(ActionEvent event) {
+        if (homeKasirController != null && homeKasirController.isFormIsiPaketTerbuka()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Form Paket Sedang Aktif");
+            alert.setHeaderText("Tidak bisa menambah produk saat mengisi paket.");
+            alert.setContentText("Apakah Anda ingin menutup form paket agar bisa menambahkan produk?");
+            ButtonType ya = new ButtonType("Ya", ButtonBar.ButtonData.YES);
+            ButtonType tidak = new ButtonType("Batal", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(ya, tidak);
+
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ya) {
+                    homeKasirController.tutupFormIsiPaket(); //
+                } else if (response == tidak) {
+                    homeKasirController.bringFormIsiPaketToFront();
+                }
+
+            });
+
+            return;
+        }
+
         if (produk.getStok() < 1) {
             showAlert("Stok tidak mencukupi!");
             return;
@@ -112,51 +130,27 @@ public class ItemTransactProdukController {
         jumlah = (item == null) ? 1 : jumlah + 1;
         updateDetailPaket();
         updateLabelHargaTotal();
-
-        System.out.println("Tambah Produk: jumlah sekarang = " + jumlah);
     }
 
     @FXML
     private void handleKurangProduk(ActionEvent event) {
-        if (jumlah > 1) {
+        if (homeKasirController != null && homeKasirController.isFormIsiPaketTerbuka()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Aksi Ditolak");
+            alert.setHeaderText("Form Paket sedang terbuka");
+            alert.setContentText("Tidak dapat mengurangi produk dari keranjang saat form paket sedang diisi.");
+            alert.showAndWait();
+
+            homeKasirController.bringFormIsiPaketToFront(); // Fokuskan kembali ke form
+            return;
+        }
+
+        if (jumlah > 0) {
             jumlah--;
             produk.setStok(produk.getStok() + 1);
             lblStok.setText(String.valueOf(produk.getStok()));
-
-            if (item != null) {
-                item.setJumlah(jumlah);
-            }
-
-            if (homeKasirController != null) {
-                homeKasirController.updateDetailProduk(item);
-            }
-
+            updateDetailPaket();
             updateLabelHargaTotal();
-        } else {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Konfirmasi");
-            alert.setHeaderText("Jumlah tinggal 1");
-            alert.setContentText("Ingin menghapus item ini dari keranjang?");
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                // Jika user pilih YES
-                produk.setStok(produk.getStok() + 1);
-                lblStok.setText(String.valueOf(produk.getStok()));
-
-                jumlah = 0;
-                if (item != null) {
-                    item.setJumlah(jumlah);
-                }
-
-                if (homeKasirController != null && item != null) {
-                    homeKasirController.hapusItemDariKeranjang(item);
-                }
-
-                showAlert("Item dihapus dari keranjang.");
-            } else {
-                showAlert("Penghapusan dibatalkan.");
-            }
         }
     }
 
