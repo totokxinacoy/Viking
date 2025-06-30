@@ -909,6 +909,7 @@ public class HomeKasirController implements Initializable {
             if (rows > 0) {
                 showAlert(Alert.AlertType.INFORMATION, "Sukses", "Data produk berhasil diperbarui.");
                 RefreshData();
+                refreshProdukList();
             } else {
                 showAlert(Alert.AlertType.WARNING, "Gagal", "Update produk gagal.");
             }

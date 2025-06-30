@@ -30,7 +30,6 @@ public class ItemProdukController {
         private Produk produk;
         private HomeKasirController homeKasirController;
 
-
     public void setHomeController(HomeKasirController controller) {
         this.homeKasirController = controller;
     }
@@ -149,6 +148,12 @@ public class ItemProdukController {
                 homeKasirController.setDetailProduk(produk); // Kirim data ke form
             }
         }
+
+    private void RefreshData() {
+        if (homeKasirController != null) {
+            homeKasirController.refreshProdukList();
+        }
+    }
 
     }
 
