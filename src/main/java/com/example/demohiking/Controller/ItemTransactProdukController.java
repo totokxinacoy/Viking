@@ -52,6 +52,7 @@ public class ItemTransactProdukController {
     private detailPaket item;
     private HomeKasirController homeKasirController;
 
+    
     public void setHomeController(HomeKasirController controller) {
         this.homeKasirController = controller;
     }

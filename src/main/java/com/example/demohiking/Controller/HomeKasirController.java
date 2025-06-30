@@ -288,8 +288,9 @@ public class HomeKasirController implements Initializable {
     }
 
     public void refreshProdukList() {
-        loadProdukItems();
-        loadProdukItemsTransact();
+        List<Produk> dataProduk = getDataProduk();
+        loadProdukItems(dataProduk);
+        loadProdukItemsTransact(dataProduk);
     }
 
     public void setDetailProduk(Produk produk) {
@@ -539,32 +540,30 @@ public class HomeKasirController implements Initializable {
     }
 
     public List<Paket> getDataPaket() {
-        List<Paket> daftarPaket = new ArrayList<>();
+        List<Paket> list = new ArrayList<>();
         DBConnect db = new DBConnect();
 
-        String query = "SELECT ID_Paket, Nama_Paket, Harga, Diskon FROM Paket";
+        String query = "SELECT ID_Paket, Nama_Paket, Jumlah, Harga, Diskon FROM Paket";
 
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                String id = rs.getString("ID_Paket");
-                String nama = rs.getString("Nama_Paket");
-                double harga = rs.getDouble("Harga");
-                double diskon = rs.getDouble("Diskon");
-
-                int jumlah = 1;
-
-                Paket paket = new Paket(id, nama, harga, diskon, jumlah);
-                daftarPaket.add(paket);
+                list.add(new Paket(
+                        rs.getString("ID_Paket"),
+                        rs.getString("Nama_Paket"),
+                        rs.getDouble("Harga"),
+                        rs.getDouble("Diskon"),
+                        rs.getInt("Jumlah")
+                ));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return daftarPaket;
+        return list;
     }
 
 //    public void setDetailPaket(Paket paket) {
@@ -807,7 +806,6 @@ public class HomeKasirController implements Initializable {
         }
     }
 
-
     @FXML
     protected void onAddProduk() {
         String idProduk = txtIDProduk.getText().trim();
@@ -824,13 +822,11 @@ public class HomeKasirController implements Initializable {
             return;
         }
 
-        // Validasi gambar
         if (selectedImageFile == null) {
             showAlert(Alert.AlertType.WARNING, "Validasi Gambar", "Silakan pilih gambar produk terlebih dahulu.");
             return;
         }
 
-        // Validasi angka
         int harga, stock;
         try {
             harga = Integer.parseInt(hargaStr);
@@ -840,14 +836,32 @@ public class HomeKasirController implements Initializable {
             return;
         }
 
-        // Insert Produk
-        String query = "INSERT INTO Produk VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        DBConnect connect = new DBConnect();
+        try (Connection conn = connect.getConnection()) {
 
-        try {
-            DBConnect connect = new DBConnect();
-            Connection conn = connect.getConnection();
-            PreparedStatement pstat = conn.prepareStatement(query);
+            String cekQuery = "SELECT ID_Produk FROM Produk WHERE Nama_Produk = ?";
+            PreparedStatement cekStmt = conn.prepareStatement(cekQuery);
+            cekStmt.setString(1, nama);
+            ResultSet rs = cekStmt.executeQuery();
 
+            if (rs.next()) {
+                String existingID = rs.getString("ID_Produk");
+
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Produk Sudah Ada");
+                confirm.setHeaderText(null);
+                confirm.setContentText("Produk dengan nama ini sudah terdaftar.\nIngin mengupdate data produk?");
+                confirm.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        updateProduk(existingID, nama, kategori, desk, harga, stock, status);
+                    }
+                });
+
+                return;
+            }
+
+            String insertQuery = "INSERT INTO Produk VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pstat = conn.prepareStatement(insertQuery);
             pstat.setString(1, idProduk);
             pstat.setString(2, nama);
             pstat.setString(3, kategori);
@@ -859,19 +873,50 @@ public class HomeKasirController implements Initializable {
             pstat.setBinaryStream(8, imageStream, (int) selectedImageFile.length());
 
             pstat.executeUpdate();
+            showAlert(Alert.AlertType.INFORMATION, "Sukses", "Insert data produk berhasil!");
+            RefreshData();
+
             pstat.close();
             conn.close();
 
-            RefreshData();
-            JOptionPane.showMessageDialog(null, "Insert data produk berhasil!");
         } catch (SQLException ex) {
-            System.out.println("Terjadi error saat insert data produk: " + ex.getMessage());
             showAlert(Alert.AlertType.ERROR, "Database Error", ex.getMessage());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
+    private void updateProduk(String idProduk, String nama, String kategori, String desk,
+                              int harga, int stock, String status) {
+
+        String updateQuery = "UPDATE Produk SET Kategori = ?, Deskripsi = ?, Harga = ?, Stok = ?, Status = ?, Image = ? WHERE ID_Produk = ?";
+
+        try (
+                Connection conn = new DBConnect().getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(updateQuery)
+        ) {
+            pstmt.setString(1, kategori);
+            pstmt.setString(2, desk);
+            pstmt.setInt(3, harga);
+            pstmt.setInt(4, stock);
+            pstmt.setString(5, status);
+            InputStream imageStream = new FileInputStream(selectedImageFile);
+            pstmt.setBinaryStream(6, imageStream, (int) selectedImageFile.length());
+            pstmt.setString(7, idProduk);
+
+            int rows = pstmt.executeUpdate();
+
+            if (rows > 0) {
+                showAlert(Alert.AlertType.INFORMATION, "Sukses", "Data produk berhasil diperbarui.");
+                RefreshData();
+            } else {
+                showAlert(Alert.AlertType.WARNING, "Gagal", "Update produk gagal.");
+            }
+
+        } catch (SQLException | FileNotFoundException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
+        }
+    }
 
     @FXML
     protected void onClearProduk() {
@@ -921,30 +966,6 @@ public class HomeKasirController implements Initializable {
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    protected void updateStok(String idProduk, int stokBaru) {
-        String query = "UPDATE Produk SET Stok = ? WHERE ID_Produk = ?";
-
-        try {
-            DBConnect connect = new DBConnect();
-            Connection conn = connect.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query);
-
-            pstmt.setInt(1, stokBaru);
-            pstmt.setString(2, idProduk);
-
-            int result = pstmt.executeUpdate();
-            if (result == 0) {
-                System.out.println("⚠️ Stok gagal diperbarui di database.");
-            }
-
-            pstmt.close();
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Database Error", "Gagal update stok: " + e.getMessage());
         }
     }
 

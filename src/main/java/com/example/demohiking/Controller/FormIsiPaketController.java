@@ -169,7 +169,7 @@ public class FormIsiPaketController {
             paketStmt.setString(1, idPaket);
             paketStmt.setString(2, nama);
             paketStmt.setDouble(3, harga);
-            paketStmt.setDouble(4, diskon / 100.0);
+            paketStmt.setDouble(4, diskon/100.0);
             paketStmt.setString(5, deskripsi);
             paketStmt.setInt(6, jumlahPaket);
             paketStmt.executeUpdate();

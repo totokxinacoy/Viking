@@ -30,6 +30,7 @@ public class ItemProdukController {
         private Produk produk;
         private HomeKasirController homeKasirController;
 
+
     public void setHomeController(HomeKasirController controller) {
         this.homeKasirController = controller;
     }
