@@ -76,6 +76,10 @@ public class HomeKasirController implements Initializable {
     @FXML
     private Button btnTransaksi;
     @FXML
+    private Button btnPeminjaman;
+    @FXML
+    private Button btnPembayaran;
+    @FXML
     private Button btnLogout;
 
     // PANEL ALL
@@ -91,6 +95,10 @@ public class HomeKasirController implements Initializable {
     private Pane pnlCustomer;
     @FXML
     private Pane pnlTransaksi;
+    @FXML
+    private Pane pnlTransaksiPeminjaman;
+    @FXML
+    private Pane pnlTransaksiPembayaran;
 
     // PRODUK ITEMS
     @FXML
@@ -734,6 +742,16 @@ public class HomeKasirController implements Initializable {
         {
             pnlTransaksi.setStyle("-fx-background-color : #ffffff");
             pnlTransaksi.toFront();
+        }
+        if(actionEvent.getSource()==btnPeminjaman)
+        {
+            pnlTransaksiPeminjaman.setStyle("-fx-background-color : #ffffff");
+            pnlTransaksiPeminjaman.toFront();
+        }
+        if(actionEvent.getSource()==btnPembayaran)
+        {
+            pnlTransaksiPembayaran.setStyle("-fx-background-color : #ffffff");
+            pnlTransaksiPembayaran.toFront();
         }
     }
 

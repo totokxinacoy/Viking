@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="267.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.CekCustomerController">
+   <children>
+      <Label layoutX="97.0" layoutY="41.0" text="CEK CUSTOMER">
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="48.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtCekCustomer" layoutX="97.0" layoutY="122.0" prefHeight="38.0" prefWidth="293.0" />
+      <Button fx:id="btnCek" layoutX="136.0" layoutY="203.0" mnemonicParsing="false" text="CEK" />
+      <Button fx:id="btnBatal" layoutX="288.0" layoutY="203.0" mnemonicParsing="false" text="BATAL" />
+   </children>
+</AnchorPane>
