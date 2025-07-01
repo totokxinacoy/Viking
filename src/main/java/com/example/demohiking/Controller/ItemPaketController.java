@@ -98,6 +98,7 @@ public class ItemPaketController {
         });
     }
 
+    @FXML
     private void hapusPaket() {
         String query = "UPDATE Paket SET status = 'Non Aktif' WHERE ID_Paket = ?";
         try (
@@ -110,7 +111,7 @@ public class ItemPaketController {
             if (rows > 0) {
                 showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Paket telah dihapus.");
                 if (homeKasirController != null) {
-                    homeKasirController.RefreshData();
+                    homeKasirController.refreshPaket();
                 }
             } else {
                 showAlert(Alert.AlertType.WARNING, "Gagal", "Paket tidak ditemukan di database.");

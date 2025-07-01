@@ -25,7 +25,6 @@ public class UpdateDendaController {
     @FXML
     private ImageView imgDenda;
 
-    private File selectedImageFile;
     @FXML
     private TextField txtNominal;
     @FXML
@@ -59,7 +58,6 @@ public class UpdateDendaController {
     private String initialJenis, initialDeskripsi;
     private double initialNominal;
     private HomeKasirController homeKasirController;
-    private Image initialImage;
 
     public void setHomeController(HomeKasirController controller) {
         this.homeKasirController = controller;
@@ -87,17 +85,10 @@ public class UpdateDendaController {
                 txtDeskripsi.setText(deskripsi);
                 txtNominal.setText(String.valueOf(nominal));
 
-                InputStream is = rs.getBinaryStream("Image");
-                if (is != null) {
-                    Image image = new Image(is);
-                    imgDenda.setImage(image);
-                }
-
                 // Simpan nilai awal
                 initialJenis = jenis;
                 initialDeskripsi = deskripsi;
                 initialNominal = nominal;
-                initialImage = imgDenda.getImage();
             } else {
                 showAlert(Alert.AlertType.WARNING, "Tidak Ditemukan", "Data denda tidak ditemukan.");
             }
@@ -111,21 +102,6 @@ public class UpdateDendaController {
         }
     }
 
-    @FXML
-    private void handleChooseImage() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Pilih Gambar Denda");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg")
-        );
-
-        File file = fileChooser.showOpenDialog(null);
-        if (file != null) {
-            selectedImageFile = file;
-            Image image = new Image(file.toURI().toString());
-            imgDenda.setImage(image);
-        }
-    }
 
     @FXML
     private void handleUpdate() {
@@ -152,8 +128,7 @@ public class UpdateDendaController {
 
         boolean adaPerubahan = !jenis.equals(initialJenis)
                 || !deskripsi.equals(initialDeskripsi)
-                || nominal != initialNominal
-                || selectedImageFile != null;
+                || nominal != initialNominal;
 
         if (!adaPerubahan) {
             showAlert(Alert.AlertType.INFORMATION, "Info", "Belum ada perubahan data.");
@@ -167,24 +142,12 @@ public class UpdateDendaController {
             String query;
             PreparedStatement pstat;
 
-            if (selectedImageFile != null) {
-                query = "UPDATE Denda SET Jenis_Denda=?, Deskripsi=?, Nominal=?, Image=? WHERE ID_Denda=?";
-                pstat = conn.prepareStatement(query);
-                pstat.setString(1, jenis);
-                pstat.setString(2, deskripsi);
-                pstat.setDouble(3, nominal);
-
-                InputStream imgStream = new FileInputStream(selectedImageFile);
-                pstat.setBinaryStream(4, imgStream, (int) selectedImageFile.length());
-                pstat.setString(5, denda.getId());
-            } else {
                 query = "UPDATE Denda SET Jenis_Denda=?, Deskripsi=?, Nominal=? WHERE ID_Denda=?";
                 pstat = conn.prepareStatement(query);
                 pstat.setString(1, jenis);
                 pstat.setString(2, deskripsi);
                 pstat.setDouble(3, nominal);
                 pstat.setString(4, denda.getId());
-            }
 
             int rows = pstat.executeUpdate();
             pstat.close();
@@ -205,8 +168,6 @@ public class UpdateDendaController {
 
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
-        } catch (FileNotFoundException e) {
-            showAlert(Alert.AlertType.ERROR, "File Gambar Tidak Ditemukan", e.getMessage());
         }
     }
 

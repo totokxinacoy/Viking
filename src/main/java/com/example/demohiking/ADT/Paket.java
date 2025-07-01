@@ -11,6 +11,8 @@ public class Paket {
     private int jumlahPaket;
     private List<detailPaket> isiPaket; // Tambahan: daftar isi paket
 
+    public Paket() {}
+
     // Constructor tanpa deskripsi
     public Paket(String id, String nama, double harga, double diskon, int jumlahPaket) {
         this.id = id;

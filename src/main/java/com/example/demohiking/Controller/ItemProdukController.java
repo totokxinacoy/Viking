@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -15,6 +16,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
@@ -98,43 +100,65 @@ public class ItemProdukController {
             return;
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Konfirmasi Hapus");
-        confirm.setHeaderText(null);
-        confirm.setContentText("Apakah Anda yakin ingin menghapus produk ini?");
+        try {
+            Connection conn = new DBConnect().getConnection();
+            String checkQuery = "SELECT COUNT(*) AS jumlah " +
+                    "FROM detail_transaksi dt " +
+                    "JOIN Transaksi t ON dt.ID_Transaksi = t.ID_Transaksi " +
+                    "WHERE dt.ID_Produk = ? AND t.Status = 'Belum Dibayar'";
 
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == javafx.scene.control.ButtonType.OK) {
-                try {
-                    DBConnect db = new DBConnect();
-                    Connection conn = db.getConnection();
+            PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+            checkStmt.setString(1, produk.getId());
+            ResultSet rs = checkStmt.executeQuery();
 
-                    String query = "UPDATE Produk SET status = 'Non Aktif' WHERE ID_Produk = ?";
-                    PreparedStatement pstat = conn.prepareStatement(query);
-                    pstat.setString(1, produk.getId());
-
-                    int rows = pstat.executeUpdate();
-                    pstat.close();
-                    conn.close();
-
-                    if (rows > 0) {
-                        showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Produk telah dihapus.");
-
-                        // Langsung panggil refresh tanpa menunggu konfirmasi tambahan
-                        if (homeKasirController != null) {
-                            homeKasirController.RefreshData();
-                        }
-                    } else {
-                        showAlert(Alert.AlertType.WARNING, "Gagal", "Produk tidak ditemukan di database.");
-                    }
-
-                } catch (SQLException e) {
-                    showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
-                }
+            if (rs.next() && rs.getInt("jumlah") > 0) {
+                showAlert(Alert.AlertType.WARNING, "Tidak Dapat Menghapus",
+                        "Produk ini sedang digunakan dalam transaksi yang belum dibayar.");
+                rs.close();
+                checkStmt.close();
+                conn.close();
+                return;
             }
-        });
-    }
 
+            rs.close();
+            checkStmt.close();
+
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Konfirmasi Hapus");
+            confirm.setHeaderText(null);
+            confirm.setContentText("Apakah Anda yakin ingin menghapus produk ini?");
+
+            confirm.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    try {
+                        String query = "UPDATE Produk SET status = 'Non Aktif' WHERE ID_Produk = ?";
+                        PreparedStatement pstat = conn.prepareStatement(query);
+                        pstat.setString(1, produk.getId());
+
+                        int rows = pstat.executeUpdate();
+                        pstat.close();
+                        conn.close();
+
+                        if (rows > 0) {
+                            showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Produk telah dihapus.");
+
+                            if (homeKasirController != null) {
+                                homeKasirController.refreshProdukList();
+                            }
+                        } else {
+                            showAlert(Alert.AlertType.WARNING, "Gagal", "Produk tidak ditemukan di database.");
+                        }
+
+                    } catch (SQLException e) {
+                        showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+                    }
+                }
+            });
+
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+        }
+    }
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

@@ -100,14 +100,6 @@
                               <Insets left="30.0" right="30.0" top="10.0" />
                            </VBox.margin>
                         </Pane>
-                        <Button fx:id="btnUpload" mnemonicParsing="false" onAction="#handleChooseImage" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="UPLOAD">
-                           <font>
-                              <Font name="Franklin Gothic Demi Cond" size="24.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets left="55.0" top="15.0" />
-                           </VBox.margin>
-                        </Button>
                         <Button fx:id="btnUpdate" layoutX="65.0" layoutY="226.0" mnemonicParsing="false" onAction="#handleUpdate" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="SUBMIT">
                            <font>
                               <Font name="Franklin Gothic Demi Cond" size="24.0" />

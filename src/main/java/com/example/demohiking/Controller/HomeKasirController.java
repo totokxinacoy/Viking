@@ -525,7 +525,6 @@ public class HomeKasirController implements Initializable {
                 controller.setData(paket);
                 controller.setHomeController(this);
 
-                // Hover effect (opsional)
                 node.setOnMouseEntered(e -> node.setStyle("-fx-background-color: #051036; -fx-background-radius: 15"));
                 node.setOnMouseExited(e -> node.setStyle("-fx-background-color: #0D2857; -fx-background-radius: 15"));
 
@@ -1150,28 +1149,6 @@ public class HomeKasirController implements Initializable {
 
     /* --- DENDA CRUD --- */
     @FXML
-    private void handleChooseImageDenda() {
-        if (isImageSelected) {
-            showAlert(Alert.AlertType.INFORMATION, "Gambar Sudah Dipilih", "Gambar hanya bisa dipilih satu kali dalam sesi ini.");
-            return;
-        }
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Pilih Gambar Denda");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg")
-        );
-
-        File file = fileChooser.showOpenDialog(null);
-        if (file != null) {
-            selectedImageFile = file;
-            Image image = new Image(file.toURI().toString());
-            imgDenda.setImage(image);
-            isImageSelected = true; // lock sampai form direset
-        }
-    }
-
-    @FXML
     protected void onAddDenda() {
         String idDenda = txtIDDenda.getText().trim();
         String jenisDenda = cmbJenisDenda.getValue();
@@ -1183,10 +1160,6 @@ public class HomeKasirController implements Initializable {
             return;
         }
 
-        if (selectedImageFile == null) {
-            showAlert(Alert.AlertType.WARNING, "Validasi Gambar", "Silakan pilih gambar terlebih dahulu.");
-            return;
-        }
 
         double nominal;
         try {
@@ -1200,7 +1173,7 @@ public class HomeKasirController implements Initializable {
             return;
         }
 
-        String query = "INSERT INTO Denda (ID_Denda, Jenis_Denda, Deskripsi, Nominal, Image) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Denda (ID_Denda, Jenis_Denda, Deskripsi, Nominal) VALUES (?, ?, ?, ?)";
 
         try {
             DBConnect connect = new DBConnect();
@@ -1212,9 +1185,6 @@ public class HomeKasirController implements Initializable {
             pstat.setString(3, deskripsi);
             pstat.setDouble(4, nominal);
 
-            InputStream imgStream = new FileInputStream(selectedImageFile);
-            pstat.setBinaryStream(5, imgStream, (int) selectedImageFile.length());
-
             pstat.executeUpdate();
             pstat.close();
             conn.close();
@@ -1224,8 +1194,6 @@ public class HomeKasirController implements Initializable {
 
         } catch (SQLException ex) {
             showAlert(Alert.AlertType.ERROR, "Database Error", ex.getMessage());
-        } catch (FileNotFoundException e) {
-            showAlert(Alert.AlertType.ERROR, "File Gambar Tidak Ditemukan", e.getMessage());
         }
     }
 
@@ -1268,88 +1236,6 @@ public class HomeKasirController implements Initializable {
         }
     }
 
-    private Denda getDendaById(String id) {
-        String query = "SELECT * FROM Denda WHERE ID_Denda = ?";
-        try (
-                Connection conn = new DBConnect().getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(query)
-        ) {
-            pstmt.setString(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return new Denda(
-                        rs.getString("ID_Denda"),
-                        rs.getString("Jenis_Denda"),
-                        rs.getDouble("Nominal")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @FXML
-    private void handleAktifkanDenda(MouseEvent event) {
-        String id = txtSearchDenda.getText().trim();
-
-        if (id.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Aktivasi Denda", "ID Denda tidak boleh kosong.");
-            return;
-        }
-
-        String checkQuery = "SELECT Status FROM Denda WHERE ID_Denda = ?";
-        String updateQuery = "UPDATE Denda SET Status = 'Aktif' WHERE ID_Denda = ?";
-
-        DBConnect connect = new DBConnect();
-        Connection conn = null;
-        PreparedStatement pstmtCheck = null;
-        PreparedStatement pstmtUpdate = null;
-
-        try {
-            conn = connect.getConnection();
-
-            pstmtCheck = conn.prepareStatement(checkQuery);
-            pstmtCheck.setString(1, id);
-            ResultSet rs = pstmtCheck.executeQuery();
-
-            if (rs.next()) {
-                String status = rs.getString("Status");
-                if ("Aktif".equalsIgnoreCase(status)) {
-                    showAlert(Alert.AlertType.INFORMATION, "Status Sudah Aktif", "Denda sudah aktif. Tidak dapat diaktifkan ulang.");
-                    return;
-                }
-            } else {
-                showAlert(Alert.AlertType.WARNING, "ID Tidak Ditemukan", "ID Denda tidak ditemukan.");
-                return;
-            }
-
-            // Update jika lolos validasi
-            pstmtUpdate = conn.prepareStatement(updateQuery);
-            pstmtUpdate.setString(1, id);
-
-            int rowsAffected = pstmtUpdate.executeUpdate();
-
-            if (rowsAffected > 0) {
-                showAlert(Alert.AlertType.INFORMATION, "Aktivasi Berhasil", "Denda berhasil diaktifkan kembali.");
-                loadDendaItems();
-            } else {
-                showAlert(Alert.AlertType.WARNING, "Aktivasi Gagal", "Gagal mengaktifkan denda.");
-            }
-
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Kesalahan Database", "Terjadi kesalahan: " + e.getMessage());
-        } finally {
-            try {
-                if (pstmtCheck != null) pstmtCheck.close();
-                if (pstmtUpdate != null) pstmtUpdate.close();
-                if (conn != null && !conn.isClosed()) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     @FXML
     protected void onClearDenda() {
         RefreshDataDenda();
@@ -1360,9 +1246,6 @@ public class HomeKasirController implements Initializable {
         cmbJenisDenda.getSelectionModel().clearSelection();
         txtDeskripsiDenda.clear();
         txtNominal.clear();
-        isImageSelected = false;
-        imgDenda.setImage(null);
-        selectedImageFile = null;
         loadDendaItems();
     }
 
@@ -1450,5 +1333,41 @@ public class HomeKasirController implements Initializable {
 
     public void clearKeranjang() {
         keranjang.clear();
+    }
+
+    public void refreshDataPaket() {
+        pnItemsPaket.getChildren().clear(); // Kosongkan container tampilan
+
+        String query = "SELECT * FROM Paket WHERE status = 'Aktif'";
+
+        try (Connection conn = new DBConnect().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Paket paket = new Paket();
+                paket.setId(rs.getString("ID_Paket"));
+                paket.setNama(rs.getString("Nama_Paket"));
+                paket.setHarga(rs.getDouble("Harga"));
+                paket.setDiskon(rs.getDouble("Diskon"));
+                paket.setJumlahPaket(rs.getInt("Jumlah"));
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemPaket.fxml"));
+                Parent node = loader.load();
+
+                ItemPaketController controller = loader.getController();
+                controller.setData(paket);
+                controller.setHomeController(this);
+
+                pnItemsPaket.getChildren().add(node);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Load Error");
+            alert.setContentText("Gagal memuat data paket:\n" + e.getMessage());
+            alert.showAndWait();
+        }
     }
 }
