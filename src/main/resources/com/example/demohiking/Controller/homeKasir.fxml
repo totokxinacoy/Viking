@@ -1695,7 +1695,7 @@
                                     <Insets right="230.0" top="10.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextField fx:id="txtCekNamaCustomer" layoutX="70.0" layoutY="417.0" prefHeight="39.0" prefWidth="309.0" promptText="Masukkan Nama">
+                              <TextField fx:id="txtNamaCekCustomer" layoutX="70.0" layoutY="417.0" prefHeight="39.0" prefWidth="309.0" promptText="Masukkan Nama">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -1784,7 +1784,7 @@
                               </TextArea>
                               <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
                                  <children>
-                                    <Button fx:id="btnAddCustomer1" mnemonicParsing="false" onAction="#onAddCustomer" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="CHECK" textAlignment="CENTER" textFill="WHITE">
+                                    <Button fx:id="btnCekCustomer" mnemonicParsing="false" onAction="#handleCekCustomer" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="CHECK" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font name="Franklin Gothic Demi Cond" size="24.0" />
                                        </font>

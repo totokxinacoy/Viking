@@ -177,6 +177,8 @@ public class HomeKasirController implements Initializable {
     @FXML
     private TextField txtSearchCekCustomer;
     @FXML
+    private Button btnCekCustomer;
+    @FXML
     private TextField txtIDCekCustomer;
     @FXML
     private TextField txtNamaCekCustomer;
@@ -748,6 +750,7 @@ public class HomeKasirController implements Initializable {
             btnSearchCekCustomer.setDisable(newValue.trim().isEmpty());
         });
         btnSearchCekCustomer.setDisable(true);
+        txtNamaCekCustomer.setOnAction(event -> handleCekCustomer(null));
         
 
         // Tunda pengecekan session sampai setelah UI tampil
@@ -1468,5 +1471,72 @@ public class HomeKasirController implements Initializable {
         }
     }
 
+    @FXML
+    private void handleCekCustomer(ActionEvent event) {
+        String nama = txtNamaCekCustomer.getText().trim();
 
+        if (!nama.isEmpty()) {
+            isCustomerExist(nama);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Validasi");
+            alert.setHeaderText(null);
+            alert.setContentText("Silakan masukkan nama customer terlebih dahulu.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void isCustomerExist(String namaCustomer) {
+        String query = "SELECT TOP 1 * FROM Customer WHERE LOWER(Nama_Customer) = LOWER(?) AND status = 'Aktif'";
+
+        try  {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, namaCustomer);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String id = rs.getString("ID_Customer");
+                String nama = rs.getString("Nama_Customer");
+                String jenisKelamin = rs.getString("Jenis_Kelamin");
+                String  telpon = rs.getString("Nomor_Telephone");
+                String email = rs.getString("Email");
+                String alamat = rs.getString("Alamat");
+
+                txtIDCekCustomer.setText(id);
+                txtNamaCekCustomer.setText(nama);
+//                cmbJenisKelamin.getItems().setAll("Laki-Laki", "Perempuan");
+//                cmbJenisKelamin.setValue(jenisKelamin);
+                txtCekNoTelephone.setText(String.valueOf(telpon));
+                txtCekEmail.setText(email);
+                txtCekAlamat.setText(alamat);
+
+                InputStream is = rs.getBinaryStream("Image");
+                if (is != null) {
+                    Image image = new Image(is);
+                    imgCekCustomer.setImage(image);
+                }
+
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Customer Tidak Ditemukan");
+                alert.setHeaderText("Customer tidak ditemukan");
+                alert.setContentText("Apakah Anda ingin menambahkan customer baru?");
+
+                ButtonType btnYes = new ButtonType("Ya", ButtonBar.ButtonData.YES);
+                ButtonType btnNo = new ButtonType("Tidak", ButtonBar.ButtonData.NO);
+                alert.getButtonTypes().setAll(btnYes, btnNo);
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == btnYes) {
+                    pnlCustomer.toFront();
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Gagal mengecek customer: " + e.getMessage());
+        }
+    }
 }
