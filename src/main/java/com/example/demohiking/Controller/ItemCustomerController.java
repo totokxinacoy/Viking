@@ -42,6 +42,19 @@ public class ItemCustomerController {
         lblTelpon.setText(customer.getNomortelephone());
     }
 
+    public void setData2(Customer customer) {
+        this.customer = customer;
+
+        lblIDCustomer.setText(customer.getId());
+        lblNama.setText(customer.getNama());
+        lblEmail.setText(customer.getEmail());
+        lblTelpon.setText(customer.getNomortelephone());
+        btnDelete.setManaged(false);
+        btnDelete.setVisible(false);
+        btnUpdate.setVisible(false);
+        btnUpdate.setManaged(false);
+    }
+
     @FXML
     private void handleUpdateButtonClick() {
         if (UpdateCustomerController.isWindowOpen()) {

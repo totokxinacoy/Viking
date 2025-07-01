@@ -36,6 +36,8 @@ public class HomeKasirController implements Initializable {
     @FXML
     private ImageView imgCustomer;
     @FXML
+    private ImageView imgCekCustomer;
+    @FXML
     private ImageView imgDenda;
     private boolean isImageSelected = false;
     private File selectedImageFile;
@@ -48,11 +50,11 @@ public class HomeKasirController implements Initializable {
     @FXML
     private VBox pnItemsCustomer = null;
     @FXML
+    private VBox pnItemsCekCustomer = null;
+    @FXML
     private VBox pnItemsPaket = null;
     @FXML
     private VBox pnItemsHomePaket = null;
-    @FXML
-    private VBox pnItemsTransaksi = null;
     @FXML
     private VBox pnCartProduk = null;
 
@@ -93,6 +95,8 @@ public class HomeKasirController implements Initializable {
     private Pane pnlDenda;
     @FXML
     private Pane pnlCustomer;
+    @FXML
+    private Pane pnlCekCustomer;
     @FXML
     private Pane pnlTransaksi;
     @FXML
@@ -156,8 +160,6 @@ public class HomeKasirController implements Initializable {
     @FXML
     private TextField txtNominal;
     @FXML
-    private Button btnAktifDenda;
-    @FXML
     private ComboBox<String> cmbFilterStatusDenda;
 
     // PAKET ITEMS
@@ -167,6 +169,31 @@ public class HomeKasirController implements Initializable {
     private Button btnAddPaket;
 
 
+    /* --- TRANSAKSI PEMINJAMAN ITEMS --- */
+
+    // CEK CUSTOMER ITEMS
+    @FXML
+    private Button btnSearchCekCustomer;
+    @FXML
+    private TextField txtSearchCekCustomer;
+    @FXML
+    private TextField txtIDCekCustomer;
+    @FXML
+    private TextField txtNamaCekCustomer;
+    //    @FXML
+//    private ComboBox<String> cmbJenisKelamin;
+    @FXML
+    private TextField txtCekNoTelephone;
+    @FXML
+    private TextField txtCekEmail;
+    @FXML
+    private TextArea txtCekAlamat;
+//    @FXML
+//    private RadioButton rdLaki;
+//    @FXML
+//    private RadioButton rdPerempuan;
+//    @FXML
+//    private ToggleGroup genderGroup;
 
 
 
@@ -498,6 +525,38 @@ public class HomeKasirController implements Initializable {
         }
     }
 
+    private void loadCekCustomerItems() {
+        List<Customer> dataCustomer = getDataCustomer();
+        loadCekCustomerItems(dataCustomer);
+    }
+
+    private void loadCekCustomerItems(List<Customer> dataCustomer) {
+        pnItemsCekCustomer.getChildren().clear();
+
+        for (int i = 0; i < dataCustomer.size(); i++) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemCustomer.fxml"));
+                Node node = loader.load();
+
+                ItemCustomerController controller = loader.getController();
+                controller.setData2(dataCustomer.get(i));
+                controller.setHomeController(this); // <-- penting!
+
+                final int j = i;
+                node.setOnMouseEntered(event -> {
+                    node.setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                node.setOnMouseExited(event -> {
+                    node.setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+
+                pnItemsCekCustomer.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void setDetailCustomer(Customer customer) {
         txtIDCustomer.setText(customer.getId());
         txtNamaCustomer.setText(customer.getNama());
@@ -682,6 +741,13 @@ public class HomeKasirController implements Initializable {
         // Inisialisasi Component Paket
         loadProdukItemsTransact();
         loadItemPaket();
+
+        // Inisialisasi Component Transaksi Peminjaman
+        loadCekCustomerItems();
+        txtSearchCekCustomer.textProperty().addListener((observable, oldValue, newValue) -> {
+            btnSearchCekCustomer.setDisable(newValue.trim().isEmpty());
+        });
+        btnSearchCekCustomer.setDisable(true);
         
 
         // Tunda pengecekan session sampai setelah UI tampil
@@ -745,8 +811,8 @@ public class HomeKasirController implements Initializable {
         }
         if(actionEvent.getSource()==btnPeminjaman)
         {
-            pnlTransaksiPeminjaman.setStyle("-fx-background-color : #ffffff");
-            pnlTransaksiPeminjaman.toFront();
+            pnlCekCustomer.setStyle("-fx-background-color : #ffffff");
+            pnlCekCustomer.toFront();
         }
         if(actionEvent.getSource()==btnPembayaran)
         {
@@ -1353,39 +1419,54 @@ public class HomeKasirController implements Initializable {
         keranjang.clear();
     }
 
-    public void refreshDataPaket() {
-        pnItemsPaket.getChildren().clear(); // Kosongkan container tampilan
 
-        String query = "SELECT * FROM Paket WHERE status = 'Aktif'";
+    /* --- TRANSAKSI PEMINJAMAN --- */
 
-        try (Connection conn = new DBConnect().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+    // CEK CUSTOMER
+    @FXML
+    private void handleSearchCekCustomer(ActionEvent event) {
+        String keyword = txtSearchCekCustomer.getText().trim();
+
+        String query = "SELECT * FROM Customer WHERE (ID_Customer = ? OR LOWER(Nama_Customer) LIKE ?) AND status = 'Aktif'";
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, keyword);
+            pstmt.setString(2, "%" + keyword.toLowerCase() + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+            List<Customer> foundList = new ArrayList<>();
 
             while (rs.next()) {
-                Paket paket = new Paket();
-                paket.setId(rs.getString("ID_Paket"));
-                paket.setNama(rs.getString("Nama_Paket"));
-                paket.setHarga(rs.getDouble("Harga"));
-                paket.setDiskon(rs.getDouble("Diskon"));
-                paket.setJumlahPaket(rs.getInt("Jumlah"));
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemPaket.fxml"));
-                Parent node = loader.load();
-
-                ItemPaketController controller = loader.getController();
-                controller.setData(paket);
-                controller.setHomeController(this);
-
-                pnItemsPaket.getChildren().add(node);
+                Customer customer = new Customer(
+                        rs.getString("ID_Customer"),
+                        rs.getString("Nama_Customer"),
+                        rs.getString("Nomor_Telephone"),
+                        rs.getString("Email")
+                );
+                foundList.add(customer);
             }
 
-        } catch (Exception e) {
+            if (!foundList.isEmpty()) {
+                setDetailCustomer(foundList.get(0)); // tampilkan detail pertama
+                loadCustomerItems(foundList);        // tampilkan hasil pencarian
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Pencarian Customer");
+                alert.setHeaderText(null);
+                alert.setContentText("Customer tidak ditemukan.");
+                alert.showAndWait();
+                txtSearchCekCustomer.clear();
+            }
+
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Load Error");
-            alert.setContentText("Gagal memuat data paket:\n" + e.getMessage());
-            alert.showAndWait();
         }
     }
+
+
 }
