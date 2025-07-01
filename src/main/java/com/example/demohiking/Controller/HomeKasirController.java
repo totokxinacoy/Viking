@@ -751,7 +751,19 @@ public class HomeKasirController implements Initializable {
         });
         btnSearchCekCustomer.setDisable(true);
         txtNamaCekCustomer.setOnAction(event -> handleCekCustomer(null));
-        
+        txtNamaCekCustomer.setOnAction(event -> {
+            String nama = txtNamaCekCustomer.getText().trim();
+            if (!nama.isEmpty()) {
+                isCustomerExist(nama);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Validasi");
+                alert.setHeaderText(null);
+                alert.setContentText("Silakan masukkan nama customer terlebih dahulu.");
+                alert.showAndWait();
+            }
+        });
+
 
         // Tunda pengecekan session sampai setelah UI tampil
         Platform.runLater(this::cekSession);

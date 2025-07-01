@@ -105,7 +105,7 @@ public class ItemProdukController {
             String checkQuery = "SELECT COUNT(*) AS jumlah " +
                     "FROM detail_transaksi dt " +
                     "JOIN Transaksi t ON dt.ID_Transaksi = t.ID_Transaksi " +
-                    "WHERE dt.ID_Produk = ? AND t.Status = 'Belum Dibayar'";
+                    "WHERE dt.ID_Produk = ? AND t.Status = 'Non Aktif'";
 
             PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
             checkStmt.setString(1, produk.getId());
