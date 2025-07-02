@@ -174,6 +174,12 @@ public class FormIsiPaketController {
             paketStmt.setInt(6, jumlahPaket);
             paketStmt.executeUpdate();
 
+            String updateStokPaket = "UPDATE Paket SET Stok = ? WHERE ID_Paket = ?";
+            PreparedStatement updateStokStmt = conn.prepareStatement(updateStokPaket);
+            updateStokStmt.setInt(1, jumlahPaket);
+            updateStokStmt.setString(2, idPaket);
+            updateStokStmt.executeUpdate();
+
             String insertDetail = "INSERT INTO detail_paket (ID_Paket, ID_Produk, Jumlah) VALUES (?, ?, ?)";
             PreparedStatement detailStmt = conn.prepareStatement(insertDetail);
             for (detailPaket item : produkDalamPaket) {
@@ -187,7 +193,8 @@ public class FormIsiPaketController {
             String updateStok = "UPDATE Produk SET Stok = Stok - ? WHERE ID_Produk = ?";
             PreparedStatement stokStmt = conn.prepareStatement(updateStok);
             for (detailPaket item : produkDalamPaket) {
-                stokStmt.setInt(1, item.getJumlah());
+                int totalPengurangan = item.getJumlah() * jumlahPaket;
+                stokStmt.setInt(1, totalPengurangan);
                 stokStmt.setString(2, item.getProduk().getId());
                 stokStmt.addBatch();
             }

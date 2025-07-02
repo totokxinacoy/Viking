@@ -24,6 +24,7 @@ public class ItemPaketController {
     @FXML private Label lblJumlah;
     @FXML private Label lblHarga;
     @FXML private Label lblDiskon;
+    @FXML private Label lblStok;
     @FXML private Button btnUpdate;
     @FXML private Button btnDelete;
 
@@ -43,12 +44,14 @@ public class ItemPaketController {
             lblHarga.setText(paket.getHarga() > 0 ? String.format("Rp. %,.0f", paket.getHarga()) : "Rp. 0");
             lblDiskon.setText(String.format("%.0f%%", paket.getDiskon() * 100));
             lblJumlah.setText(String.format("%,d", paket.getJumlahPaket()));
+            lblStok.setText(String.format("%,d", paket.getJumlahPaket()));
         } else {
             lblID.setText("-");
             lblNama.setText("-");
             lblHarga.setText("Rp. 0");
             lblDiskon.setText("0%");
             lblJumlah.setText("0");
+            lblStok.setText("0");
         }
     }
 

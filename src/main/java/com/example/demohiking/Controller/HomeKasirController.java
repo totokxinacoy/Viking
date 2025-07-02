@@ -613,7 +613,7 @@ public class HomeKasirController implements Initializable {
         List<Paket> list = new ArrayList<>();
         DBConnect db = new DBConnect();
 
-        String query = "SELECT ID_Paket, Nama_Paket, Jumlah, Harga, Diskon FROM Paket";
+        String query = "SELECT ID_Paket, Nama_Paket, Jumlah, Harga, Diskon, Stok FROM Paket";
 
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
@@ -625,7 +625,8 @@ public class HomeKasirController implements Initializable {
                         rs.getString("Nama_Paket"),
                         rs.getDouble("Harga"),
                         rs.getDouble("Diskon"),
-                        rs.getInt("Jumlah")
+                        rs.getInt("Jumlah"),
+                        rs.getInt("Stok")
                 ));
             }
 

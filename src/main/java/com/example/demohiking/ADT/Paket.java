@@ -9,38 +9,42 @@ public class Paket {
     private double harga;
     private double diskon;
     private int jumlahPaket;
+    private int stok;
     private List<detailPaket> isiPaket; // Tambahan: daftar isi paket
 
     public Paket() {}
 
     // Constructor tanpa deskripsi
-    public Paket(String id, String nama, double harga, double diskon, int jumlahPaket) {
+    public Paket(String id, String nama, double harga, double diskon, int jumlahPaket, int stok) {
         this.id = id;
         this.nama = nama;
         this.deskripsi = null;
         this.harga = harga;
         this.diskon = diskon;
         this.jumlahPaket = jumlahPaket;
+        this.stok = stok;
     }
 
     // Constructor lengkap tanpa isiPaket
-    public Paket(String id, String nama, String deskripsi, double harga, double diskon, int jumlahPaket) {
+    public Paket(String id, String nama, String deskripsi, double harga, double diskon, int jumlahPaket, int stok) {
         this.id = id;
         this.nama = nama;
         this.deskripsi = deskripsi;
         this.harga = harga;
         this.diskon = diskon;
         this.jumlahPaket = jumlahPaket;
+        this.stok = stok;
     }
 
     // Constructor lengkap + isi paket
-    public Paket(String id, String nama, String deskripsi, double harga, double diskon, int jumlahPaket, List<detailPaket> isiPaket) {
+    public Paket(String id, String nama, String deskripsi, double harga, double diskon, int jumlahPaket, int stok, List<detailPaket> isiPaket) {
         this.id = id;
         this.nama = nama;
         this.deskripsi = deskripsi;
         this.harga = harga;
         this.diskon = diskon;
         this.jumlahPaket = jumlahPaket;
+        this.stok = stok;
         this.isiPaket = isiPaket;
     }
 
@@ -91,6 +95,14 @@ public class Paket {
 
     public void setJumlahPaket(int jumlahPaket) {
         this.jumlahPaket = jumlahPaket;
+    }
+
+    public int getStok() {
+        return stok;
+    }
+
+    public void setStok(int stok) {
+        this.stok = stok;
     }
 
     public List<detailPaket> getIsiPaket() {

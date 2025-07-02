@@ -112,13 +112,16 @@ public class ItemTransactProdukController {
 
             alert.showAndWait().ifPresent(response -> {
                 if (response == ya) {
-                    homeKasirController.tutupFormIsiPaket(); //
+                    homeKasirController.tutupFormIsiPaket();
                 } else if (response == tidak) {
                     homeKasirController.bringFormIsiPaketToFront();
                 }
-
             });
+            return;
+        }
 
+        if (produk.getStok() <= 5) {
+            showAlert("Stok produk terlalu sedikit untuk ditambahkan ke keranjang (minimum 5).");
             return;
         }
 
@@ -180,7 +183,7 @@ public class ItemTransactProdukController {
                     homeKasirController.hapusItemDariKeranjang(item);
                 }
 
-                btnKurang.setDisable(true); // 🔒 Matikan tombol
+                btnKurang.setDisable(true);
                 showAlert("Item dihapus dari keranjang.");
             } else {
                 showAlert("Penghapusan dibatalkan.");
