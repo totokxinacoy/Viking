@@ -59,6 +59,7 @@ public class ItemTransactProdukController {
 
     public void setData(Produk produk) {
         this.produk = produk;
+        this.jumlah = 0;
 
         lblIDProduk.setText(produk.getId() != null ? produk.getId() : "-");
         lblNamaProduk.setText(produk.getNama() != null ? produk.getNama() : "-");
@@ -69,6 +70,7 @@ public class ItemTransactProdukController {
         lblStok.setText(String.valueOf(produk.getStok()));
 
         btnTambah.setVisible(true);
+        btnKurang.setDisable(true);
     }
 
     public void setData(detailPaket item, int nomorUrut) {
@@ -131,10 +133,16 @@ public class ItemTransactProdukController {
         jumlah = (item == null) ? 1 : jumlah + 1;
         updateDetailPaket();
         updateLabelHargaTotal();
+        btnKurang.setDisable(false);
     }
 
     @FXML
     private void handleKurangProduk(ActionEvent event) {
+        if (produk == null || produk.getId() == null || produk.getId().isEmpty() || produk.getId().equals("0")) {
+            showAlert("Produk belum valid atau belum ditambahkan ke keranjang.");
+            btnKurang.setDisable(true);
+            return;
+        }
         if (homeKasirController != null && homeKasirController.isFormIsiPaketTerbuka()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Form Paket Sedang Aktif");
@@ -146,16 +154,38 @@ public class ItemTransactProdukController {
 
             alert.showAndWait().ifPresent(response -> {
                 if (response == ya) {
-                    homeKasirController.tutupFormIsiPaket(); //
+                    homeKasirController.tutupFormIsiPaket();
                 } else if (response == tidak) {
                     homeKasirController.bringFormIsiPaketToFront();
                 }
-
             });
-
             return;
         }
-        if (jumlah > 1) {
+
+        if (jumlah <= 1) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Konfirmasi");
+            alert.setHeaderText("Jumlah tinggal 1");
+            alert.setContentText("Ingin menghapus item ini dari keranjang?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                produk.setStok(produk.getStok() + 1);
+                lblStok.setText(String.valueOf(produk.getStok()));
+
+                jumlah = 0;
+                if (item != null) item.setJumlah(jumlah);
+
+                if (homeKasirController != null && item != null) {
+                    homeKasirController.hapusItemDariKeranjang(item);
+                }
+
+                btnKurang.setDisable(true); // 🔒 Matikan tombol
+                showAlert("Item dihapus dari keranjang.");
+            } else {
+                showAlert("Penghapusan dibatalkan.");
+            }
+        } else {
             jumlah--;
             produk.setStok(produk.getStok() + 1);
             lblStok.setText(String.valueOf(produk.getStok()));
@@ -169,31 +199,6 @@ public class ItemTransactProdukController {
             }
 
             updateLabelHargaTotal();
-        } else {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Konfirmasi");
-            alert.setHeaderText("Jumlah tinggal 1");
-            alert.setContentText("Ingin menghapus item ini dari keranjang?");
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                // Jika user pilih YES
-                produk.setStok(produk.getStok() + 1);
-                lblStok.setText(String.valueOf(produk.getStok()));
-
-                jumlah = 0;
-                if (item != null) {
-                    item.setJumlah(jumlah);
-                }
-
-                if (homeKasirController != null && item != null) {
-                    homeKasirController.hapusItemDariKeranjang(item);
-                }
-
-                showAlert("Item dihapus dari keranjang.");
-            } else {
-                showAlert("Penghapusan dibatalkan.");
-            }
         }
     }
 

@@ -4,6 +4,8 @@ import com.example.demohiking.ADT.*;
 import com.example.demohiking.Connection.DBConnect;
 import com.example.demohiking.Session;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -661,7 +663,6 @@ public class HomeKasirController implements Initializable {
 //    }
 
     private List<detailPaket> keranjang = new ArrayList<>();
-
     public void updateDetailProduk(detailPaket newItem) {
         boolean found = false;
         for (detailPaket item : keranjang) {
