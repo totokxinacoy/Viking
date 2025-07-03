@@ -113,7 +113,6 @@ public class ItemDendaController {
                     if (rows > 0) {
                         showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Denda telah dihapus.");
 
-                        // Langsung panggil refresh tanpa menunggu konfirmasi tambahan
                         if (homeKasirController != null) {
                             homeKasirController.RefreshDataDenda();
                         }

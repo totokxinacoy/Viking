@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import java.sql.ResultSet;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -103,28 +104,54 @@ public class ItemPaketController {
 
     @FXML
     private void hapusPaket() {
-        String query = "UPDATE Paket SET status = 'Non Aktif' WHERE ID_Paket = ?";
-        try (
-                Connection conn = new DBConnect().getConnection();
-                PreparedStatement pstat = conn.prepareStatement(query)
-        ) {
-            pstat.setString(1, paket.getId());
+        if (paket == null) return;
 
-            int rows = pstat.executeUpdate();
-            if (rows > 0) {
-                showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Paket telah dihapus.");
-                if (homeKasirController != null) {
-                    homeKasirController.refreshPaket();
+        String updatePaket = "UPDATE Paket SET status = 'Non Aktif' WHERE ID_Paket = ?";
+        String ambilDetail = "SELECT ID_Produk, Jumlah FROM detail_paket WHERE ID_Paket = ?";
+        String updateStokProduk = "UPDATE Produk SET Stok = Stok + ? WHERE ID_Produk = ?";
+
+        try (Connection conn = new DBConnect().getConnection()) {
+            conn.setAutoCommit(false);
+
+            try (
+                    PreparedStatement ambilStmt = conn.prepareStatement(ambilDetail);
+                    PreparedStatement updateProdukStmt = conn.prepareStatement(updateStokProduk);
+                    PreparedStatement nonaktifStmt = conn.prepareStatement(updatePaket)
+            ) {
+                ambilStmt.setString(1, paket.getId());
+                ResultSet rs = ambilStmt.executeQuery();
+
+                while (rs.next()) {
+                    String idProduk = rs.getString("ID_Produk");
+                    int jumlahPerPaket = rs.getInt("Jumlah");
+                    int totalKembalikan = jumlahPerPaket * paket.getJumlahPaket();
+
+                    updateProdukStmt.setInt(1, totalKembalikan);
+                    updateProdukStmt.setString(2, idProduk);
+                    updateProdukStmt.addBatch();
                 }
-            } else {
-                showAlert(Alert.AlertType.WARNING, "Gagal", "Paket tidak ditemukan di database.");
+                updateProdukStmt.executeBatch();
+
+                nonaktifStmt.setString(1, paket.getId());
+                int affected = nonaktifStmt.executeUpdate();
+
+                conn.commit();
+
+                if (affected > 0) {
+                    showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Paket dinonaktifkan & stok produk dikembalikan.");
+                    if (homeKasirController != null) {
+                        homeKasirController.refreshPaket();
+                        homeKasirController.refreshProdukList();
+                    }
+                } else {
+                    showAlert(Alert.AlertType.WARNING, "Gagal", "Tidak ada paket yang dinonaktifkan.");
+                }
             }
 
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
         }
     }
-
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -132,4 +159,5 @@ public class ItemPaketController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 }

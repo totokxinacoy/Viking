@@ -579,7 +579,7 @@ public class HomeKasirController implements Initializable {
 
     /* --- PAKET METHOD --- */
     // NEW PAKET
-    private void loadItemPaket() {
+    protected void loadItemPaket() {
         List<Paket> dataPaket = getDataPaket();
         loadItemPaket(dataPaket);
     }
@@ -605,15 +605,13 @@ public class HomeKasirController implements Initializable {
             }
         }
     }
-    public void refreshPaket() {
-        loadItemPaket();
-    }
+
 
     public List<Paket> getDataPaket() {
         List<Paket> list = new ArrayList<>();
         DBConnect db = new DBConnect();
 
-        String query = "SELECT ID_Paket, Nama_Paket, Jumlah, Harga, Diskon, Stok FROM Paket";
+        String query = "SELECT ID_Paket, Nama_Paket, Jumlah, Harga, Diskon, Stok FROM Paket WHERE status = 'Aktif'";
 
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
@@ -1552,5 +1550,9 @@ public class HomeKasirController implements Initializable {
         } catch (SQLException e) {
             System.err.println("Gagal mengecek customer: " + e.getMessage());
         }
+    }
+
+    public void refreshPaket() {
+        loadItemPaket();
     }
 }

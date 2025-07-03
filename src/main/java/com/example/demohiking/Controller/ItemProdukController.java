@@ -100,55 +100,56 @@ public class ItemProdukController {
             return;
         }
 
-        try {
-            Connection conn = new DBConnect().getConnection();
-            String checkQuery = "SELECT COUNT(*) AS jumlah " +
-                    "FROM detail_transaksi dt " +
-                    "JOIN Transaksi t ON dt.ID_Transaksi = t.ID_Transaksi " +
-                    "WHERE dt.ID_Produk = ? AND t.Status = 'Non Aktif'";
+        try (Connection conn = new DBConnect().getConnection()) {
 
-            PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
-            checkStmt.setString(1, produk.getId());
-            ResultSet rs = checkStmt.executeQuery();
+            // Cek apakah produk masih dipakai di transaksi yang belum selesai
+//            String transaksiCheck = "SELECT COUNT(*) AS jumlah FROM detail_transaksi dt " +
+//                    "JOIN Transaksi t ON dt.ID_Transaksi = t.ID_Transaksi " +
+//                    "WHERE dt.ID_Produk = ? AND t.Status = 'Non Aktif'";
+//            try (PreparedStatement stmt1 = conn.prepareStatement(transaksiCheck)) {
+//                stmt1.setString(1, produk.getId());
+//                ResultSet rs1 = stmt1.executeQuery();
+//                if (rs1.next() && rs1.getInt("jumlah") > 0) {
+//                    showAlert(Alert.AlertType.WARNING, "Tidak Dapat Menghapus",
+//                            "Produk ini sedang digunakan dalam transaksi yang belum selesai.");
+//                    return;
+//                }
+//            }
 
-            if (rs.next() && rs.getInt("jumlah") > 0) {
-                showAlert(Alert.AlertType.WARNING, "Tidak Dapat Menghapus",
-                        "Produk ini sedang digunakan dalam transaksi yang belum dibayar.");
-                rs.close();
-                checkStmt.close();
-                conn.close();
-                return;
+            // Cek apakah produk masih dipakai di paket yang aktif
+            String paketCheck = "SELECT COUNT(*) AS jumlah FROM detail_paket dp " +
+                    "JOIN Paket p ON dp.ID_Paket = p.ID_Paket " +
+                    "WHERE dp.ID_Produk = ? AND p.Status = 'Aktif'";
+            try (PreparedStatement stmt2 = conn.prepareStatement(paketCheck)) {
+                stmt2.setString(1, produk.getId());
+                ResultSet rs2 = stmt2.executeQuery();
+                if (rs2.next() && rs2.getInt("jumlah") > 0) {
+                    showAlert(Alert.AlertType.WARNING, "Tidak Dapat Menghapus",
+                            "Produk ini masih digunakan dalam paket yang aktif.");
+                    return;
+                }
             }
 
-            rs.close();
-            checkStmt.close();
-
+            // Konfirmasi sebelum nonaktifkan
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setTitle("Konfirmasi Hapus");
             confirm.setHeaderText(null);
             confirm.setContentText("Apakah Anda yakin ingin menghapus produk ini?");
-
             confirm.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    try {
-                        String query = "UPDATE Produk SET status = 'Non Aktif' WHERE ID_Produk = ?";
-                        PreparedStatement pstat = conn.prepareStatement(query);
+                    try (PreparedStatement pstat = conn.prepareStatement(
+                            "UPDATE Produk SET status = 'Non Aktif' WHERE ID_Produk = ?")) {
                         pstat.setString(1, produk.getId());
-
                         int rows = pstat.executeUpdate();
-                        pstat.close();
-                        conn.close();
 
                         if (rows > 0) {
-                            showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Produk telah dihapus.");
-
+                            showAlert(Alert.AlertType.INFORMATION, "Berhasil", "Produk berhasil dinonaktifkan.");
                             if (homeKasirController != null) {
                                 homeKasirController.refreshProdukList();
                             }
                         } else {
                             showAlert(Alert.AlertType.WARNING, "Gagal", "Produk tidak ditemukan di database.");
                         }
-
                     } catch (SQLException e) {
                         showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
                     }
