@@ -120,7 +120,7 @@ public class HomeKasirController implements Initializable {
     @FXML
     private TextField txtHarga;
     @FXML
-    private TextField txtStock;
+    private TextField txtStok;
     @FXML
     private TextArea txtDeskripsi;
 
@@ -169,6 +169,21 @@ public class HomeKasirController implements Initializable {
     private Button btnBackPaket;
     @FXML
     private Button btnAddPaket;
+    @FXML
+    private TextField lblNamaPaket;
+    @FXML
+    private TextField lblIDPaket;
+    @FXML
+    private TextField lblHargaPaket;
+    @FXML
+    private TextField lblDiskonPaket;
+    @FXML
+    private TextField lblJumlahPaket;
+    @FXML
+    private TextField lblStokPaket;
+    @FXML
+    private Button btnClearDetailPaket;
+
 
 
     /* --- TRANSAKSI PEMINJAMAN ITEMS --- */
@@ -243,7 +258,7 @@ public class HomeKasirController implements Initializable {
         try (
                 Connection conn = connection.getConnection();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT ID_Produk, Nama_Produk, Kategori, Harga, Stok FROM produk WHERE status = 'Aktif'");
+                ResultSet rs = stmt.executeQuery("SELECT ID_Produk, Nama_Produk, Kategori, Harga, Stok, Jumlah FROM produk WHERE status = 'Aktif'");
         ) {
             while (rs.next()) {
                 list.add(new Produk(
@@ -251,7 +266,8 @@ public class HomeKasirController implements Initializable {
                         rs.getString("Nama_Produk"),
                         rs.getString("Kategori"),
                         rs.getDouble("Harga"),
-                        rs.getInt("Stok")
+                        rs.getInt("Stok"),
+                        rs.getInt("Jumlah")
                 ));
             }
         } catch (SQLException e) {
@@ -338,7 +354,7 @@ public class HomeKasirController implements Initializable {
         cmbKategori.setValue(produk.getKategori());
         txtDeskripsi.setText(produk.getDeskripsi());
         txtHarga.setText(String.valueOf((int) produk.getHarga()));
-        txtStock.setText(String.valueOf(produk.getStok()));
+        txtStok.setText(String.valueOf(produk.getStok()));
     }
 
 
@@ -598,6 +614,8 @@ public class HomeKasirController implements Initializable {
 
                 node.setOnMouseEntered(e -> node.setStyle("-fx-background-color: #051036; -fx-background-radius: 15"));
                 node.setOnMouseExited(e -> node.setStyle("-fx-background-color: #0D2857; -fx-background-radius: 15"));
+                node.setOnMouseClicked(e -> showDetailPaket(paket));
+
 
                 pnItemsHomePaket.getChildren().add(node);
             } catch (IOException e) {
@@ -911,7 +929,7 @@ public class HomeKasirController implements Initializable {
         String kategori = cmbKategori.getValue();
         String desk = txtDeskripsi.getText().trim();
         String hargaStr = txtHarga.getText().trim();
-        String stockStr = txtStock.getText().trim();
+        String stockStr = txtStok.getText().trim();
         String status = "Aktif";
 
         if (idProduk.isEmpty() || nama.isEmpty() || kategori == null || kategori.isEmpty()
@@ -944,7 +962,6 @@ public class HomeKasirController implements Initializable {
 
             if (rs.next()) {
                 String existingID = rs.getString("ID_Produk");
-
                 Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                 confirm.setTitle("Produk Sudah Ada");
                 confirm.setHeaderText(null);
@@ -954,11 +971,10 @@ public class HomeKasirController implements Initializable {
                         updateProduk(existingID, nama, kategori, desk, harga, stock, status);
                     }
                 });
-
                 return;
             }
 
-            String insertQuery = "INSERT INTO Produk VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO Produk (ID_Produk, Nama_Produk, Kategori, Deskripsi, Harga, Stok, Jumlah, Status, Image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstat = conn.prepareStatement(insertQuery);
             pstat.setString(1, idProduk);
             pstat.setString(2, nama);
@@ -966,9 +982,10 @@ public class HomeKasirController implements Initializable {
             pstat.setString(4, desk);
             pstat.setInt(5, harga);
             pstat.setInt(6, stock);
-            pstat.setString(7, status);
+            pstat.setInt(7, stock);
+            pstat.setString(8, status);
             InputStream imageStream = new FileInputStream(selectedImageFile);
-            pstat.setBinaryStream(8, imageStream, (int) selectedImageFile.length());
+            pstat.setBinaryStream(9, imageStream, (int) selectedImageFile.length());
 
             pstat.executeUpdate();
             showAlert(Alert.AlertType.INFORMATION, "Sukses", "Insert data produk berhasil!");
@@ -987,7 +1004,7 @@ public class HomeKasirController implements Initializable {
     private void updateProduk(String idProduk, String nama, String kategori, String desk,
                               int harga, int stock, String status) {
 
-        String updateQuery = "UPDATE Produk SET Kategori = ?, Deskripsi = ?, Harga = ?, Stok = ?, Status = ?, Image = ? WHERE ID_Produk = ?";
+        String updateQuery = "UPDATE Produk SET Kategori = ?, Deskripsi = ?, Harga = ?, Stok = ?, Jumlah = ?, Status = ?, Image = ? WHERE ID_Produk = ?";
 
         try (
                 Connection conn = new DBConnect().getConnection();
@@ -997,10 +1014,11 @@ public class HomeKasirController implements Initializable {
             pstmt.setString(2, desk);
             pstmt.setInt(3, harga);
             pstmt.setInt(4, stock);
-            pstmt.setString(5, status);
+            pstmt.setInt(5, stock);
+            pstmt.setString(6, status);
             InputStream imageStream = new FileInputStream(selectedImageFile);
-            pstmt.setBinaryStream(6, imageStream, (int) selectedImageFile.length());
-            pstmt.setString(7, idProduk);
+            pstmt.setBinaryStream(7, imageStream, (int) selectedImageFile.length());
+            pstmt.setString(8, idProduk);
 
             int rows = pstmt.executeUpdate();
 
@@ -1043,7 +1061,8 @@ public class HomeKasirController implements Initializable {
                         rs.getString("Nama_Produk"),
                         rs.getString("Kategori"),
                         rs.getDouble("Harga"),
-                        rs.getInt("Stok")
+                        rs.getInt("Stok"),
+                        rs.getInt("Jumlah")
                 );
                 foundList.add(produk);
             }
@@ -1073,7 +1092,7 @@ public class HomeKasirController implements Initializable {
         txtNama.setText("");
         cmbKategori.setValue("");
         txtHarga.setText("");
-        txtStock.setText("");
+        txtStok.setText("");
         txtDeskripsi.setText("");
         isImageSelected = false;
         selectedImageFile = null;
@@ -1554,5 +1573,26 @@ public class HomeKasirController implements Initializable {
 
     public void refreshPaket() {
         loadItemPaket();
+    }
+
+    public void showDetailPaket(Paket paket) {
+        if (paket == null) return;
+//        System.out.println("Paket Dipilih: " + paket.getNama()); // Debug
+
+        lblIDPaket.setText(paket.getId());
+        lblNamaPaket.setText(paket.getNama());
+        lblHargaPaket.setText(String.format("Rp. %,.0f", paket.getHarga()));
+        lblDiskonPaket.setText(String.format("%.0f%%", paket.getDiskon() * 100));
+        lblJumlahPaket.setText(String.valueOf(paket.getJumlahPaket()));
+        lblStokPaket.setText(String.valueOf(paket.getStok()));
+    }
+
+    public void handleClearDetail(){
+        lblIDPaket.setText("");
+        lblNamaPaket.setText("");
+        lblHargaPaket.setText("");
+        lblDiskonPaket.setText("");
+        lblJumlahPaket.setText("");
+        lblStokPaket.setText("");
     }
 }

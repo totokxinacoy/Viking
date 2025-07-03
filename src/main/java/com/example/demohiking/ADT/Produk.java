@@ -7,23 +7,26 @@ public class Produk {
     private String deskripsi;
     private double harga;
     private int stok;
+    private int jumlah;
 
-    public Produk(String id, String nama, String kategori, String deskripsi, double harga, int stok) {
+    public Produk(String id, String nama, String kategori, String deskripsi, double harga, int stok, int jumlah) {
         this.id = id;
         this.nama = nama;
         this.kategori = kategori;
         this.deskripsi = deskripsi;
         this.harga = harga;
         this.stok = stok;
+        this.jumlah = jumlah;
     }
 
-    public Produk(String id, String nama, String kategori, double harga, int stok) {
+    public Produk(String id, String nama, String kategori, double harga, int stok, int jumlah) {
         this.id = id;
         this.nama = nama;
         this.kategori = kategori;
         this.deskripsi = null;
         this.harga = harga;
         this.stok = stok;
+        this.jumlah = jumlah;
     }
 
 
@@ -73,5 +76,13 @@ public class Produk {
 
     public void setStok(int stok) {
         this.stok = stok;
+    }
+
+    public int getJumlah() {
+        return jumlah;
+    }
+
+    public void setJumlah(int jumlah) {
+        this.jumlah = jumlah;
     }
 }

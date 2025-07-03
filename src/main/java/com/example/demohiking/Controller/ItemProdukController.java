@@ -26,6 +26,7 @@ public class ItemProdukController {
         @FXML private Label lblStok;
         @FXML private Label lblKategori;
         @FXML private Label lblHarga;
+        @FXML private Label lblJumlah;
         @FXML private Button btnUpdate;
         @FXML private Button btnDelete;
 
@@ -45,12 +46,14 @@ public class ItemProdukController {
             lblKategori.setText(produk.getKategori() != null ? produk.getKategori() : "-");
             lblHarga.setText(String.format("Rp. %,.0f", produk.getHarga()));
             lblStok.setText(String.valueOf(produk.getStok()));
+            lblJumlah.setText(String.valueOf(produk.getJumlah()));
         } else {
             lblID.setText("-");
             lblNama.setText("-");
             lblKategori.setText("-");
             lblHarga.setText("0");
             lblStok.setText("0");
+            lblJumlah.setText("0");
         }
     }
 

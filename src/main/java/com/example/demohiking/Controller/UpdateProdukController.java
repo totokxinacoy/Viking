@@ -3,66 +3,43 @@ package com.example.demohiking.Controller;
 import com.example.demohiking.ADT.Produk;
 import com.example.demohiking.Connection.DBConnect;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.swing.*;
+import java.io.*;
+import java.sql.*;
 
 public class UpdateProdukController {
-    @FXML
-    private ImageView imgProduk;
+
+    @FXML private ImageView imgProduk;
+    @FXML private TextField txtNama, txtHarga, txtStok;
+    @FXML private Label lblTotalJumlah;
+    @FXML private ComboBox<String> cmbKategori;
+    @FXML private TextArea txtDeskripsi;
 
     private File selectedImageFile;
-    @FXML
-    private TextField txtNama, txtKategori, txtHarga, txtStock;
-    @FXML
-    private ComboBox<String> cmbKategori;
-    @FXML
-    private TextArea txtDeskripsi;
-
     private Produk produk;
+    private HomeKasirController homeKasirController;
 
-    // Static stage untuk kontrol satu jendela saja
+    private String initialNama, initialKategori, initialDeskripsi;
+    private double initialHarga;
+    private int initialStok, initialJumlah;
+    private Image initialImage;
+
     private static Stage updateStage = null;
-
-    public static boolean isWindowOpen() {
-        return updateStage != null;
-    }
-
-    public static void setWindow(Stage stage) {
-        updateStage = stage;
-    }
-
-    public static void clearWindow() {
-        updateStage = null;
-    }
-
+    public static boolean isWindowOpen() { return updateStage != null; }
+    public static void setWindow(Stage stage) { updateStage = stage; }
+    public static void clearWindow() { updateStage = null; }
     public static void bringToFront() {
         if (updateStage != null) {
             updateStage.toFront();
             updateStage.requestFocus();
         }
     }
-
-    private String initialNama, initialKategori, initialDeskripsi;
-    private double initialHarga;
-    private int initialStok;
-    private Image initialImage;
-
-    private HomeKasirController homeKasirController;
 
     public void setHomeController(HomeKasirController controller) {
         this.homeKasirController = controller;
@@ -71,10 +48,7 @@ public class UpdateProdukController {
     public void setProduk(Produk produk) {
         this.produk = produk;
 
-        try {
-            DBConnect db = new DBConnect();
-            Connection conn = db.getConnection();
-
+        try (Connection conn = new DBConnect().getConnection()) {
             String query = "SELECT * FROM Produk WHERE ID_Produk = ?";
             PreparedStatement pstat = conn.prepareStatement(query);
             pstat.setString(1, produk.getId());
@@ -86,13 +60,14 @@ public class UpdateProdukController {
                 String deskripsi = rs.getString("Deskripsi");
                 double harga = rs.getDouble("Harga");
                 int stok = rs.getInt("Stok");
+                int jumlah = rs.getInt("Jumlah");
 
                 txtNama.setText(nama);
                 cmbKategori.getItems().setAll("Tas", "Sepatu", "Aksessoris", "Pakaian", "Tenda");
                 cmbKategori.setValue(kategori);
                 txtDeskripsi.setText(deskripsi);
                 txtHarga.setText(String.valueOf(harga));
-                txtStock.setText(String.valueOf(stok));
+                lblTotalJumlah.setText(String.valueOf(jumlah));
 
                 InputStream is = rs.getBinaryStream("Image");
                 if (is != null) {
@@ -100,12 +75,12 @@ public class UpdateProdukController {
                     imgProduk.setImage(image);
                 }
 
-                // Simpan data awal
                 initialNama = nama;
                 initialKategori = kategori;
                 initialDeskripsi = deskripsi;
                 initialHarga = harga;
                 initialStok = stok;
+                initialJumlah = jumlah;
                 initialImage = imgProduk.getImage();
             } else {
                 showAlert(Alert.AlertType.WARNING, "Tidak Ditemukan", "Produk tidak ditemukan.");
@@ -113,7 +88,6 @@ public class UpdateProdukController {
 
             rs.close();
             pstat.close();
-            conn.close();
 
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
@@ -124,9 +98,7 @@ public class UpdateProdukController {
     private void handleChooseImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Pilih Gambar Produk");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg")
-        );
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Gambar", "*.png", "*.jpg", "*.jpeg"));
 
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
@@ -142,83 +114,95 @@ public class UpdateProdukController {
         String kategori = cmbKategori.getValue();
         String deskripsi = txtDeskripsi.getText().trim();
         String hargaStr = txtHarga.getText().trim();
-        String stokStr = txtStock.getText().trim();
+        String stokStr = txtStok.getText().trim();
 
-        if (nama.isEmpty() || kategori.isEmpty() || deskripsi.isEmpty()
-                || hargaStr.isEmpty() || stokStr.isEmpty()) {
+        if (nama.isEmpty() || kategori == null || kategori.isEmpty()
+                || deskripsi.isEmpty() || hargaStr.isEmpty() || stokStr.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Validasi", "Semua field wajib diisi.");
             return;
         }
 
         try {
             double harga = Double.parseDouble(hargaStr);
-            int stok = Integer.parseInt(stokStr);
+            int stokInput = Integer.parseInt(stokStr);
 
             boolean adaPerubahan = !nama.equals(initialNama)
                     || !kategori.equals(initialKategori)
                     || !deskripsi.equals(initialDeskripsi)
                     || harga != initialHarga
-                    || stok != initialStok
+                    || stokInput != initialStok
                     || selectedImageFile != null;
 
             if (!adaPerubahan) {
-                showAlert(Alert.AlertType.INFORMATION, "Info", "Belum ada perubahan data.");
+                showAlert(Alert.AlertType.INFORMATION, "Info", "Tidak ada perubahan data.");
                 return;
             }
 
-            DBConnect db = new DBConnect();
-            Connection conn = db.getConnection();
+            int perubahanJumlah = stokInput - initialStok;
+            int jumlahBaru = initialJumlah;
 
-            String query;
-            PreparedStatement pstat;
-
-            if (selectedImageFile != null) {
-                query = "UPDATE Produk SET Nama_Produk=?, Kategori=?, Deskripsi=?, Harga=?, Stok=?, Image=? WHERE ID_Produk=?";
-                pstat = conn.prepareStatement(query);
-                pstat.setString(1, nama);
-                pstat.setString(2, kategori);
-                pstat.setString(3, deskripsi);
-                pstat.setDouble(4, harga);
-                pstat.setInt(5, stok);
-                InputStream imageStream = new FileInputStream(selectedImageFile);
-                pstat.setBinaryStream(6, imageStream, (int) selectedImageFile.length());
-                pstat.setString(7, produk.getId());
-            } else {
-                query = "UPDATE Produk SET Nama_Produk=?, Kategori=?, Deskripsi=?, Harga=?, Stok=? WHERE ID_Produk=?";
-                pstat = conn.prepareStatement(query);
-                pstat.setString(1, nama);
-                pstat.setString(2, kategori);
-                pstat.setString(3, deskripsi);
-                pstat.setDouble(4, harga);
-                pstat.setInt(5, stok);
-                pstat.setString(6, produk.getId());
+            if (perubahanJumlah > 0) {
+                jumlahBaru += perubahanJumlah;
+            } else if (perubahanJumlah < 0) {
+                int pengurangan = Math.abs(perubahanJumlah);
+                if (initialStok < pengurangan) {
+                    showAlert(Alert.AlertType.WARNING, "Tidak Dapat Mengurangi Jumlah",
+                            "Stok saat ini (" + initialStok + ") tidak mencukupi untuk mengurangi jumlah sebanyak " + pengurangan + ".");
+                    return;
+                }
+                jumlahBaru -= pengurangan;
             }
 
-            int rows = pstat.executeUpdate();
-            pstat.close();
-            conn.close();
+            try (Connection conn = new DBConnect().getConnection()) {
+                String query;
+                PreparedStatement pstat;
 
-            if (rows > 0) {
-                showAlert(Alert.AlertType.INFORMATION, "Sukses", "Produk berhasil diperbarui!");
-
-                if (homeKasirController != null) {
-                    homeKasirController.RefreshData();
+                if (selectedImageFile != null) {
+                    query = "UPDATE Produk SET Nama_Produk=?, Kategori=?, Deskripsi=?, Harga=?, Stok=?, Jumlah=?, Image=? WHERE ID_Produk=?";
+                    pstat = conn.prepareStatement(query);
+                    pstat.setString(1, nama);
+                    pstat.setString(2, kategori);
+                    pstat.setString(3, deskripsi);
+                    pstat.setDouble(4, harga);
+                    pstat.setInt(5, stokInput);
+                    pstat.setInt(6, jumlahBaru);
+                    InputStream imageStream = new FileInputStream(selectedImageFile);
+                    pstat.setBinaryStream(7, imageStream, (int) selectedImageFile.length());
+                    pstat.setString(8, produk.getId());
+                } else {
+                    query = "UPDATE Produk SET Nama_Produk=?, Kategori=?, Deskripsi=?, Harga=?, Stok=?, Jumlah=? WHERE ID_Produk=?";
+                    pstat = conn.prepareStatement(query);
+                    pstat.setString(1, nama);
+                    pstat.setString(2, kategori);
+                    pstat.setString(3, deskripsi);
+                    pstat.setDouble(4, harga);
+                    pstat.setInt(5, stokInput);
+                    pstat.setInt(6, jumlahBaru);
+                    pstat.setString(7, produk.getId());
                 }
 
-                if (updateStage != null) {
-                    updateStage.close();
-                    clearWindow();
+                int rows = pstat.executeUpdate();
+                pstat.close();
+
+                if (rows > 0) {
+                    lblTotalJumlah.setText(String.valueOf(jumlahBaru));
+                    showAlert(Alert.AlertType.INFORMATION, "Sukses", "Produk berhasil diperbarui!");
+                    if (homeKasirController != null) {
+                        homeKasirController.RefreshData();
+                    }
+                    if (updateStage != null) {
+                        updateStage.close();
+                        clearWindow();
+                    }
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Gagal", "Produk tidak ditemukan.");
                 }
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Gagal", "Data tidak ditemukan.");
+
             }
-
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Format Salah", "Harga dan stok harus angka.");
-        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Format Salah", "Harga dan stok harus berupa angka.");
+        } catch (SQLException | FileNotFoundException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
-        } catch (FileNotFoundException e) {
-            showAlert(Alert.AlertType.ERROR, "File Gambar Tidak Ditemukan", e.getMessage());
         }
     }
 
@@ -234,7 +218,7 @@ public class UpdateProdukController {
         txtNama.setText("");
         cmbKategori.setValue("");
         txtHarga.setText("");
-        txtStock.setText("");
+        txtStok.setText("");
         txtDeskripsi.setText("");
         imgProduk.setImage(null);
     }
