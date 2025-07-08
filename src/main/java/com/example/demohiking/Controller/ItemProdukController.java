@@ -183,6 +183,11 @@ public class ItemProdukController {
         }
     }
 
+    public void refreshStok() {
+        if (produk != null && lblStok.isVisible()) {
+            lblStok.setText(String.valueOf(produk.getStok()));
+        }
+    }
     }
 
 

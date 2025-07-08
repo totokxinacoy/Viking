@@ -162,6 +162,24 @@ public class FormIsiPaketController {
         }
 
         try (Connection conn = new DBConnect().getConnection()) {
+            for (detailPaket item : produkDalamPaket) {
+                int totalPengurangan = item.getJumlah() * jumlahPaket;
+                String queryStok = "SELECT Stok FROM Produk WHERE ID_Produk = ?";
+                try (PreparedStatement checkStmt = conn.prepareStatement(queryStok)) {
+                    checkStmt.setString(1, item.getProduk().getId());
+                    ResultSet rs = checkStmt.executeQuery();
+                    if (rs.next()) {
+                        int stokSaatIni = rs.getInt("Stok");
+                        if (stokSaatIni < totalPengurangan) {
+                            showAlert("Stok produk \"" + item.getProduk().getNama() +
+                                    "\" tidak mencukupi.\nStok tersedia: " + stokSaatIni +
+                                    ", tetapi diperlukan: " + totalPengurangan);
+                            return;
+                        }
+                    }
+                    rs.close();
+                }
+            }
             conn.setAutoCommit(false);
 
             String insertPaket = "INSERT INTO Paket (ID_Paket, Nama_Paket, Harga, Diskon, Deskripsi, Jumlah) VALUES (?, ?, ?, ?, ?, ?)";

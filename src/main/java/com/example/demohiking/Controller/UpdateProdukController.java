@@ -114,23 +114,34 @@ public class UpdateProdukController {
         String kategori = cmbKategori.getValue();
         String deskripsi = txtDeskripsi.getText().trim();
         String hargaStr = txtHarga.getText().trim();
-        String stokStr = txtStok.getText().trim();
+        String jumlahStr = txtStok.getText().trim();
 
+        // Validasi input
         if (nama.isEmpty() || kategori == null || kategori.isEmpty()
-                || deskripsi.isEmpty() || hargaStr.isEmpty() || stokStr.isEmpty()) {
+                || deskripsi.isEmpty() || hargaStr.isEmpty() || jumlahStr.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Validasi", "Semua field wajib diisi.");
             return;
         }
 
         try {
             double harga = Double.parseDouble(hargaStr);
-            int stokInput = Integer.parseInt(stokStr);
+            int jumlahInput = Integer.parseInt(jumlahStr);
+            int perubahanJumlah = jumlahInput - initialJumlah;
+            int stokBaru = initialStok + perubahanJumlah;
 
+            // Cek apakah stok mencukupi jika jumlah dikurangi
+            if (perubahanJumlah < 0 && stokBaru < 0) {
+                showAlert(Alert.AlertType.WARNING, "Stok Tidak Cukup",
+                        "Stok tidak mencukupi untuk mengurangi jumlah sebanyak " + Math.abs(perubahanJumlah));
+                return;
+            }
+
+            // Cek ada perubahan data
             boolean adaPerubahan = !nama.equals(initialNama)
                     || !kategori.equals(initialKategori)
                     || !deskripsi.equals(initialDeskripsi)
                     || harga != initialHarga
-                    || stokInput != initialStok
+                    || jumlahInput != initialJumlah
                     || selectedImageFile != null;
 
             if (!adaPerubahan) {
@@ -138,21 +149,7 @@ public class UpdateProdukController {
                 return;
             }
 
-            int perubahanJumlah = stokInput - initialStok;
-            int jumlahBaru = initialJumlah;
-
-            if (perubahanJumlah > 0) {
-                jumlahBaru += perubahanJumlah;
-            } else if (perubahanJumlah < 0) {
-                int pengurangan = Math.abs(perubahanJumlah);
-                if (initialStok < pengurangan) {
-                    showAlert(Alert.AlertType.WARNING, "Tidak Dapat Mengurangi Jumlah",
-                            "Stok saat ini (" + initialStok + ") tidak mencukupi untuk mengurangi jumlah sebanyak " + pengurangan + ".");
-                    return;
-                }
-                jumlahBaru -= pengurangan;
-            }
-
+            // Proses update ke database
             try (Connection conn = new DBConnect().getConnection()) {
                 String query;
                 PreparedStatement pstat;
@@ -164,8 +161,8 @@ public class UpdateProdukController {
                     pstat.setString(2, kategori);
                     pstat.setString(3, deskripsi);
                     pstat.setDouble(4, harga);
-                    pstat.setInt(5, stokInput);
-                    pstat.setInt(6, jumlahBaru);
+                    pstat.setInt(5, stokBaru);
+                    pstat.setInt(6, jumlahInput);
                     InputStream imageStream = new FileInputStream(selectedImageFile);
                     pstat.setBinaryStream(7, imageStream, (int) selectedImageFile.length());
                     pstat.setString(8, produk.getId());
@@ -176,8 +173,8 @@ public class UpdateProdukController {
                     pstat.setString(2, kategori);
                     pstat.setString(3, deskripsi);
                     pstat.setDouble(4, harga);
-                    pstat.setInt(5, stokInput);
-                    pstat.setInt(6, jumlahBaru);
+                    pstat.setInt(5, stokBaru);
+                    pstat.setInt(6, jumlahInput);
                     pstat.setString(7, produk.getId());
                 }
 
@@ -185,7 +182,7 @@ public class UpdateProdukController {
                 pstat.close();
 
                 if (rows > 0) {
-                    lblTotalJumlah.setText(String.valueOf(jumlahBaru));
+                    lblTotalJumlah.setText(String.valueOf(jumlahInput));
                     showAlert(Alert.AlertType.INFORMATION, "Sukses", "Produk berhasil diperbarui!");
                     if (homeKasirController != null) {
                         homeKasirController.RefreshData();
@@ -198,11 +195,12 @@ public class UpdateProdukController {
                     showAlert(Alert.AlertType.ERROR, "Gagal", "Produk tidak ditemukan.");
                 }
 
+            } catch (SQLException | FileNotFoundException e) {
+                showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
             }
+
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Format Salah", "Harga dan stok harus berupa angka.");
-        } catch (SQLException | FileNotFoundException e) {
-            showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Format Salah", "Harga dan jumlah harus berupa angka.");
         }
     }
 
