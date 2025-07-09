@@ -200,7 +200,7 @@ public class UpdateCustomerController {
                 showAlert(Alert.AlertType.INFORMATION, "Sukses", "Customer berhasil diperbarui!");
 
                 if (homeKasirController != null) {
-                    homeKasirController.RefreshDataCustomer();
+                    homeKasirController.refreshAllCustomerViews();
                 }
 
                 if (updateStage != null) {

@@ -133,7 +133,7 @@ public class HomeKasirController implements Initializable {
     private TextField txtIDCustomer;
     @FXML
     private TextField txtNamaCustomer;
-//    @FXML
+    //    @FXML
 //    private ComboBox<String> cmbJenisKelamin;
     @FXML
     private TextField txtNoTelephone;
@@ -496,14 +496,16 @@ public class HomeKasirController implements Initializable {
         try (
                 Connection conn = connection.getConnection();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT ID_Customer, Nama_Customer, Nomor_Telephone, Email FROM Customer WHERE status = 'Aktif'");
+                ResultSet rs = stmt.executeQuery("SELECT ID_Customer, Nama_Customer, Nomor_Telephone, Email, Alamat, Image  FROM Customer WHERE status = 'Aktif'");
         ) {
             while (rs.next()) {
                 list.add(new Customer(
                         rs.getString("ID_Customer"),
                         rs.getString("Nama_Customer"),
                         rs.getString("Nomor_Telephone"),
-                        rs.getString("Email")
+                        rs.getString("Email"),
+                        rs.getString("Alamat"),
+                        rs.getBytes("Image")
                 ));
             }
         } catch (SQLException e) {
@@ -545,6 +547,13 @@ public class HomeKasirController implements Initializable {
         }
     }
 
+    public void refreshAllCustomerViews() {
+        List<Customer> dataCustomer = getDataCustomer();
+        loadCustomerItems(dataCustomer);
+        loadCekCustomerItems(dataCustomer);
+    }
+
+
     private void loadCekCustomerItems() {
         List<Customer> dataCustomer = getDataCustomer();
         loadCekCustomerItems(dataCustomer);
@@ -562,13 +571,15 @@ public class HomeKasirController implements Initializable {
                 controller.setData2(dataCustomer.get(i));
                 controller.setHomeController(this); // <-- penting!
 
-                final int j = i;
+                final Customer selectedCustomer = dataCustomer.get(i);
+
                 node.setOnMouseEntered(event -> {
                     node.setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
                 });
                 node.setOnMouseExited(event -> {
                     node.setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
                 });
+                node.setOnMouseClicked(e -> showDetailCustomer(selectedCustomer));
 
                 pnItemsCekCustomer.getChildren().add(node);
             } catch (IOException e) {
@@ -1587,6 +1598,36 @@ public class HomeKasirController implements Initializable {
         lblDiskonPaket.setText(String.format("%.0f%%", paket.getDiskon() * 100));
         lblJumlahPaket.setText(String.valueOf(paket.getJumlahPaket()));
         lblStokPaket.setText(String.valueOf(paket.getStok()));
+    }
+
+    public void showDetailCustomer(Customer customer) {
+        if (customer == null) return;
+
+        txtIDCekCustomer.setText(customer.getId());
+        txtNamaCekCustomer.setText(customer.getNama());
+        txtCekNoTelephone.setText(customer.getNomortelephone());
+        txtCekEmail.setText(customer.getEmail());
+        txtCekAlamat.setText(customer.getAlamat() != null ? customer.getAlamat() : "");
+
+        byte[] bytes = customer.getImageBytes();
+        if (bytes != null && bytes.length > 0) {
+            InputStream is = new ByteArrayInputStream(bytes);
+            Image image = new Image(is);
+            imgCekCustomer.setImage(image);
+        } else {
+            imgCekCustomer.setImage(null);
+        }
+    }
+
+
+    @FXML
+    public void clearDetailCustomer() {
+        txtIDCekCustomer.clear();
+        txtNamaCekCustomer.clear();
+        txtCekNoTelephone.clear();
+        txtCekEmail.clear();
+        txtCekAlamat.clear();
+        imgCekCustomer.setImage(null);
     }
 
     public void handleClearDetail(){

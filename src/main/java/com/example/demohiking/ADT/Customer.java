@@ -7,6 +7,15 @@ public class Customer {
     private String nomortelephone;
     private String email;
     private String alamat;
+    private byte[] imageBytes;
+
+    public byte[] getImageBytes() {
+        return imageBytes;
+    }
+
+    public void setImageBytes(byte[] imageBytes) {
+        this.imageBytes = imageBytes;
+    }
 
     public Customer(String id, String nama, String nomortelephone, String email) {
         this.id = id;
@@ -17,13 +26,14 @@ public class Customer {
         this.alamat = null;
     }
 
-    public Customer(String id, String nama, String jeniskelamin, String nomortelephone, String email, String alamat) {
+    public Customer(String id, String nama, String nomortelephone, String email, String alamat, byte[] imageBytes) {
         this.id = id;
         this.nama = nama;
-        this.jeniskelamin = jeniskelamin;
+        this.jeniskelamin = null;
         this.nomortelephone = nomortelephone;
         this.email = email;
         this.alamat = alamat;
+        this.imageBytes = imageBytes;
     }
 
     public String getId() {

@@ -125,7 +125,7 @@ public class ItemCustomerController {
 
                         // Langsung panggil refresh tanpa menunggu konfirmasi tambahan
                         if (homeKasirController != null) {
-                            homeKasirController.RefreshDataCustomer();
+                            homeKasirController.refreshAllCustomerViews();
                         }
                     } else {
                         showAlert(Alert.AlertType.WARNING, "Gagal", "Customer tidak ditemukan di database.");
