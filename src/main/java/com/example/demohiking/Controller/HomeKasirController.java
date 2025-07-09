@@ -61,6 +61,8 @@ public class HomeKasirController implements Initializable {
     private VBox pnCartProduk = null;
     @FXML
     private VBox pnPeminjamanProduk = null;
+    @FXML
+    private VBox pnPeminjamanPaket = null;
 
     // HBOX ALL
     @FXML
@@ -645,6 +647,7 @@ public class HomeKasirController implements Initializable {
     protected void loadItemPaket() {
         List<Paket> dataPaket = getDataPaket();
         loadItemPaket(dataPaket);
+        loadItemPeminjamanPaket();
     }
 
     private void loadItemPaket(List<Paket> dataPaket) {
@@ -665,6 +668,35 @@ public class HomeKasirController implements Initializable {
 
 
                 pnItemsHomePaket.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void loadItemPeminjamanPaket() {
+        List<Paket> dataPaket = getDataPaket();
+        loadItemPeminjamanPaket(dataPaket);
+    }
+
+    private void loadItemPeminjamanPaket(List<Paket> dataPaket) {
+        pnPeminjamanPaket.getChildren().clear();
+
+        for (Paket paket : dataPaket) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemPeminjamanPaket.fxml"));
+                Node node = loader.load();
+
+                ItemPeminjamanPaketController controller = loader.getController();
+                controller.setData(paket);
+                controller.setHomeController(this);
+
+                node.setOnMouseEntered(e -> node.setStyle("-fx-background-color: #051036; -fx-background-radius: 15"));
+                node.setOnMouseExited(e -> node.setStyle("-fx-background-color: #0D2857; -fx-background-radius: 15"));
+                node.setOnMouseClicked(e -> showDetailPaket(paket));
+
+
+                pnPeminjamanPaket.getChildren().add(node);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -830,6 +862,7 @@ public class HomeKasirController implements Initializable {
         });
 
         loadItemPeminjamanProduk();
+        loadItemPeminjamanPaket();
 
 
         // Tunda pengecekan session sampai setelah UI tampil
