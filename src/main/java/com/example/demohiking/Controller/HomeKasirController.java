@@ -59,6 +59,8 @@ public class HomeKasirController implements Initializable {
     private VBox pnItemsHomePaket = null;
     @FXML
     private VBox pnCartProduk = null;
+    @FXML
+    private VBox pnPeminjamanProduk = null;
 
     // HBOX ALL
     @FXML
@@ -102,7 +104,7 @@ public class HomeKasirController implements Initializable {
     @FXML
     private Pane pnlTransaksi;
     @FXML
-    private Pane pnlTransaksiPeminjaman;
+    private Pane pnlPeminjaman;
     @FXML
     private Pane pnlTransaksiPembayaran;
 
@@ -342,10 +344,44 @@ public class HomeKasirController implements Initializable {
         }
     }
 
+    private void loadItemPeminjamanProduk(){
+        List<Produk> dataProduk = getDataProduk();
+        loadItemPeminjamanProduk(dataProduk);
+    }
+
+    private void loadItemPeminjamanProduk(List<Produk> dataProduk) {
+        pnItemsPaket.getChildren().clear();
+
+
+        for (int i = 0; i < dataProduk.size(); i++) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemPeminjamanProduk.fxml"));
+                Node node = loader.load();
+
+                ItemPeminjamanProdukController controller = loader.getController();
+                controller.setData(dataProduk.get(i));
+                controller.setHomeController(this); // <-- penting!
+
+                final int j = i;
+                node.setOnMouseEntered(event -> {
+                    node.setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                node.setOnMouseExited(event -> {
+                    node.setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+
+                pnPeminjamanProduk.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void refreshProdukList() {
         List<Produk> dataProduk = getDataProduk();
         loadProdukItems(dataProduk);
         loadProdukItemsTransact(dataProduk);
+        loadItemPeminjamanProduk(dataProduk);
     }
 
     public void setDetailProduk(Produk produk) {
@@ -792,6 +828,8 @@ public class HomeKasirController implements Initializable {
                 alert.showAndWait();
             }
         });
+
+        loadItemPeminjamanProduk();
 
 
         // Tunda pengecekan session sampai setelah UI tampil
@@ -1637,5 +1675,31 @@ public class HomeKasirController implements Initializable {
         lblDiskonPaket.setText("");
         lblJumlahPaket.setText("");
         lblStokPaket.setText("");
+    }
+
+    private String selectedCustomerId;
+
+    @FXML
+    private void handleNextButton(ActionEvent event) {
+        if (txtIDCekCustomer.getText() == null || txtIDCekCustomer.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Peringatan");
+            alert.setHeaderText("Customer belum dipilih");
+            alert.setContentText("Silakan pilih customer terlebih dahulu.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Simpan ID customer yang dipilih
+        selectedCustomerId = txtIDCekCustomer.getText();
+
+        Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+        infoAlert.setTitle("Informasi");
+        infoAlert.setHeaderText("Customer Dipilih");
+        infoAlert.setContentText("Customer ID yang dipilih: " + selectedCustomerId);
+        infoAlert.showAndWait();
+
+        pnlPeminjaman.setVisible(true);
+        pnlCekCustomer.setVisible(false);
     }
 }

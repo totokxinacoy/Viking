@@ -2138,7 +2138,7 @@
                               </TextArea>
                               <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
                                  <children>
-                                    <Button fx:id="btnNextCekCustomer" mnemonicParsing="false" onAction="#handleCekCustomer" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="NEXT" textAlignment="CENTER" textFill="WHITE">
+                                    <Button fx:id="btnNextCekCustomer" mnemonicParsing="false" onAction="#handleNextButton" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="NEXT" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font name="Franklin Gothic Demi Cond" size="24.0" />
                                        </font>
