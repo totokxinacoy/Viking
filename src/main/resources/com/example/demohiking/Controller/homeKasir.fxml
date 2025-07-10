@@ -28,65 +28,7 @@
     <children>
         <StackPane layoutX="251.0" prefHeight="1080.0" prefWidth="1670.0" style="-fx-background-color: #02030A;">
             <children>
-            <Pane fx:id="pnlHome" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
-                     <children>
-                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/home-icon-silhouette.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label prefHeight="38.0" prefWidth="200.0" text="MENU UTAMA" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/leave.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="1280.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                  </HBox>
-                  <ImageView fitHeight="700.0" fitWidth="1699.0" layoutX="-29.0" layoutY="444.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/profil-bg.png" />
-                     </image>
-                  </ImageView>
-                  <Circle fill="WHITE" layoutX="603.0" layoutY="514.0" radius="143.0" stroke="#577bc1" strokeType="INSIDE" strokeWidth="3.0">
-                     <effect>
-                        <DropShadow height="10.0" radius="4.5" width="10.0" />
-                     </effect>
-                  </Circle>
-                  <ImageView fx:id="imgProfile" fitHeight="211.0" fitWidth="170.0" layoutX="518.0" layoutY="407.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label layoutX="139.0" layoutY="115.0" text="Hi," textFill="#0d2857">
-                     <font>
-                        <Font name="Franklin Gothic Demi Cond" size="72.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblNamaKasir" layoutX="236.0" layoutY="115.0" text="Nama Kasir !" textFill="#0d2857">
-                     <font>
-                        <Font name="Franklin Gothic Demi Cond" size="72.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="139.0" layoutY="196.0" text="Anda Login sebagai Kasir" textFill="#0d2857">
-                     <font>
-                        <Font name="Franklin Gothic Demi Cond" size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane fx:id="pnlDenda" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
+            <Pane fx:id="pnlDenda" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: \\\;">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
                   <TextField fx:id="txtSearchDenda" layoutX="85.0" layoutY="100.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI DENDA" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
@@ -1666,6 +1608,387 @@
                   </HBox>
                </children>
             </Pane>
+            <Pane fx:id="pnlPeminjaman" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
+                  <TextField fx:id="txtSearchDenda2" layoutX="85.0" layoutY="86.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI PRODUK" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
+                     <font>
+                        <Font name="Segoe UI Bold" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" top="5.0" />
+                     </padding>
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="2.0" offsetX="4.0" offsetY="4.0" radius="0.5" width="2.0">
+                           <color>
+                              <Color opacity="0.5" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </TextField>
+                  <Pane layoutX="85.0" layoutY="153.0" prefHeight="387.0" prefWidth="1126.0" style="-fx-background-radius: 15; -fx-background-color: #D4EBF8;" stylesheets="@style.css">
+                     <children>
+                        <ScrollPane layoutY="81.0" prefHeight="306.0" prefWidth="1126.0">
+                           <content>
+                              <VBox fx:id="pnPeminjamanProduk" prefHeight="295.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                        <HBox prefHeight="74.0" prefWidth="1126.0">
+                           <children>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="70.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="100.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="KATEGORI" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="115.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="HARGA" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="110.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="STOK" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="70.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
+                     <children>
+                        <VBox alignment="TOP_CENTER" blendMode="SRC_ATOP" layoutY="6.0" prefHeight="938.0" prefWidth="392.0" spacing="3.0">
+                           <children>
+                              <Label layoutX="71.0" layoutY="20.0" text="ISI KERANJANG" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="28.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="100.0" top="30.0" />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="33.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/shopping-cart.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Label>
+                              <HBox alignment="CENTER" prefHeight="23.0" prefWidth="392.0" spacing="10.0">
+                                 <children>
+                                    <Separator prefHeight="23.0" prefWidth="265.0">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                    </Separator>
+                                    <Button fx:id="btnClearProduk2" mnemonicParsing="false" stylesheets="@style.css">
+                                       <graphic>
+                                          <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/trash.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <ScrollPane prefHeight="706.0" prefWidth="303.0" style="-fx-background-color: #FFFFFF;" stylesheets="@style.css">
+                                 <VBox.margin>
+                                    <Insets left="50.0" right="40.0" top="15.0" />
+                                 </VBox.margin>
+                                 <content>
+                                    <VBox fx:id="pnCartPeminjaman" blendMode="SRC_ATOP" prefHeight="741.0" prefWidth="312.0" spacing="5.0" style="-fx-background-color: #577bc1;">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                              <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
+                                 <children>
+                                    <Button fx:id="btnAddPaket2" mnemonicParsing="false" onAction="#handleSimpanPeminjaman" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="ADD" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btnBatal2" layoutX="164.0" layoutY="46.0" mnemonicParsing="false" onAction="#clearKeranjangTransaksi" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="BATAL" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </Pane>
+                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
+                     <children>
+                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/punishment.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label prefHeight="38.0" prefWidth="213.0" text="MENU PEMINJAMAN" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/home-icon-silhouette.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="1265.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <Button fx:id="btnSearchDenda2" layoutX="1148.0" layoutY="94.0" mnemonicParsing="false" onAction="#handleSearchDenda" styleClass="button-search" stylesheets="@style.css">
+                     <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/search.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <TextField fx:id="txtSearchDenda1" layoutX="85.0" layoutY="566.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI PAKET" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
+                     <font>
+                        <Font name="Segoe UI Bold" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" top="5.0" />
+                     </padding>
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="2.0" offsetX="4.0" offsetY="4.0" radius="0.5" width="2.0">
+                           <color>
+                              <Color opacity="0.5" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </TextField>
+                  <Pane layoutX="85.0" layoutY="631.0" prefHeight="387.0" prefWidth="1126.0" style="-fx-background-radius: 15; -fx-background-color: #D4EBF8;" stylesheets="@style.css">
+                     <children>
+                        <ScrollPane layoutY="81.0" prefHeight="306.0" prefWidth="1126.0">
+                           <content>
+                              <VBox fx:id="pnPeminjamanPaket" prefHeight="295.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                        <HBox prefHeight="74.0" prefWidth="1126.0">
+                           <children>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="70.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="100.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="KATEGORI" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="115.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="HARGA" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="110.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="STOK" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="70.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <Button fx:id="btnSearchDenda1" layoutX="1148.0" layoutY="574.0" mnemonicParsing="false" onAction="#handleSearchDenda" styleClass="button-search" stylesheets="@style.css">
+                     <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/search.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </Pane>
+            <Pane fx:id="pnlHome" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
+                     <children>
+                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/home-icon-silhouette.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label prefHeight="38.0" prefWidth="200.0" text="MENU UTAMA" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/leave.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="1280.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <ImageView fitHeight="700.0" fitWidth="1699.0" layoutX="-29.0" layoutY="444.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/profil-bg.png" />
+                     </image>
+                  </ImageView>
+                  <Circle fill="WHITE" layoutX="603.0" layoutY="514.0" radius="143.0" stroke="#577bc1" strokeType="INSIDE" strokeWidth="3.0">
+                     <effect>
+                        <DropShadow height="10.0" radius="4.5" width="10.0" />
+                     </effect>
+                  </Circle>
+                  <ImageView fx:id="imgProfile" fitHeight="211.0" fitWidth="170.0" layoutX="518.0" layoutY="407.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label layoutX="139.0" layoutY="115.0" text="Hi," textFill="#0d2857">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="72.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblNamaKasir" layoutX="236.0" layoutY="115.0" text="Nama Kasir !" textFill="#0d2857">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="72.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="139.0" layoutY="196.0" text="Anda Login sebagai Kasir" textFill="#0d2857">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane fx:id="pnlHome1" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #FFFFFF;">
+               <children>
+                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
+                     <children>
+                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/home-icon-silhouette.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label prefHeight="38.0" prefWidth="200.0" text="MENU UTAMA" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/leave.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="1280.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <ImageView fitHeight="700.0" fitWidth="1699.0" layoutX="-29.0" layoutY="444.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/profil-bg.png" />
+                     </image>
+                  </ImageView>
+                  <Circle fill="WHITE" layoutX="603.0" layoutY="514.0" radius="143.0" stroke="#577bc1" strokeType="INSIDE" strokeWidth="3.0">
+                     <effect>
+                        <DropShadow height="10.0" radius="4.5" width="10.0" />
+                     </effect>
+                  </Circle>
+                  <ImageView fx:id="imgProfile1" fitHeight="211.0" fitWidth="170.0" layoutX="518.0" layoutY="407.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label layoutX="139.0" layoutY="115.0" text="Hi," textFill="#0d2857">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="72.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblNamaKasir1" layoutX="236.0" layoutY="115.0" text="Nama Kasir !" textFill="#0d2857">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="72.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="139.0" layoutY="196.0" text="Anda Login sebagai Kasir" textFill="#0d2857">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
             <Pane fx:id="pnlCekCustomer" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
@@ -1910,271 +2233,6 @@
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" layoutX="95.0" layoutY="159.0" prefHeight="74.0" prefWidth="1126.0" />
-               </children>
-            </Pane>
-            <Pane fx:id="pnlPeminjaman" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
-                  <TextField fx:id="txtSearchDenda2" layoutX="85.0" layoutY="86.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI PRODUK" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
-                     <font>
-                        <Font name="Segoe UI Bold" size="24.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="5.0" left="20.0" top="5.0" />
-                     </padding>
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" height="2.0" offsetX="4.0" offsetY="4.0" radius="0.5" width="2.0">
-                           <color>
-                              <Color opacity="0.5" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                  </TextField>
-                  <Pane layoutX="85.0" layoutY="153.0" prefHeight="387.0" prefWidth="1126.0" style="-fx-background-radius: 15; -fx-background-color: #D4EBF8;" stylesheets="@style.css">
-                     <children>
-                        <ScrollPane layoutY="81.0" prefHeight="306.0" prefWidth="1126.0">
-                           <content>
-                              <VBox fx:id="pnPeminjamanProduk" prefHeight="295.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </VBox>
-                           </content>
-                        </ScrollPane>
-                        <HBox prefHeight="74.0" prefWidth="1126.0">
-                           <children>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="70.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="100.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="KATEGORI" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="115.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="HARGA" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="110.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="STOK" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="70.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                           </children>
-                        </HBox>
-                     </children>
-                  </Pane>
-                  <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
-                     <children>
-                        <VBox alignment="TOP_CENTER" blendMode="SRC_ATOP" layoutY="6.0" prefHeight="938.0" prefWidth="392.0" spacing="3.0">
-                           <children>
-                              <Label layoutX="71.0" layoutY="20.0" text="ISI KERANJANG" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="28.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets right="100.0" top="30.0" />
-                                 </VBox.margin>
-                                 <graphic>
-                                    <ImageView fitHeight="33.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/shopping-cart.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Label>
-                              <HBox alignment="CENTER" prefHeight="23.0" prefWidth="392.0" spacing="10.0">
-                                 <children>
-                                    <Separator prefHeight="23.0" prefWidth="265.0">
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
-                                       <HBox.margin>
-                                          <Insets left="20.0" />
-                                       </HBox.margin>
-                                    </Separator>
-                                    <Button fx:id="btnClearProduk2" mnemonicParsing="false" stylesheets="@style.css">
-                                       <graphic>
-                                          <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../images/trash.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <ScrollPane prefHeight="706.0" prefWidth="303.0" style="-fx-background-color: #FFFFFF;" stylesheets="@style.css">
-                                 <VBox.margin>
-                                    <Insets left="50.0" right="40.0" top="15.0" />
-                                 </VBox.margin>
-                                 <content>
-                                    <VBox fx:id="pnCartPeminjaman" blendMode="SRC_ATOP" prefHeight="741.0" prefWidth="312.0" spacing="5.0" style="-fx-background-color: #577bc1;">
-                                       <padding>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </padding>
-                                    </VBox>
-                                 </content>
-                              </ScrollPane>
-                              <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
-                                 <children>
-                                    <Button fx:id="btnAddPaket2" mnemonicParsing="false" onAction="#handleSimpanPaket" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="ADD" textAlignment="CENTER" textFill="WHITE">
-                                       <font>
-                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
-                                       </font>
-                                    </Button>
-                                    <Button fx:id="btnBatal2" layoutX="164.0" layoutY="46.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="BATAL" textAlignment="CENTER" textFill="WHITE">
-                                       <font>
-                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </Pane>
-                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
-                     <children>
-                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/punishment.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label prefHeight="38.0" prefWidth="213.0" text="MENU PEMINJAMAN" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/home-icon-silhouette.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="1265.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                  </HBox>
-                  <Button fx:id="btnSearchDenda2" layoutX="1148.0" layoutY="94.0" mnemonicParsing="false" onAction="#handleSearchDenda" styleClass="button-search" stylesheets="@style.css">
-                     <graphic>
-                        <ImageView fitHeight="32.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/search.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <TextField fx:id="txtSearchDenda1" layoutX="85.0" layoutY="566.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI PAKET" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
-                     <font>
-                        <Font name="Segoe UI Bold" size="24.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="5.0" left="20.0" top="5.0" />
-                     </padding>
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" height="2.0" offsetX="4.0" offsetY="4.0" radius="0.5" width="2.0">
-                           <color>
-                              <Color opacity="0.5" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                  </TextField>
-                  <Pane layoutX="85.0" layoutY="631.0" prefHeight="387.0" prefWidth="1126.0" style="-fx-background-radius: 15; -fx-background-color: #D4EBF8;" stylesheets="@style.css">
-                     <children>
-                        <ScrollPane layoutY="81.0" prefHeight="306.0" prefWidth="1126.0">
-                           <content>
-                              <VBox fx:id="pnPeminjamanPaket" prefHeight="295.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </VBox>
-                           </content>
-                        </ScrollPane>
-                        <HBox prefHeight="74.0" prefWidth="1126.0">
-                           <children>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="70.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="100.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="KATEGORI" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="115.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="HARGA" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="110.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="STOK" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="70.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                           </children>
-                        </HBox>
-                     </children>
-                  </Pane>
-                  <Button fx:id="btnSearchDenda1" layoutX="1148.0" layoutY="574.0" mnemonicParsing="false" onAction="#handleSearchDenda" styleClass="button-search" stylesheets="@style.css">
-                     <graphic>
-                        <ImageView fitHeight="32.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/search.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
                </children>
             </Pane>
             </children>

@@ -837,18 +837,22 @@ public class HomeKasirController implements Initializable {
         refreshKeranjangTransaksiView();
     }
 
-    public void hapusItemDariKeranjang(detailPeminjaman items) {
-        keranjangTransaksi.removeIf(k -> {
-            if ("produk".equals(k.getTipe()) && k.getProduk().getId().equals(items.getProduk().getId())) {
-                return true;
-            } else if ("paket".equals(k.getTipe()) && k.getPaket().getId().equals(items.getPaket().getId())) {
-                return true;
-            }
-            return false;
-        });
-
+    public void hapusItemDariKeranjang(detailPeminjaman item) {
+        keranjangTransaksi.remove(item);
         refreshKeranjangTransaksiView();
     }
+//    public void hapusItemDariKeranjang(detailPeminjaman items) {
+//        keranjangTransaksi.removeIf(k -> {
+//            if ("produk".equals(k.getTipe()) && k.getProduk().getId().equals(items.getProduk().getId())) {
+//                return true;
+//            } else if ("paket".equals(k.getTipe()) && k.getPaket().getId().equals(items.getPaket().getId())) {
+//                return true;
+//            }
+//            return false;
+//        });
+//
+//        refreshKeranjangTransaksiView();
+//    }
 
 //    public void refreshKeranjangTransaksiView() {
 //        pnCartPeminjaman.getChildren().clear();
@@ -889,9 +893,9 @@ public void refreshKeranjangTransaksiView() {
             FXMLLoader loader;
 
             if ("produk".equalsIgnoreCase(item.getTipe())) {
-                loader = new FXMLLoader(getClass().getResource("ItemDetailPeminjamanProduk.fxml"));
+                loader = new FXMLLoader(getClass().getResource("ItemPeminjamanProduk.fxml"));
             } else if ("paket".equalsIgnoreCase(item.getTipe())) {
-                loader = new FXMLLoader(getClass().getResource("ItemDetailPeminjamanPaket.fxml"));
+                loader = new FXMLLoader(getClass().getResource("ItemPeminjamanPaket.fxml"));
             } else {
                 System.err.println("Tipe item tidak dikenal: " + item.getTipe());
                 continue;
@@ -900,11 +904,11 @@ public void refreshKeranjangTransaksiView() {
             Node node = loader.load();
 
             if ("produk".equalsIgnoreCase(item.getTipe())) {
-                ItemDetailPeminjamanProdukController controller = loader.getController();
+                ItemPeminjamanProdukController controller = loader.getController();
                 controller.setHomeController(this);
                 controller.setData(item, index);
             } else {
-                ItemDetailPeminjamanPaketController controller = loader.getController();
+                ItemPeminjamanPaketController controller = loader.getController();
                 controller.setHomeController(this);
                 controller.setData(item, index);
             }
@@ -1850,4 +1854,93 @@ public void refreshKeranjangTransaksiView() {
         pnlPeminjaman.toFront();
         pnlCekCustomer.setVisible(false);
     }
+
+
+
+    private Stage stageFormIsiTransaksi;
+    private boolean isFormIsiTransaksiTerbuka = false;
+
+    public boolean isFormIsiTransaksiTerbuka() {
+        return isFormIsiTransaksiTerbuka;
+    }
+
+    public void setFormIsiTransaksiTerbuka(boolean status) {
+        this.isFormIsiTransaksiTerbuka = status;
+    }
+
+    public void tutupFormIsiTransaksi() {
+        if (stageFormIsiTransaksi != null) {
+            stageFormIsiTransaksi.close();
+            stageFormIsiTransaksi = null;
+            setFormIsiTransaksiTerbuka(false);
+        }
+    }
+
+    public void bringFormIsiTransaksiToFront() {
+        if (stageFormIsiTransaksi != null) {
+            javafx.application.Platform.runLater(() -> {
+                stageFormIsiTransaksi.setIconified(false);
+                stageFormIsiTransaksi.toFront();
+                stageFormIsiTransaksi.requestFocus();
+            });
+        }
+    }
+
+    @FXML
+    private void handleSimpanPeminjaman(ActionEvent event) {
+        if (isFormIsiTransaksiTerbuka) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Form Sudah Dibuka");
+            alert.setHeaderText("Form Isi Transaksi sedang aktif");
+            alert.setContentText("Klik OK untuk membukanya kembali.");
+            alert.showAndWait();
+
+            if (stageFormIsiTransaksi != null) {
+                javafx.application.Platform.runLater(() -> {
+                    stageFormIsiTransaksi.setIconified(false);
+                    stageFormIsiTransaksi.toFront();
+                    stageFormIsiTransaksi.requestFocus();
+                });
+            }
+            return;
+        }
+
+        if (keranjangTransaksi.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Keranjang Kosong", "Silakan tambahkan produk atau paket terlebih dahulu.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FormIsiPeminjaman.fxml"));
+            Parent root = loader.load();
+
+            FormIsiPeminjamanController controller = loader.getController();
+            controller.setItemDalamPeminjaman(new ArrayList<>(keranjangTransaksi));
+            controller.setHomeController(this);
+            controller.setSelectedCustomerId(selectedCustomerId);
+
+            Stage stage = new Stage();
+            stage.setTitle("Isi Data Peminjaman");
+            stage.setScene(new Scene(root));
+
+            setFormIsiTransaksiTerbuka(true);
+            stage.setOnHiding(e -> {
+                setFormIsiTransaksiTerbuka(false);
+                stageFormIsiTransaksi = null; // clear reference
+            });
+
+            stageFormIsiTransaksi = stage; // simpan referensinya
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            setFormIsiTransaksiTerbuka(false);
+            showAlert(Alert.AlertType.ERROR, "Gagal Membuka Form", "Terjadi kesalahan:\n" + e.getMessage());
+        }
+    }
+
+    public void clearKeranjangTransaksi() {
+        keranjangTransaksi.clear();
+    }
+
 }

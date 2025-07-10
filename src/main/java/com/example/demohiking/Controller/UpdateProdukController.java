@@ -61,6 +61,8 @@ public class UpdateProdukController {
                 double harga = rs.getDouble("Harga");
                 int stok = rs.getInt("Stok");
                 int jumlah = rs.getInt("Jumlah");
+                InputStream is = rs.getBinaryStream("Image");
+
 
                 txtNama.setText(nama);
                 cmbKategori.getItems().setAll("Tas", "Sepatu", "Aksessoris", "Pakaian", "Tenda");
@@ -69,7 +71,7 @@ public class UpdateProdukController {
                 txtHarga.setText(String.valueOf(harga));
                 lblTotalJumlah.setText(String.valueOf(jumlah));
 
-                InputStream is = rs.getBinaryStream("Image");
+
                 if (is != null) {
                     Image image = new Image(is);
                     imgProduk.setImage(image);

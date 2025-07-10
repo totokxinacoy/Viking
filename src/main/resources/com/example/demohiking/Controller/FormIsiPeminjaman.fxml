@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="802.0" prefWidth="739.0" style="-fx-background-color: #0D2857; -fx-background-radius: 2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.FormIsiPeminjamanController">
+   <children>
+      <VBox prefHeight="496.0" prefWidth="739.0" style="-fx-background-color: #0D2857; -fx-background-radius: 10;">
+         <children>
+            <HBox alignment="CENTER" prefHeight="91.0" prefWidth="677.0" style="-fx-background-color: #0D2857; -fx-background-radius: 10;">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="FORM PEMINJAMAN" textFill="WHITE">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="36.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="468.0" prefWidth="739.0">
+               <children>
+                  <VBox prefHeight="389.0" prefWidth="486.0">
+                     <children>
+                        <Label text="ID Peminjaman" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="txtIDPeminjaman" editable="false" prefHeight="39.0" prefWidth="451.0">
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" top="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label text="ID Karyawan" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="txtIDKaryawan" editable="false" layoutX="30.0" layoutY="48.0" prefHeight="39.0" prefWidth="451.0">
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" top="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label layoutX="30.0" layoutY="97.0" text="ID Customer" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="txtIDCustomer" editable="false" layoutX="30.0" layoutY="124.0" prefHeight="39.0" prefWidth="451.0">
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" top="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label layoutX="30.0" layoutY="174.0" text="Tanggal Peminjaman" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <DatePicker fx:id="txtTglPeminjaman" prefHeight="39.0" prefWidth="446.0" promptText="Masukkan Tanggal Peminjaman">
+                           <VBox.margin>
+                              <Insets left="20.0" />
+                           </VBox.margin>
+                        </DatePicker>
+                        <Label layoutX="30.0" layoutY="251.0" text="Tanggal Pengembalian" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <DatePicker fx:id="txtTglPengembalian" layoutX="30.0" layoutY="270.0" prefHeight="39.0" prefWidth="446.0" promptText="Masukkan Tanggal Pengembalian">
+                           <VBox.margin>
+                              <Insets left="20.0" />
+                           </VBox.margin>
+                        </DatePicker>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="389.0" prefWidth="253.0">
+                     <children>
+                        <Button fx:id="btnSubmit" layoutX="65.0" layoutY="226.0" mnemonicParsing="false" onAction="#handlePinjam" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="SUBMIT">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="55.0" top="266.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btnCancel" layoutX="65.0" layoutY="290.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="CANCEL">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="55.0" top="15.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="91.0" prefWidth="677.0" style="-fx-background-color: #0D2857; -fx-background-radius: 10;">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="List Peminjaman" textFill="WHITE">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="36.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="20.0" />
+                     </HBox.margin>
+                     <padding>
+                        <Insets top="-10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox layoutX="-3.0" layoutY="503.0" prefHeight="203.0" prefWidth="746.0">
+         <children>
+            <ListView fx:id="listPeminjaman" prefHeight="201.0" prefWidth="686.0" style="-fx-background-radius: 10px;">
+               <VBox.margin>
+                  <Insets left="30.0" right="30.0" top="10.0" />
+               </VBox.margin>
+            </ListView>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -13,6 +13,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
+import java.util.Optional;
+
 public class ItemPeminjamanPaketController {
     @FXML
     private HBox Item1;
@@ -50,8 +52,8 @@ public class ItemPeminjamanPaketController {
     }
 
     public void setData(Paket paket) {
+        this.item = null;
         this.paket = paket;
-        this.jumlah = 0;
 
         lblID.setText(paket.getId() != null ? paket.getId() : "-");
         lblNama.setText(paket.getNama() != null ? paket.getNama() : "-");
@@ -73,11 +75,11 @@ public class ItemPeminjamanPaketController {
         lblNama.setText(paket.getNama());
         lblHarga.setText("x" + jumlah);
 
-        double total = jumlah * paket.getHarga();
-        lblTotalHarga.setText(String.format("Total : Rp. %,.0f", total));
-        lblTotalHarga.setVisible(true);
-        lblHarga.setVisible(false);
+        lblTotalHarga.setVisible(false);
+        lblHarga.setVisible(true);
 
+        lblStok.setManaged(false);
+        lblStok.setVisible(false);
         btnTambah.setManaged(false);
         btnTambah.setVisible(false);
         btnKurang.setManaged(false);
@@ -135,7 +137,6 @@ public class ItemPeminjamanPaketController {
             item.setJumlah(jumlah);
         }
 
-        lblStok.setText("x" + jumlah);
         updateLabelHargaTotalPaket();
         btnKurang.setDisable(false);
 
@@ -145,23 +146,62 @@ public class ItemPeminjamanPaketController {
     }
 
     @FXML
-    private void handleKurangPaket() {
-        if (paket == null || jumlah <= 1) {
-            showMinimalAlert();
+    private void handleKurangPaket(ActionEvent event) {
+        if (paket == null || jumlah <= 0) {
+            showAlert("Paket belum ditambahkan ke keranjang.");
+            btnKurang.setDisable(true);
             return;
         }
 
-        jumlah--;
-        item.setJumlah(jumlah);
+        // Jika jumlah tinggal 1, konfirmasi penghapusan
+        if (jumlah == 1) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Konfirmasi");
+            alert.setHeaderText("Jumlah tinggal 1");
+            alert.setContentText("Ingin menghapus item ini dari keranjang?");
+            ButtonType hapus = new ButtonType("Hapus", ButtonBar.ButtonData.OK_DONE);
+            ButtonType batal = new ButtonType("Batal", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(hapus, batal);
 
-        lblStok.setText("x" + jumlah);
-        double total = jumlah * paket.getHarga();
-        lblTotalHarga.setText(String.format("Total : Rp. %,.0f", total));
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == hapus) {
+                paket.setStok(paket.getStok() + 1);
+                lblStok.setText(String.valueOf(paket.getStok()));
+
+                jumlah = 0;
+                if (item != null) item.setJumlah(jumlah);
+
+                if (homeKasirController != null && item != null) {
+                    homeKasirController.hapusItemDariKeranjang(item);
+                }
+
+                btnKurang.setDisable(true);
+                showAlert("Item dihapus dari keranjang.");
+            } else {
+                showAlert("Penghapusan dibatalkan.");
+            }
+        } else {
+            // Kurangi jumlah dan kembalikan stok
+            jumlah--;
+            paket.setStok(paket.getStok() + 1);
+            lblStok.setText(String.valueOf(paket.getStok()));
+
+            if (item != null) {
+                item.setJumlah(jumlah);
+            }
+
+            updateLabelHargaTotalPaket();
+
+            if (homeKasirController != null) {
+                homeKasirController.updateKeranjang(item);
+            }
+        }
     }
 
     private void updateLabelHargaTotalPaket() {
-        double total = jumlah * paket.getHarga();
-        lblTotalHarga.setText(String.format("Total : Rp. %,.0f", total));
+        if (paket != null && isKeranjangView){
+            double total = jumlah * paket.getHarga();
+            lblTotalHarga.setText(String.format("Total : Rp. %,.0f", total));}
     }
 
     private void showAlert(String message) {

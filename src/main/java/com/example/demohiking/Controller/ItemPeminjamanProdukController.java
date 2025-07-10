@@ -14,6 +14,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
+import java.util.Optional;
+
 
 public class ItemPeminjamanProdukController {
     @FXML
@@ -67,34 +69,25 @@ public class ItemPeminjamanProdukController {
         btnKurang.setDisable(true);
     }
 
+    public void setData(detailPeminjaman item, int nomorUrut) {
+        this.item = item;
+        this.jumlah = item.getJumlah();
+        this.produk = item.getProduk();
+
+        // Tampilkan hanya informasi penting untuk keranjang
+        lblIDProduk.setText(String.valueOf(nomorUrut));
+        lblNamaProduk.setText(produk.getNama() != null ? produk.getNama() : "-");
+        lblKategori.setText("x" + jumlah);
+
+        // Sembunyikan elemen yang tidak relevan
+        lblHargaSatuan.setVisible(false);
+        lblStok.setVisible(false);
+        btnTambah.setVisible(false);
+        btnKurang.setVisible(false);
+    }
+
     @FXML
     private void handleTambahProduk(ActionEvent event) {
-        // Cegah penambahan jika form isi paket sedang aktif
-        if (homeKasirController != null && homeKasirController.isFormIsiPaketTerbuka()) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Form Paket Sedang Aktif");
-            alert.setHeaderText("Tidak bisa menambah produk saat mengisi paket.");
-            alert.setContentText("Apakah Anda ingin menutup form paket agar bisa menambahkan produk?");
-            ButtonType ya = new ButtonType("Ya", ButtonBar.ButtonData.YES);
-            ButtonType tidak = new ButtonType("Batal", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(ya, tidak);
-
-            alert.showAndWait().ifPresent(response -> {
-                if (response == ya) {
-                    homeKasirController.tutupFormIsiPaket();
-                } else if (response == tidak) {
-                    homeKasirController.bringFormIsiPaketToFront();
-                }
-            });
-            return;
-        }
-
-        // Validasi stok
-        if (produk.getStok() <= 1) {
-            showAlert("Stok produk terlalu sedikit untuk ditambahkan ke keranjang (minimum 1).");
-            return;
-        }
-
         if (produk.getStok() < 1) {
             showAlert("Stok tidak mencukupi!");
             return;
@@ -111,7 +104,6 @@ public class ItemPeminjamanProdukController {
             item.setJumlah(jumlah);
         }
 
-        lblKategori.setText("x" + jumlah);
         updateLabelHargaTotal();
         btnKurang.setDisable(false);
 
@@ -121,23 +113,61 @@ public class ItemPeminjamanProdukController {
     }
 
     @FXML
-    private void handleKurangProduk() {
-        if (produk == null || jumlah <= 1) {
-            showMinimalAlert();
+    private void handleKurangProduk(ActionEvent event) {
+        if (produk == null || jumlah <= 0) {
+            showAlert("Produk belum ditambahkan ke keranjang.");
+            btnKurang.setDisable(true);
             return;
         }
 
-        jumlah--;
-        item.setJumlah(jumlah);
+        // Jika jumlah tinggal 1, konfirmasi penghapusan
+        if (jumlah == 1) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Konfirmasi");
+            alert.setHeaderText("Jumlah tinggal 1");
+            alert.setContentText("Ingin menghapus item ini dari keranjang?");
+            ButtonType hapus = new ButtonType("Hapus", ButtonBar.ButtonData.OK_DONE);
+            ButtonType batal = new ButtonType("Batal", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(hapus, batal);
 
-        lblKategori.setText("x" + jumlah);
-        double total = jumlah * produk.getHarga();
-        lblHargaSatuan.setText(String.format("Total : Rp. %,.0f", total));
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == hapus) {
+                produk.setStok(produk.getStok() + 1);
+                lblStok.setText(String.valueOf(produk.getStok()));
+
+                jumlah = 0;
+                if (item != null) item.setJumlah(jumlah);
+
+                if (homeKasirController != null && item != null) {
+                    homeKasirController.hapusItemDariKeranjang(item);
+                }
+
+                btnKurang.setDisable(true);
+                showAlert("Item dihapus dari keranjang.");
+            } else {
+                showAlert("Penghapusan dibatalkan.");
+            }
+        } else {
+            // Kurangi jumlah dan kembalikan stok
+            jumlah--;
+            produk.setStok(produk.getStok() + 1);
+            lblStok.setText(String.valueOf(produk.getStok()));
+
+            if (item != null) {
+                item.setJumlah(jumlah);
+            }
+
+            updateLabelHargaTotal();
+
+            if (homeKasirController != null) {
+                homeKasirController.updateKeranjang(item);
+            }
+        }
     }
 
     private void updateLabelHargaTotal() {
-        double total = jumlah * produk.getHarga();
-        lblHargaSatuan.setText(String.format("Total : Rp. %,.0f", total));
+        if (produk != null && isKeranjangView){double total = jumlah * produk.getHarga();
+            lblHargaSatuan.setText(String.format("Total : Rp. %,.0f", total));}
     }
 
     private void showAlert(String message) {
