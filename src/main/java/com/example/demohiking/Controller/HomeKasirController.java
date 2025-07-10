@@ -889,7 +889,7 @@ public void refreshKeranjangTransaksiView() {
             FXMLLoader loader;
 
             if ("produk".equalsIgnoreCase(item.getTipe())) {
-                loader = new FXMLLoader(getClass().getResource("ItemPeminjamanProduk.fxml"));
+                loader = new FXMLLoader(getClass().getResource("ItemDetailPeminjamanProduk.fxml"));
             } else if ("paket".equalsIgnoreCase(item.getTipe())) {
                 loader = new FXMLLoader(getClass().getResource("ItemPeminjamanPaket.fxml"));
             } else {
@@ -900,7 +900,7 @@ public void refreshKeranjangTransaksiView() {
             Node node = loader.load();
 
             if ("produk".equalsIgnoreCase(item.getTipe())) {
-                ItemPeminjamanProdukController controller = loader.getController();
+                ItemDetailPeminjamanProdukController controller = loader.getController();
                 controller.setHomeController(this);
                 controller.setData(item, index);
             } else {

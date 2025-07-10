@@ -29,9 +29,6 @@ public class ItemPeminjamanProdukController {
     private Label lblKategori;
 
     @FXML
-    private Label lblTotalHarga;
-
-    @FXML
     private Label lblHargaSatuan;
 
     @FXML
@@ -64,39 +61,10 @@ public class ItemPeminjamanProdukController {
         lblKategori.setText(produk.getKategori() != null ? produk.getKategori() : "-");
         lblHargaSatuan.setText(String.format("Rp. %,.0f", produk.getHarga()));
         lblHargaSatuan.setVisible(true);
-        lblTotalHarga.setVisible(false);
         lblStok.setText(String.valueOf(produk.getStok()));
 
         btnTambah.setVisible(true);
-        btnKurang.setManaged(false);
-        btnKurang.setVisible(true);
-    }
-
-    public void setData(detailPeminjaman item, int nomorUrut) {
-        this.item = item;
-        this.jumlah = item.getJumlah();
-        this.produk = item.getProduk();
-
-        lblIDProduk.setText(String.valueOf(nomorUrut));
-        lblNamaProduk.setText(produk.getNama());
-        lblKategori.setText("x" + jumlah);
-
-        double total = jumlah * produk.getHarga();
-        lblHargaSatuan.setText(String.format("Total : Rp. %,.0f", total));
-        lblHargaSatuan.setVisible(true);
-        lblTotalHarga.setVisible(false);
-
-        lblStok.setText("");
-        lblStok.setManaged(false);
-        lblStok.setVisible(false);
-        btnTambah.setManaged(false);
-        btnTambah.setVisible(false);
-        btnKurang.setManaged(false);
-        btnKurang.setVisible(false);
-
-        Item1.setPrefWidth(800);
-        Item1.setMaxWidth(600);
-        HBox.setMargin(lblTotalHarga, new Insets(0, 0, 0, 5));
+        btnKurang.setDisable(true);
     }
 
     @FXML

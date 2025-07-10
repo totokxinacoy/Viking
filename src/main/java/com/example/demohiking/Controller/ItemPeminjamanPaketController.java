@@ -70,8 +70,8 @@ public class ItemPeminjamanPaketController {
         this.paket = item.getPaket();
 
         lblID.setText(String.valueOf(nomorUrut));
-        lblNama.setText("[PAKET] " + paket.getNama());
-        lblStok.setText("x" + jumlah);
+        lblNama.setText(paket.getNama());
+        lblHarga.setText("x" + jumlah);
 
         double total = jumlah * paket.getHarga();
         lblTotalHarga.setText(String.format("Total : Rp. %,.0f", total));
@@ -92,24 +92,24 @@ public class ItemPeminjamanPaketController {
     @FXML
     private void handleTambahPaket(ActionEvent event) {
         // Cegah penambahan jika form isi paket sedang aktif
-        if (homeKasirController != null && homeKasirController.isFormIsiPaketTerbuka()) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Form Paket Sedang Aktif");
-            alert.setHeaderText("Tidak bisa menambah paket saat mengisi paket lain.");
-            alert.setContentText("Apakah Anda ingin menutup form paket agar bisa menambahkan paket?");
-            ButtonType ya = new ButtonType("Ya", ButtonBar.ButtonData.YES);
-            ButtonType tidak = new ButtonType("Batal", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(ya, tidak);
-
-            alert.showAndWait().ifPresent(response -> {
-                if (response == ya) {
-                    homeKasirController.tutupFormIsiPaket();
-                } else if (response == tidak) {
-                    homeKasirController.bringFormIsiPaketToFront();
-                }
-            });
-            return;
-        }
+//        if (homeKasirController != null && homeKasirController.isFormIsiPaketTerbuka()) {
+//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//            alert.setTitle("Form Transaksi Sedang Aktif");
+//            alert.setHeaderText("Tidak bisa menambah paket saat mengisi transaksi lain.");
+//            alert.setContentText("Apakah Anda ingin menutup form paket agar bisa menambahkan transaksi?");
+//            ButtonType ya = new ButtonType("Ya", ButtonBar.ButtonData.YES);
+//            ButtonType tidak = new ButtonType("Batal", ButtonBar.ButtonData.CANCEL_CLOSE);
+//            alert.getButtonTypes().setAll(ya, tidak);
+//
+//            alert.showAndWait().ifPresent(response -> {
+//                if (response == ya) {
+//                    homeKasirController.tutupFormIsiPaket();
+//                } else if (response == tidak) {
+//                    homeKasirController.bringFormIsiPaketToFront();
+//                }
+//            });
+//            return;
+//        }
 
         // Validasi stok paket (jika paket punya stok total)
         if (paket.getStok() <= 1) {
