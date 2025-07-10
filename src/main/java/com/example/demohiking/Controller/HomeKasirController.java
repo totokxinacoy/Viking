@@ -891,7 +891,7 @@ public void refreshKeranjangTransaksiView() {
             if ("produk".equalsIgnoreCase(item.getTipe())) {
                 loader = new FXMLLoader(getClass().getResource("ItemDetailPeminjamanProduk.fxml"));
             } else if ("paket".equalsIgnoreCase(item.getTipe())) {
-                loader = new FXMLLoader(getClass().getResource("ItemPeminjamanPaket.fxml"));
+                loader = new FXMLLoader(getClass().getResource("ItemDetailPeminjamanPaket.fxml"));
             } else {
                 System.err.println("Tipe item tidak dikenal: " + item.getTipe());
                 continue;
@@ -904,7 +904,7 @@ public void refreshKeranjangTransaksiView() {
                 controller.setHomeController(this);
                 controller.setData(item, index);
             } else {
-                ItemPeminjamanPaketController controller = loader.getController();
+                ItemDetailPeminjamanPaketController controller = loader.getController();
                 controller.setHomeController(this);
                 controller.setData(item, index);
             }
