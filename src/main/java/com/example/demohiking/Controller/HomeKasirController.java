@@ -60,6 +60,8 @@ public class HomeKasirController implements Initializable {
     @FXML
     private VBox pnCartProduk = null;
     @FXML
+    private VBox pnCartPeminjaman = null;
+    @FXML
     private VBox pnPeminjamanProduk = null;
     @FXML
     private VBox pnPeminjamanPaket = null;
@@ -352,7 +354,7 @@ public class HomeKasirController implements Initializable {
     }
 
     private void loadItemPeminjamanProduk(List<Produk> dataProduk) {
-        pnItemsPaket.getChildren().clear();
+        pnPeminjamanProduk.getChildren().clear();
 
 
         for (int i = 0; i < dataProduk.size(); i++) {
@@ -802,6 +804,119 @@ public class HomeKasirController implements Initializable {
     public void showHomePaketPanel() {
         pnlHomePaket.toFront();
     }
+
+    /* --- TRANSAKSI PEMINJAMAN METHOD --- */
+    private List<detailPeminjaman> keranjangTransaksi = new ArrayList<>();
+    public void updateKeranjang(detailPeminjaman newItem) {
+        boolean found = false;
+
+        for (detailPeminjaman items : keranjangTransaksi) {
+            if (items.getTipe().equals(newItem.getTipe())) {
+                if ("produk".equals(items.getTipe()) &&
+                        items.getProduk() != null &&
+                        newItem.getProduk() != null &&
+                        items.getProduk().getId().equals(newItem.getProduk().getId())) {
+                    items.setJumlah(newItem.getJumlah());
+                    found = true;
+                    break;
+                } else if ("paket".equals(items.getTipe()) &&
+                        items.getPaket() != null &&
+                        newItem.getPaket() != null &&
+                        items.getPaket().getId().equals(newItem.getPaket().getId())) {
+                    items.setJumlah(newItem.getJumlah());
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        if (!found) {
+            keranjangTransaksi.add(newItem);
+        }
+
+        refreshKeranjangTransaksiView();
+    }
+
+    public void hapusItemDariKeranjang(detailPeminjaman items) {
+        keranjangTransaksi.removeIf(k -> {
+            if ("produk".equals(k.getTipe()) && k.getProduk().getId().equals(items.getProduk().getId())) {
+                return true;
+            } else if ("paket".equals(k.getTipe()) && k.getPaket().getId().equals(items.getPaket().getId())) {
+                return true;
+            }
+            return false;
+        });
+
+        refreshKeranjangTransaksiView();
+    }
+
+//    public void refreshKeranjangTransaksiView() {
+//        pnCartPeminjaman.getChildren().clear();
+//
+//        try {
+//            int index = 1;
+//            for (detailPeminjaman item : keranjangTransaksi) {
+//                FXMLLoader loader;
+//                if ("produk".equals(item.getTipe())) {
+//                    loader = new FXMLLoader(getClass().getResource("ItemTransactProduk.fxml"));
+//                } else {
+//                    loader = new FXMLLoader(getClass().getResource("ItemTransactPaket.fxml"));
+//                }
+//
+//                Node node = loader.load();
+//                Object controller = loader.getController();
+//
+//                if (controller instanceof ItemPeminjamanProdukController && "produk".equals(item.getTipe())) {
+//                    ((ItemPeminjamanProdukController) controller).setData(item, index);
+//                } else if (controller instanceof ItemPeminjamanPaketController && "paket".equals(item.getTipe())) {
+//                    ((ItemPeminjamanPaketController) controller).setData(item, index);
+//                }
+//
+//                pnCartPeminjaman.getChildren().add(node);
+//                index++;
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+public void refreshKeranjangTransaksiView() {
+    pnCartPeminjaman.getChildren().clear();
+
+    try {
+        int index = 1;
+        for (detailPeminjaman item : keranjangTransaksi) {
+            FXMLLoader loader;
+
+            if ("produk".equalsIgnoreCase(item.getTipe())) {
+                loader = new FXMLLoader(getClass().getResource("ItemPeminjamanProduk.fxml"));
+            } else if ("paket".equalsIgnoreCase(item.getTipe())) {
+                loader = new FXMLLoader(getClass().getResource("ItemPeminjamanPaket.fxml"));
+            } else {
+                System.err.println("Tipe item tidak dikenal: " + item.getTipe());
+                continue;
+            }
+
+            Node node = loader.load();
+
+            if ("produk".equalsIgnoreCase(item.getTipe())) {
+                ItemPeminjamanProdukController controller = loader.getController();
+                controller.setHomeController(this);
+                controller.setData(item, index);
+            } else {
+                ItemPeminjamanPaketController controller = loader.getController();
+                controller.setHomeController(this);
+                controller.setData(item, index);
+            }
+
+            pnCartPeminjaman.getChildren().add(node);
+            index++;
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -1732,7 +1847,7 @@ public class HomeKasirController implements Initializable {
         infoAlert.setContentText("Customer ID yang dipilih: " + selectedCustomerId);
         infoAlert.showAndWait();
 
-        pnlPeminjaman.setVisible(true);
+        pnlPeminjaman.toFront();
         pnlCekCustomer.setVisible(false);
     }
 }
