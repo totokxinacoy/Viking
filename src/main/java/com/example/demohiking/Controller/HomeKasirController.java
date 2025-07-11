@@ -232,9 +232,7 @@ public class HomeKasirController implements Initializable {
     @FXML
     private TextField txtIDPengembalian;
     @FXML
-    private ComboBox<String> cmbDenda;
-    @FXML
-    private TextField txtTotalHarga;
+    private ComboBox<Denda> cmbDenda;
     @FXML
     private Button btnAddPengembalian;
     @FXML
@@ -2090,16 +2088,16 @@ public void refreshKeranjangTransaksiView() {
     private Connection conn;
 
     private void loadDendaOptions() {
-        try {
-            conn = new DBConnect().getConnection();
+        ObservableList<Denda> listDenda = FXCollections.observableArrayList();
 
-            ObservableList<String> listDenda = FXCollections.observableArrayList();
-            Statement stmt = conn.createStatement();
-
-            ResultSet rs = stmt.executeQuery("SELECT ID_Denda FROM denda WHERE status = 'Aktif'");
+        try (Connection conn = new DBConnect().getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT ID_Denda, Jenis_Denda FROM denda WHERE status = 'Aktif'")) {
 
             while (rs.next()) {
-                listDenda.add(rs.getString("ID_Denda"));
+                String id = rs.getString("ID_Denda");
+                String jenis = rs.getString("Jenis_Denda");
+                listDenda.add(new Denda(id, jenis));
             }
 
             cmbDenda.setItems(listDenda);
@@ -2113,7 +2111,7 @@ public void refreshKeranjangTransaksiView() {
     private void handleInsertPengembalian() {
         String idPengembalian = txtIDPengembalian.getText().trim();
         String idPeminjaman = txtIDPeminjaman.getText().trim();
-        String idDenda = cmbDenda.getValue();
+        Denda selectedDenda = cmbDenda.getValue();
         String statusPengembalian = "Pending";
 
         // Validasi
@@ -2126,6 +2124,7 @@ public void refreshKeranjangTransaksiView() {
             return;
         }
 
+        String idDenda = selectedDenda.getId();
         String insertPengembalian = "INSERT INTO Transaksi_Pengembalian (id_pengembalian, id_peminjaman, id_denda) VALUES (?, ?, ?)";
         String updateStatusPeminjaman = "UPDATE Transaksi_Peminjaman SET status = ? WHERE id_peminjaman = ?";
 

@@ -20,6 +20,14 @@ public class Denda {
         this.nominal = nominal;
     }
 
+    // Constructor untuk transaksi pengembalian
+    public Denda(String id, String jenis) {
+        this.id = id;
+        this.jenis = jenis;
+        this.deskripsi = null;
+        this.nominal = 0;
+    }
+
     public String getId() {
         return id;
     }
@@ -51,4 +59,10 @@ public class Denda {
     public void setNominal(double nominal) {
         this.nominal = nominal;
     }
+
+    @Override
+    public String toString() {
+        return jenis;
+    }
+
 }
