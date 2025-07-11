@@ -2107,6 +2107,35 @@ public void refreshKeranjangTransaksiView() {
         }
     }
 
+    private Stage stageFormIsiPembayaran;
+    private boolean isFormIsiPembayaranTerbuka = false;
+
+    public boolean isFormIsiPembayaranTerbuka() {
+        return isFormIsiPembayaranTerbuka;
+    }
+
+    public void setFormIsiPembayaranTerbuka(boolean status) {
+        this.isFormIsiPembayaranTerbuka = status;
+    }
+
+    public void tutupFormIsiPembayaran() {
+        if (stageFormIsiPembayaran != null) {
+            stageFormIsiPembayaran.close();
+            stageFormIsiPembayaran = null;
+            setFormIsiPembayaranTerbuka(false);
+        }
+    }
+
+    public void bringFormIsiPembayaranToFront() {
+        if (stageFormIsiPembayaran != null) {
+            Platform.runLater(() -> {
+                stageFormIsiPembayaran.setIconified(false);
+                stageFormIsiPembayaran.toFront();
+                stageFormIsiPembayaran.requestFocus();
+            });
+        }
+    }
+
     @FXML
     private void handleInsertPengembalian() {
         String idPengembalian = txtIDPengembalian.getText().trim();
@@ -2124,7 +2153,12 @@ public void refreshKeranjangTransaksiView() {
             return;
         }
 
-        String idDenda = selectedDenda.getId();
+        String idDenda;
+        if (selectedDenda != null) {
+            idDenda = selectedDenda.getId();
+        } else {
+            idDenda = null;
+        }
         String insertPengembalian = "INSERT INTO Transaksi_Pengembalian (id_pengembalian, id_peminjaman, id_denda) VALUES (?, ?, ?)";
         String updateStatusPeminjaman = "UPDATE Transaksi_Peminjaman SET status = ? WHERE id_peminjaman = ?";
 
@@ -2150,6 +2184,43 @@ public void refreshKeranjangTransaksiView() {
                 showAlert("Sukses", "Pengembalian dicatat lanjut Ke Pembayaran.");
                 clearPengembalianForm();
                 refreshPeminjamanViews();
+                if (isFormIsiPembayaranTerbuka) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Form Pembayaran Aktif");
+                    alert.setHeaderText("Form pembayaran sudah dibuka.");
+                    alert.setContentText("Klik OK untuk membukanya kembali.");
+                    alert.showAndWait();
+
+                    bringFormIsiPembayaranToFront();
+                    return;
+                }
+
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("FormIsiPembayaran.fxml"));
+                    Parent root = loader.load();
+
+                    FormIsiPembayaranController pembayaranController = loader.getController();
+//                    pembayaranController.setIDPengembalian(idPengembalian);
+
+                    Stage stage = new Stage();
+                    stage.setTitle("Form Pembayaran");
+                    stage.setScene(new Scene(root));
+
+                    setFormIsiPembayaranTerbuka(true);
+                    stage.setOnHiding(e -> {
+                        setFormIsiPembayaranTerbuka(false);
+                        stageFormIsiPembayaran = null;
+                    });
+
+                    stageFormIsiPembayaran = stage;
+                    stage.show();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    setFormIsiPembayaranTerbuka(false);
+                    showAlert("Navigasi Error", "Gagal membuka form pembayaran: " + e.getMessage());
+                }
+
             } catch (SQLException e) {
                 conn.rollback();
                 throw e;
@@ -2160,6 +2231,7 @@ public void refreshKeranjangTransaksiView() {
             ex.printStackTrace();
         }
     }
+
     private void clearPengembalianForm() {
         txtIDPengembalian.clear();
         txtIDPeminjaman.clear();

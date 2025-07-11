@@ -65,7 +65,7 @@ public class LoadingController {
         fade.play();
 
         Timeline timeline = new Timeline();
-        int duration = 5;
+        int duration = 3;
         double startX = 760;
         double endX = startX + 360;
 

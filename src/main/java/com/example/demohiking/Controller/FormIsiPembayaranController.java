@@ -77,7 +77,7 @@ public class FormIsiPembayaranController {
     }
     private void generatePembayaranID() {
         String id = "PMB001";
-        String query = "SELECT MAX(id_pembayaran) as max_id FROM Transaksi_Peminjaman";
+        String query = "SELECT MAX(id_pembayaran) as max_id FROM Transaksi_Pembayaran";
 
         try (Connection conn = new DBConnect().getConnection();
              Statement stmt = conn.createStatement();
@@ -86,11 +86,11 @@ public class FormIsiPembayaranController {
             if (rs.next()) {
                 String maxID = rs.getString("max_id");
 
-                if (maxID != null && maxID.startsWith("TRS")) {
+                if (maxID != null && maxID.startsWith("PMB")) {
                     String numberPart = maxID.substring(3);
                     if (numberPart.matches("\\d+")) {
                         int nextID = Integer.parseInt(numberPart) + 1;
-                        id = String.format("TRS%03d", nextID);
+                        id = String.format("PMB%03d", nextID);
                     }
                 }
             }
@@ -98,6 +98,7 @@ public class FormIsiPembayaranController {
             e.printStackTrace();
         }
 
-        txtIDPeminjaman.setText(id);
+        txtIDPembayaran.setText(id);
     }
+
 }
