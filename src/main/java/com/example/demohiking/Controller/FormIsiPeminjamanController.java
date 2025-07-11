@@ -188,6 +188,12 @@ public class FormIsiPeminjamanController {
             conn.commit();
             showAlert("Sukses", "Transaksi peminjaman berhasil disimpan.");
             loadPeminjamanList();
+            if (homeKasirController != null) {
+                homeKasirController.clearKeranjang();
+                homeKasirController.refreshKeranjangTransaksiView();
+                homeKasirController.refreshProdukList();
+                homeKasirController.refreshPaket();
+            }
             clearForm();
 
         } catch (SQLException e) {

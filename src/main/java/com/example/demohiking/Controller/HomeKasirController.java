@@ -194,7 +194,6 @@ public class HomeKasirController implements Initializable {
 
     /* --- TRANSAKSI PEMINJAMAN ITEMS --- */
 
-    // CEK CUSTOMER ITEMS
     @FXML
     private Button btnSearchCekCustomer;
     @FXML
@@ -220,7 +219,20 @@ public class HomeKasirController implements Initializable {
 //    @FXML
 //    private ToggleGroup genderGroup;
 
+    /* --- TRANSAKSI PEMINJAMAN ITEMS --- */
 
+    @FXML
+    private TextField txtIDPeminjaman;
+    @FXML
+    private TextField txtIDPengembalian;
+    @FXML
+    private ComboBox<String> cmbDenda;
+    @FXML
+    private TextField txtTotalHarga;
+    @FXML
+    private Button btnAddPengembalian;
+    @FXML
+    private Button btnBatalPengembalian;
 
 
     /* --- PRODUK METHOD --- */
