@@ -978,7 +978,7 @@ public void refreshKeranjangTransaksiView() {
         List<Peminjaman> list = new ArrayList<>();
         DBConnect db = new DBConnect();
 
-        String query = "SELECT id_peminjaman, id_customer, tanggal_peminjaman, tanggal_pengembalian FROM Transaksi_Peminjaman WHERE status = 'Dipinjam'";
+        String query = "SELECT id_peminjaman, id_customer, tanggal_peminjaman, tanggal_pengembalian FROM Transaksi_Peminjaman WHERE status = 'Aktif'";
 
         try (Connection conn = db.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
@@ -2108,6 +2108,70 @@ public void refreshKeranjangTransaksiView() {
             ex.printStackTrace();
         }
     }
+
+    @FXML
+    private void handleInsertPengembalian() {
+        String idPengembalian = txtIDPengembalian.getText().trim();
+        String idPeminjaman = txtIDPeminjaman.getText().trim();
+        String idDenda = cmbDenda.getValue();
+        String statusPengembalian = "Pending";
+
+        // Validasi
+        if (idPengembalian.isEmpty()) {
+            showAlert("Validasi", "ID Pengembalian tidak boleh kosong.");
+            return;
+        }
+        if (idPeminjaman.isEmpty()) {
+            showAlert("Validasi", "ID Peminjaman tidak boleh kosong.");
+            return;
+        }
+
+        String insertPengembalian = "INSERT INTO Transaksi_Pengembalian (id_pengembalian, id_peminjaman, id_denda) VALUES (?, ?, ?)";
+        String updateStatusPeminjaman = "UPDATE Transaksi_Peminjaman SET status = ? WHERE id_peminjaman = ?";
+
+        try (Connection conn = new DBConnect().getConnection()) {
+            conn.setAutoCommit(false);
+
+            try (
+                    PreparedStatement psInsert = conn.prepareStatement(insertPengembalian);
+                    PreparedStatement psUpdate = conn.prepareStatement(updateStatusPeminjaman)
+            ) {
+                // Insert pengembalian
+                psInsert.setString(1, idPengembalian);
+                psInsert.setString(2, idPeminjaman);
+                psInsert.setString(3, idDenda);
+                psInsert.executeUpdate();
+
+                // Update status peminjaman
+                psUpdate.setString(1, statusPengembalian);
+                psUpdate.setString(2, idPeminjaman);
+                psUpdate.executeUpdate();
+
+                conn.commit();
+                showAlert("Sukses", "Pengembalian dicatat lanjut Ke Pembayaran.");
+                clearPengembalianForm();
+                refreshPeminjamanViews();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+
+        } catch (SQLException ex) {
+            showAlert("Database Error", "Gagal menyimpan: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+    private void clearPengembalianForm() {
+        txtIDPengembalian.clear();
+        txtIDPeminjaman.clear();
+        cmbDenda.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void handleBackPengembalian() { pnlTransaksi.toFront();
+    txtIDPeminjaman.clear();
+    cmbDenda.getSelectionModel().clearSelection();}
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

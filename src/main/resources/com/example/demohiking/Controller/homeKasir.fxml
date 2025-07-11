@@ -2298,12 +2298,12 @@
                               </ComboBox>
                               <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
                                  <children>
-                                    <Button fx:id="btnAddPengembalian" mnemonicParsing="false" onAction="#onAddDenda" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="NEXT" textAlignment="CENTER" textFill="WHITE">
+                                    <Button fx:id="btnAddPengembalian" mnemonicParsing="false" onAction="#handleInsertPengembalian" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="NEXT" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font name="Franklin Gothic Demi Cond" size="24.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="btnBatalPengembalian" layoutX="164.0" layoutY="46.0" mnemonicParsing="false" onAction="#RefreshDataDenda" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="BATAL" textAlignment="CENTER" textFill="WHITE">
+                                    <Button fx:id="btnBatalPengembalian" layoutX="164.0" layoutY="46.0" mnemonicParsing="false" onAction="#handleBackPengembalian" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="BATAL" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font name="Franklin Gothic Demi Cond" size="24.0" />
                                        </font>
