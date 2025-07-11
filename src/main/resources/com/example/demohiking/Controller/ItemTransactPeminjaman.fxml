@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.demohiking.Controller.ItemTransactPeminjamanController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<HBox fx:id="Item1" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1095.0" spacing="25.0" style="-fx-background-color: #0D2857; -fx-background-radius: 15; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demohiking.Controller.ItemTransactPeminjamanController">
+   <children>
+      <Label fx:id="lblID" alignment="CENTER" prefHeight="22.0" prefWidth="114.0" text="ID Peminjaman" textFill="WHITE">
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblNama" alignment="CENTER" prefHeight="22.0" prefWidth="135.0" text="Nama Customer" textFill="WHITE" wrapText="true">
+         <HBox.margin>
+            <Insets left="40.0" />
+         </HBox.margin>
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblTglPeminjaman" alignment="CENTER" layoutX="201.0" layoutY="26.0" prefHeight="22.0" prefWidth="163.0" text="Tanggal Peminjaman" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+         <HBox.margin>
+            <Insets left="40.0" />
+         </HBox.margin>
+      </Label>
+      <Label fx:id="lblTglPengembalian" alignment="CENTER" layoutX="406.0" layoutY="26.0" prefHeight="22.0" prefWidth="164.0" text="Tanggal Pengembalian" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+         <HBox.margin>
+            <Insets left="40.0" />
+         </HBox.margin>
+      </Label>
+   </children>
+   <effect>
+      <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
+   </effect>
+   <padding>
+      <Insets left="60.0" />
+   </padding>
+</HBox>

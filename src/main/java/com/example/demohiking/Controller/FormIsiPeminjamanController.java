@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import javafx.stage.Stage;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -90,7 +92,6 @@ public class FormIsiPeminjamanController {
             showAlert("Database Error", e.getMessage());
         }
 
-        loadPeminjamanList();
 
         if (Session.isLoggedIn()) {
             txtIDKaryawan.setText(Session.getId());
@@ -187,14 +188,17 @@ public class FormIsiPeminjamanController {
 
             conn.commit();
             showAlert("Sukses", "Transaksi peminjaman berhasil disimpan.");
-            loadPeminjamanList();
             if (homeKasirController != null) {
                 homeKasirController.clearKeranjang();
                 homeKasirController.refreshKeranjangTransaksiView();
                 homeKasirController.refreshProdukList();
                 homeKasirController.refreshPaket();
+                homeKasirController.refreshPeminjamanViews();
+                homeKasirController.showHomeTransactPanel();
             }
             clearForm();
+            showAlert("Berhasil Simpan ✅" , "Transaksi Peminjaman berhasil disimpan ke database!");
+            ((Stage) txtIDPeminjaman.getScene().getWindow()).close();
 
         } catch (SQLException e) {
             try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
@@ -215,18 +219,7 @@ public class FormIsiPeminjamanController {
         txtTglPengembalian.setValue(null);
     }
 
-    private void loadPeminjamanList() {
-        ObservableList<String> data = FXCollections.observableArrayList();
-        String query = "SELECT * FROM Transaksi_Peminjaman";
-        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                data.add(rs.getString("id_peminjaman") + " - " + rs.getString("id_customer"));
-            }
-            listPeminjaman.setItems(data);
-        } catch (SQLException e) {
-            showAlert("Error", "Gagal memuat data: " + e.getMessage());
-        }
-    }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -65,6 +65,8 @@ public class HomeKasirController implements Initializable {
     private VBox pnPeminjamanProduk = null;
     @FXML
     private VBox pnPeminjamanPaket = null;
+    @FXML
+    private VBox pnItemsTransaksi = null;
 
     // HBOX ALL
     @FXML
@@ -90,6 +92,8 @@ public class HomeKasirController implements Initializable {
     @FXML
     private Button btnPembayaran;
     @FXML
+    private Button btnPengembalian;
+    @FXML
     private Button btnLogout;
 
     // PANEL ALL
@@ -111,6 +115,8 @@ public class HomeKasirController implements Initializable {
     private Pane pnlPeminjaman;
     @FXML
     private Pane pnlTransaksiPembayaran;
+    @FXML
+    private Pane pnlTransaksiPengembalian;
 
     // PRODUK ITEMS
     @FXML
@@ -933,6 +939,120 @@ public void refreshKeranjangTransaksiView() {
     }
 }
 
+    /* --- TRANSAKSI PENGEMBALIAN METHOD --- */
+
+    private String generatePengembalianID() {
+        String id = "PNG001";
+        String query = "SELECT MAX(id_pengembalian) as max_id FROM Transaksi_Pengembalian";
+
+        try {
+            DBConnect connect = new DBConnect();
+            Connection conn = connect.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                String maxID = rs.getString("max_id");
+
+                // Validasi agar tidak error saat null atau format tidak sesuai
+                if (maxID != null && maxID.length() >= 4) {
+                    String numberPart = maxID.substring(3);
+                    if (!numberPart.isEmpty() && numberPart.matches("\\d+")) {
+                        int nextID = Integer.parseInt(numberPart) + 1;
+                        id = String.format("PNG%03d", nextID);
+                    }
+                }
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
+    public List<Peminjaman> getDataPeminjaman() {
+        List<Peminjaman> list = new ArrayList<>();
+        DBConnect db = new DBConnect();
+
+        String query = "SELECT id_peminjaman, id_customer, tanggal_peminjaman, tanggal_pengembalian FROM Transaksi_Peminjaman WHERE status = 'Dipinjam'";
+
+        try (Connection conn = db.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(new Peminjaman(
+                        rs.getString("id_peminjaman"),
+                        rs.getString("id_customer"),
+                        rs.getDate("tanggal_peminjaman").toLocalDate(),
+                        rs.getDate("tanggal_pengembalian").toLocalDate()
+                ));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+//    public void setDetailPeminjaman(Peminjaman peminjaman) {
+//        txtIDDenda.setText(denda.getId());
+//        cmbJenisDenda.setValue(denda.getJenis());
+//        txtDeskripsiDenda.setText(denda.getDeskripsi());
+//        txtNominal.setText(String.valueOf((int) denda.getNominal()));
+//    }
+
+    private void loadPeminjamanItemsTransact(List<Peminjaman> dataPeminjaman) {
+        pnItemsTransaksi.getChildren().clear();
+
+
+        for (int i = 0; i < dataPeminjaman.size(); i++) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemTransactPeminjaman.fxml"));
+                Node node = loader.load();
+
+                ItemTransactPeminjamanController controller = loader.getController();
+                controller.setData(dataPeminjaman.get(i));
+                controller.setHomeController(this); // <-- penting!
+
+                final Peminjaman selectedPeminjaman = dataPeminjaman.get(i);
+
+                final int j = i;
+                node.setOnMouseEntered(event -> {
+                    node.setStyle("-fx-background-color : #051036; -fx-background-radius : 15");
+                });
+                node.setOnMouseExited(event -> {
+                    node.setStyle("-fx-background-color : #0D2857; -fx-background-radius : 15");
+                });
+
+                node.setOnMouseClicked(e -> showDetailPeminjaman(selectedPeminjaman));
+
+                pnItemsTransaksi.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void loadPeminjamanItemsTransact(){
+        List<Peminjaman> dataPeminjaman = getDataPeminjaman();
+        loadPeminjamanItemsTransact(dataPeminjaman);
+    }
+
+    public void refreshPeminjamanViews() {
+        List<Peminjaman> dataPeminjaman = getDataPeminjaman();
+        loadPeminjamanItemsTransact(dataPeminjaman);
+    }
+
+    public void showHomeTransactPanel() {
+        pnlTransaksi.toFront();
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -995,6 +1115,10 @@ public void refreshKeranjangTransaksiView() {
         loadItemPeminjamanProduk();
         loadItemPeminjamanPaket();
 
+        // Inisialisasi Component Transaksi Pengembalian
+        loadPeminjamanItemsTransact();
+        txtIDPengembalian.setText(generatePengembalianID());
+        loadDendaOptions();
 
         // Tunda pengecekan session sampai setelah UI tampil
         Platform.runLater(this::cekSession);
@@ -1060,10 +1184,10 @@ public void refreshKeranjangTransaksiView() {
             pnlCekCustomer.setStyle("-fx-background-color : #ffffff");
             pnlCekCustomer.toFront();
         }
-        if(actionEvent.getSource()==btnPembayaran)
+        if(actionEvent.getSource()==btnPengembalian)
         {
-            pnlTransaksiPembayaran.setStyle("-fx-background-color : #ffffff");
-            pnlTransaksiPembayaran.toFront();
+            pnlTransaksiPengembalian.setStyle("-fx-background-color : #ffffff");
+            pnlTransaksiPengembalian.toFront();
         }
     }
 
@@ -1955,4 +2079,40 @@ public void refreshKeranjangTransaksiView() {
         keranjangTransaksi.clear();
     }
 
+    /* --- TRANSAKSI PENGEMBALIAN --- */
+
+    public void showDetailPeminjaman(Peminjaman peminjaman) {
+        if (peminjaman == null) return;
+
+        txtIDPeminjaman.setText(peminjaman.getIdPeminjaman());
+    }
+
+    private Connection conn;
+
+    private void loadDendaOptions() {
+        try {
+            conn = new DBConnect().getConnection();
+
+            ObservableList<String> listDenda = FXCollections.observableArrayList();
+            Statement stmt = conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT ID_Denda FROM denda WHERE status = 'Aktif'");
+
+            while (rs.next()) {
+                listDenda.add(rs.getString("ID_Denda"));
+            }
+
+            cmbDenda.setItems(listDenda);
+        } catch (SQLException ex) {
+            showAlert("Database Error", ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 public class Peminjaman {
     private String idPeminjaman;
+    private String idCustomer;
+    private String idKaryawan;
     private LocalDate tanggalPeminjaman;
     private LocalDate tanggalPengembalian;
     private Karyawan karyawan;
@@ -11,12 +13,20 @@ public class Peminjaman {
 
     public Peminjaman(){}
 
-    public Peminjaman(String idPeminjaman, LocalDate tanggalPeminjaman, LocalDate tanggalPengembalian, Karyawan karyawan, Customer customer) {
+    public Peminjaman(String idPeminjaman, String idCustomer, String idKaryawan, LocalDate tanggalPeminjaman, LocalDate tanggalPengembalian) {
         this.idPeminjaman = idPeminjaman;
+        this.idCustomer = idCustomer;
+        this.idKaryawan = idKaryawan;
         this.tanggalPeminjaman = tanggalPeminjaman;
         this.tanggalPengembalian = tanggalPengembalian;
-        this.karyawan = karyawan;
-        this.customer = customer;
+    }
+
+    public Peminjaman(String idPeminjaman, String idCustomer, LocalDate tanggalPeminjaman, LocalDate tanggalPengembalian) {
+        this.idPeminjaman = idPeminjaman;
+        this.idCustomer = idCustomer;
+        this.idKaryawan = null;
+        this.tanggalPeminjaman = tanggalPeminjaman;
+        this.tanggalPengembalian = tanggalPengembalian;
     }
 
     public String getIdPeminjaman() {
@@ -57,5 +67,21 @@ public class Peminjaman {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public String getIdCustomer() {
+        return idCustomer;
+    }
+
+    public void setIdCustomer(String idCustomer) {
+        this.idCustomer = idCustomer;
+    }
+
+    public String getIdKaryawan() {
+        return idKaryawan;
+    }
+
+    public void setIdKaryawan(String idKaryawan) {
+        this.idKaryawan = idKaryawan;
     }
 }

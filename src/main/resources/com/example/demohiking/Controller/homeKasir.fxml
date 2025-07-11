@@ -1295,63 +1295,6 @@
                   </HBox>
                </children>
             </Pane>
-            <Pane fx:id="pnlTransaksi" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
-                     <children>
-                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/transaction.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label prefHeight="38.0" prefWidth="200.0" text="MENU TRANSAKSI" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/home-icon-silhouette.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="1280.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                  </HBox>
-                  <ImageView fitHeight="170.0" fitWidth="1639.0" layoutX="33.0" layoutY="912.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button fx:id="btnPeminjaman" contentDisplay="TOP" graphicTextGap="13.0" layoutX="305.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="217.0" prefWidth="370.0" style="-fx-background-radius: 10px;" stylesheets="@style.css" text="TRANSAKSI PEMINJAMAN">
-                     <graphic>
-                        <ImageView fitHeight="66.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/user.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="Franklin Gothic Demi Cond" size="30.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnPengembalian" contentDisplay="TOP" graphicTextGap="13.0" layoutX="845.0" layoutY="389.0" mnemonicParsing="false" prefHeight="217.0" prefWidth="370.0" style="-fx-background-radius: 10px;" stylesheets="@style.css" text="TRANSAKSI PENGEMBALIAN">
-                     <font>
-                        <Font name="Franklin Gothic Demi Cond" size="30.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="66.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/trekking-pole.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </Pane>
             <Pane fx:id="pnlPaket" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
@@ -2177,6 +2120,63 @@
                   </Label>
                </children>
             </Pane>
+            <Pane fx:id="pnlTransaksi" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
+                     <children>
+                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/transaction.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label prefHeight="38.0" prefWidth="200.0" text="MENU TRANSAKSI" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/home-icon-silhouette.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="1280.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <ImageView fitHeight="170.0" fitWidth="1639.0" layoutX="33.0" layoutY="912.0" pickOnBounds="true" preserveRatio="true" />
+                  <Button fx:id="btnPeminjaman" contentDisplay="TOP" graphicTextGap="13.0" layoutX="305.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="217.0" prefWidth="370.0" style="-fx-background-radius: 10px;" stylesheets="@style.css" text="TRANSAKSI PEMINJAMAN">
+                     <graphic>
+                        <ImageView fitHeight="66.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/user.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="30.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnPengembalian" contentDisplay="TOP" graphicTextGap="13.0" layoutX="845.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="217.0" prefWidth="370.0" style="-fx-background-radius: 10px;" stylesheets="@style.css" text="TRANSAKSI PENGEMBALIAN">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="30.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="66.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/trekking-pole.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </Pane>
             <Pane fx:id="pnlTransaksiPengembalian" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
@@ -2296,28 +2296,9 @@
                                     <Insets left="60.0" right="55.0" top="5.0" />
                                  </VBox.margin>
                               </ComboBox>
-                              <Label layoutX="71.0" layoutY="589.0" text="Total Harga" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="25.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets right="163.0" top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <TextField fx:id="txtTotalHarga" layoutX="70.0" layoutY="196.0" prefHeight="39.0" prefWidth="309.0">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <effect>
-                                    <DropShadow offsetX="4.0" offsetY="4.0" />
-                                 </effect>
-                                 <VBox.margin>
-                                    <Insets left="60.0" right="55.0" top="5.0" />
-                                 </VBox.margin>
-                              </TextField>
                               <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
                                  <children>
-                                    <Button fx:id="btnAddPengembalian" mnemonicParsing="false" onAction="#onAddDenda" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="ADD" textAlignment="CENTER" textFill="WHITE">
+                                    <Button fx:id="btnAddPengembalian" mnemonicParsing="false" onAction="#onAddDenda" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="NEXT" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font name="Franklin Gothic Demi Cond" size="24.0" />
                                        </font>
