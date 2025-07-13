@@ -1806,64 +1806,6 @@
                   <HBox alignment="CENTER_RIGHT" layoutX="95.0" layoutY="159.0" prefHeight="74.0" prefWidth="1126.0" />
                </children>
             </Pane>
-            <Pane fx:id="pnlHome" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
-                     <children>
-                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/home-icon-silhouette.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label prefHeight="38.0" prefWidth="200.0" text="MENU UTAMA" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/leave.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="1280.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                  </HBox>
-                  <ImageView fitHeight="700.0" fitWidth="1699.0" layoutX="-29.0" layoutY="444.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/profil-bg.png" />
-                     </image>
-                  </ImageView>
-                  <Circle fill="WHITE" layoutX="603.0" layoutY="514.0" radius="143.0" stroke="#577bc1" strokeType="INSIDE" strokeWidth="3.0">
-                     <effect>
-                        <DropShadow height="10.0" radius="4.5" width="10.0" />
-                     </effect>
-                  </Circle>
-                  <ImageView fx:id="imgProfile" fitHeight="211.0" fitWidth="170.0" layoutX="518.0" layoutY="407.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label layoutX="139.0" layoutY="115.0" text="Hi," textFill="#0d2857">
-                     <font>
-                        <Font name="Franklin Gothic Demi Cond" size="72.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblNamaKasir" layoutX="236.0" layoutY="115.0" text="Nama Kasir !" textFill="#0d2857">
-                     <font>
-                        <Font name="Franklin Gothic Demi Cond" size="72.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="139.0" layoutY="196.0" text="Anda Login sebagai Kasir" textFill="#0d2857">
-                     <font>
-                        <Font name="Franklin Gothic Demi Cond" size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
             <Pane fx:id="pnlTransaksi" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
                <children>
                   <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
@@ -2334,6 +2276,64 @@
                         </ImageView>
                      </children>
                   </HBox>
+               </children>
+            </Pane>
+            <Pane fx:id="pnlHome" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
+                     <children>
+                        <ImageView fitHeight="37.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/home-icon-silhouette.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label prefHeight="38.0" prefWidth="200.0" text="MENU UTAMA" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/leave.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="1280.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <ImageView fitHeight="700.0" fitWidth="1699.0" layoutX="-29.0" layoutY="444.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/profil-bg.png" />
+                     </image>
+                  </ImageView>
+                  <Circle fill="WHITE" layoutX="603.0" layoutY="514.0" radius="143.0" stroke="#577bc1" strokeType="INSIDE" strokeWidth="3.0">
+                     <effect>
+                        <DropShadow height="10.0" radius="4.5" width="10.0" />
+                     </effect>
+                  </Circle>
+                  <ImageView fx:id="imgProfile" fitHeight="211.0" fitWidth="189.0" layoutX="511.0" layoutY="409.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label layoutX="139.0" layoutY="115.0" text="Hi," textFill="#0d2857">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="72.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblNamaKasir" layoutX="236.0" layoutY="115.0" text="Nama Kasir !" textFill="#0d2857">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="72.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="139.0" layoutY="196.0" text="Anda Login sebagai Kasir" textFill="#0d2857">
+                     <font>
+                        <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
             </children>

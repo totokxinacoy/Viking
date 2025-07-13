@@ -36,6 +36,8 @@ public class HomeKasirController implements Initializable {
     @FXML
     private ImageView imgProduk;
     @FXML
+    private ImageView imgProfile;
+    @FXML
     private ImageView imgCustomer;
     @FXML
     private ImageView imgCekCustomer;
@@ -43,6 +45,10 @@ public class HomeKasirController implements Initializable {
     private ImageView imgDenda;
     private boolean isImageSelected = false;
     private File selectedImageFile;
+
+    // LABEL ALL
+    @FXML
+    private Label lblNamaKasir;
 
     // VBOX ALL
     @FXML
