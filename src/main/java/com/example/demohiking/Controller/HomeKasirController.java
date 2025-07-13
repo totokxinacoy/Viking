@@ -2161,25 +2161,18 @@ public void refreshKeranjangTransaksiView() {
             idDenda = null;
         }
         String insertPengembalian = "INSERT INTO Transaksi_Pengembalian (id_pengembalian, id_peminjaman, id_denda) VALUES (?, ?, ?)";
-        String updateStatusPeminjaman = "UPDATE Transaksi_Peminjaman SET status = ? WHERE id_peminjaman = ?";
 
         try (Connection conn = new DBConnect().getConnection()) {
             conn.setAutoCommit(false);
 
             try (
                     PreparedStatement psInsert = conn.prepareStatement(insertPengembalian);
-                    PreparedStatement psUpdate = conn.prepareStatement(updateStatusPeminjaman)
             ) {
                 // Insert pengembalian
                 psInsert.setString(1, idPengembalian);
                 psInsert.setString(2, idPeminjaman);
                 psInsert.setString(3, idDenda);
                 psInsert.executeUpdate();
-
-                // Update status peminjaman
-                psUpdate.setString(1, statusPengembalian);
-                psUpdate.setString(2, idPeminjaman);
-                psUpdate.executeUpdate();
 
                 conn.commit();
                 showAlert("Sukses", "Pengembalian dicatat lanjut Ke Pembayaran.");

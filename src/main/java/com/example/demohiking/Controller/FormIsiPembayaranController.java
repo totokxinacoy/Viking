@@ -6,11 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -42,7 +40,6 @@ public class FormIsiPembayaranController {
     @FXML
     private ListView<String> listPeminjaman;
 
-    private List<detailPeminjaman> itemDalamPembayaran;
     private HomeKasirController homeKasirController;
     private double jumlahYangHarusDibayar = 0;
 
@@ -112,9 +109,9 @@ public class FormIsiPembayaranController {
                 setDisable(true);
             }
         });
-
         txtTglPembayaran.setEditable(false);
     }
+
     private void tampilkanDetailPeminjaman(String idPeminjaman) {
         ObservableList<String> items = FXCollections.observableArrayList();
 
@@ -139,7 +136,7 @@ public class FormIsiPembayaranController {
                 } else if (namaPaket != null && !namaPaket.isEmpty()) {
                     namaItem = namaPaket + " x" + jumlah;
                 } else {
-                    continue; // Skip jika tidak punya nama produk/paket
+                    continue;
                 }
 
                 items.add(namaItem);
@@ -147,7 +144,6 @@ public class FormIsiPembayaranController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         listPeminjaman.setItems(items);
     }
 
@@ -173,7 +169,6 @@ public class FormIsiPembayaranController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         txtIDPembayaran.setText(id);
     }
 
@@ -182,4 +177,109 @@ public class FormIsiPembayaranController {
         return formatter.format(nilai);
     }
 
+    @FXML
+    private void handleInsertPembayaran() {
+        String idPembayaran = txtIDPembayaran.getText().trim();
+        String idPeminjaman = txtIDPeminjaman.getText().trim();
+        String metode = cmbMetode.getValue();
+        LocalDate tanggalPembayaran = txtTglPembayaran.getValue();
+
+        if (idPembayaran.isEmpty() || idPeminjaman.isEmpty() || metode == null || tanggalPembayaran == null) {
+            showAlert("Validasi", "Pastikan semua data sudah terisi dengan benar.");
+            return;
+        }
+
+        double uangBayar;
+        try {
+            uangBayar = Double.parseDouble(txtBayar.getText());
+            if (uangBayar < jumlahYangHarusDibayar) {
+                showAlert("Validasi", "Jumlah yang dibayar kurang dari total tagihan.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Validasi", "Format nominal bayar tidak valid.");
+            return;
+        }
+
+        double uangKembalian = uangBayar - jumlahYangHarusDibayar;
+        double totalDenda = parseRupiah(txtTotalDenda.getText());
+
+        String idKaryawan = null;
+        String idCustomer = null;
+
+        String infoQuery = "SELECT id_karyawan, id_customer FROM Transaksi_Peminjaman WHERE id_peminjaman = ?";
+        try (Connection conn = new DBConnect().getConnection();
+             PreparedStatement psInfo = conn.prepareStatement(infoQuery)) {
+
+            psInfo.setString(1, idPeminjaman);
+            try (ResultSet rs = psInfo.executeQuery()) {
+                if (rs.next()) {
+                    idKaryawan = rs.getString("id_karyawan");
+                    idCustomer = rs.getString("id_customer");
+                } else {
+                    showAlert("Data Tidak Ditemukan", "ID Peminjaman tidak valid.");
+                    return;
+                }
+            }
+
+            String updateStatusPeminjaman = "UPDATE Transaksi_Peminjaman SET status = ? WHERE id_peminjaman = ?";
+            String insertQuery = "INSERT INTO Transaksi_Pembayaran " +
+                    "(id_pembayaran, id_peminjaman, id_karyawan, id_customer, metode_pembayaran, tanggal_pembayaran, total_denda, total_harga, uang_bayar, uang_kembalian) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            try (PreparedStatement psInsert = conn.prepareStatement(insertQuery)) {
+                psInsert.setString(1, idPembayaran);
+                psInsert.setString(2, idPeminjaman);
+                psInsert.setString(3, idKaryawan);
+                psInsert.setString(4, idCustomer);
+                psInsert.setString(5, metode);
+                psInsert.setDate(6, java.sql.Date.valueOf(tanggalPembayaran));
+                psInsert.setDouble(7, totalDenda);
+                psInsert.setDouble(8, jumlahYangHarusDibayar);
+                psInsert.setDouble(9, uangBayar);
+                psInsert.setDouble(10, uangKembalian);
+
+                psInsert.executeUpdate();
+
+                try (PreparedStatement psUpdate = conn.prepareStatement(updateStatusPeminjaman)) {
+                    psUpdate.setString(1, "Non-Aktif");
+                    psUpdate.setString(2, idPeminjaman);
+                    psUpdate.executeUpdate();
+                }
+
+                showAlert("Sukses", "Transaksi pembayaran berhasil disimpan.");
+                if (homeKasirController != null) {
+                    homeKasirController.showHomeTransactPanel();
+                }
+                Stage stage = (Stage) btnSubmit.getScene().getWindow();
+                stage.close();
+            }
+        } catch (SQLException e) {
+            showAlert("Database Error", "Gagal menyimpan transaksi pembayaran: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private double parseRupiah(String teks) {
+        try {
+            String angka = teks.replaceAll("[^\\d]", "");
+            return Double.parseDouble(angka);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    @FXML
+    private void handleBatalPembayaran() {
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        stage.close();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

@@ -185,7 +185,7 @@
                   </VBox>
                   <VBox prefHeight="389.0" prefWidth="253.0">
                      <children>
-                        <Button fx:id="btnSubmit" layoutX="65.0" layoutY="226.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="SUBMIT">
+                        <Button fx:id="btnSubmit" layoutX="65.0" layoutY="226.0" mnemonicParsing="false" onAction="#handleInsertPembayaran" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="SUBMIT">
                            <font>
                               <Font name="Franklin Gothic Demi Cond" size="24.0" />
                            </font>
@@ -193,7 +193,7 @@
                               <Insets left="55.0" top="446.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnCancel" layoutX="65.0" layoutY="290.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="CANCEL">
+                        <Button fx:id="btnCancel" layoutX="65.0" layoutY="290.0" mnemonicParsing="false" onAction="#handleBatalPembayaran" prefHeight="41.0" prefWidth="141.0" stylesheets="@style.css" text="CANCEL">
                            <font>
                               <Font name="Franklin Gothic Demi Cond" size="24.0" />
                            </font>
