@@ -250,7 +250,9 @@ public class FormIsiPembayaranController {
                 showAlert("Sukses", "Transaksi pembayaran berhasil disimpan.");
                 if (homeKasirController != null) {
                     homeKasirController.showHomeTransactPanel();
+                    homeKasirController.refreshPeminjamanViews();
                 }
+
                 Stage stage = (Stage) btnSubmit.getScene().getWindow();
                 stage.close();
             }
