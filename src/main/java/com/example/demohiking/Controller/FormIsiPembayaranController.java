@@ -44,6 +44,7 @@ public class FormIsiPembayaranController {
 
     private List<detailPeminjaman> itemDalamPembayaran;
     private HomeKasirController homeKasirController;
+    private double jumlahYangHarusDibayar = 0;
 
     public void setHomeController(HomeKasirController controller) {
         this.homeKasirController = controller;
@@ -55,19 +56,30 @@ public class FormIsiPembayaranController {
         txtIDPeminjaman.setText(idPeminjaman);
         txtNamaCustomer.setText(namaCustomer);
         txtNamaKaryawan.setText(namaKaryawan);
-        txtTotalDenda.setText(nominalDenda != null ? nominalDenda : "0");
-        txtTotalHarga.setText(totalHarga != null ? totalHarga : "0");
-        cmbMetode.getItems().setAll("Tunai", "Non-Tunai");
-        setupTanggalPembayaran();
-        hitungKembalian();
+
+        double harga = 0;
+        double denda = 0;
+        try {
+            harga = Double.parseDouble(totalHarga);
+        } catch (NumberFormatException e) {
+            harga = 0;
+        }
 
         try {
-            double harga = Double.parseDouble(txtTotalHarga.getText());
-            double denda = Double.parseDouble(txtTotalDenda.getText());
-            txtTotalHarga.setText(String.valueOf(harga + denda));
+            denda = Double.parseDouble(nominalDenda);
         } catch (NumberFormatException e) {
-            txtBayar.setText("0");
+            denda = 0;
         }
+
+        jumlahYangHarusDibayar = harga + denda;
+
+        txtTotalDenda.setText(formatRupiah(denda));
+        txtTotalHarga.setText(formatRupiah(jumlahYangHarusDibayar));
+        txtBayar.setText(String.valueOf(jumlahYangHarusDibayar));
+        cmbMetode.getItems().setAll("Tunai", "Non-Tunai");
+        setupTanggalPembayaran();
+        tampilkanDetailPeminjaman(idPeminjaman);
+        hitungKembalian();
     }
 
     public void setIdPeminjamanLangsung(String idPeminjaman) {
@@ -83,12 +95,10 @@ public class FormIsiPembayaranController {
     private void hitungKembalian() {
         try {
             double totalBayar = Double.parseDouble(txtBayar.getText());
-            double totalHarga = Double.parseDouble(txtTotalHarga.getText());
-            double kembalian = totalBayar - totalHarga;
-
-            txtKembalian.setText(String.valueOf(kembalian < 0 ? 0 : kembalian)); // pastikan tidak minus
+            double kembalian = totalBayar - jumlahYangHarusDibayar;
+            txtKembalian.setText(formatRupiah(kembalian < 0 ? 0 : kembalian));
         } catch (NumberFormatException e) {
-            txtKembalian.setText("0");
+            txtKembalian.setText(formatRupiah(0));
         }
     }
 
@@ -165,6 +175,11 @@ public class FormIsiPembayaranController {
         }
 
         txtIDPembayaran.setText(id);
+    }
+
+    private String formatRupiah(double nilai) {
+        java.text.NumberFormat formatter = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("in", "ID"));
+        return formatter.format(nilai);
     }
 
 }
