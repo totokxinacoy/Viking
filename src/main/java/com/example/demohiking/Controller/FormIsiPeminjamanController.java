@@ -1,6 +1,5 @@
 package com.example.demohiking.Controller;
 
-import com.example.demohiking.ADT.detailPaket;
 import com.example.demohiking.ADT.detailPeminjaman;
 import com.example.demohiking.Connection.DBConnect;
 import com.example.demohiking.Session;

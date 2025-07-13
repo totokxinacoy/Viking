@@ -2184,6 +2184,24 @@ public void refreshKeranjangTransaksiView() {
                 showAlert("Sukses", "Pengembalian dicatat lanjut Ke Pembayaran.");
                 clearPengembalianForm();
                 refreshPeminjamanViews();
+                String queryInfo = "SELECT p.id_peminjaman, c.nama_customer, k.nama_karyawan " +
+                        "FROM Transaksi_Peminjaman p " +
+                        "JOIN Customer c ON p.id_customer = c.id_customer " +
+                        "JOIN Karyawan k ON p.id_karyawan = k.id_karyawan " +
+                        "WHERE p.id_peminjaman = ?";
+
+                String namaCustomer = null;
+                String namaKaryawan = null;
+
+                try (PreparedStatement psInfo = conn.prepareStatement(queryInfo)) {
+                    psInfo.setString(1, idPeminjaman);
+                    try (ResultSet rs = psInfo.executeQuery()) {
+                        if (rs.next()) {
+                            namaCustomer = rs.getString("nama_customer");
+                            namaKaryawan = rs.getString("nama_karyawan");
+                        }
+                    }
+                }
                 if (isFormIsiPembayaranTerbuka) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Form Pembayaran Aktif");
@@ -2200,7 +2218,7 @@ public void refreshKeranjangTransaksiView() {
                     Parent root = loader.load();
 
                     FormIsiPembayaranController pembayaranController = loader.getController();
-//                    pembayaranController.setIDPengembalian(idPengembalian);
+                    pembayaranController.setInformasiPeminjaman(idPeminjaman, namaCustomer, namaKaryawan);
 
                     Stage stage = new Stage();
                     stage.setTitle("Form Pembayaran");

@@ -49,32 +49,50 @@ public class FormIsiPembayaranController {
         this.homeKasirController = controller;
     }
 
-    public void setItemDalamPembayaran(List<detailPeminjaman> item) {
-        this.itemDalamPembayaran = item;
-        tampilkanItemDalamListView();
+
+    public void setInformasiPeminjaman(String idPeminjaman, String namaCustomer, String namaKaryawan) {
         generatePembayaranID();
+        txtIDPeminjaman.setText(idPeminjaman);
+        txtNamaCustomer.setText(namaCustomer);
+        txtNamaKaryawan.setText(namaKaryawan);
     }
 
-    private void tampilkanItemDalamListView() {
-        ObservableList<String> items = FXCollections.observableArrayList();
+//    private void tampilkanDetailPeminjaman(String idPeminjaman) {
+//        ObservableList<String> items = FXCollections.observableArrayList();
+//
+//        String query = "SELECT dp.jumlah, pr.nama_produk, pk.nama_paket " +
+//                "FROM Detail_Peminjaman dp " +
+//                "LEFT JOIN Produk pr ON dp.id_produk = pr.id_produk " +
+//                "LEFT JOIN Paket pk ON dp.id_paket = pk.id_paket " +
+//                "WHERE dp.id_peminjaman = '" + idPeminjaman + "'";
+//
+//        try (Connection conn = new DBConnect().getConnection();
+//             Statement stmt = conn.createStatement();
+//             ResultSet rs = stmt.executeQuery(query)) {
+//
+//            while (rs.next()) {
+//                int jumlah = rs.getInt("jumlah");
+//                String namaProduk = rs.getString("nama_produk");
+//                String namaPaket = rs.getString("nama_paket");
+//
+//                String namaItem;
+//                if (namaProduk != null) {
+//                    namaItem = namaProduk + " x" + jumlah;
+//                } else if (namaPaket != null) {
+//                    namaItem = namaPaket + " x" + jumlah;
+//                } else {
+//                    continue; // skip jika null semua
+//                }
+//
+//                items.add(namaItem);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        listPeminjaman.setItems(items);
+//    }
 
-        for (detailPeminjaman dp : itemDalamPembayaran) {
-            String namaItem = null;
-
-            if (dp.getProduk() != null) {
-                namaItem = dp.getProduk().getNama() + " x" + dp.getJumlah();
-            } else if (dp.getPaket() != null) {
-                namaItem = dp.getPaket().getNama() + " x" + dp.getJumlah();
-            } else {
-                System.err.println("Warning: detailPeminjaman tanpa produk atau paket ditemukan dan dilewati.");
-                continue;
-            }
-
-            items.add(namaItem);
-        }
-
-        listPeminjaman.setItems(items);
-    }
     private void generatePembayaranID() {
         String id = "PMB001";
         String query = "SELECT MAX(id_pembayaran) as max_id FROM Transaksi_Pembayaran";
