@@ -50,48 +50,96 @@ public class FormIsiPembayaranController {
     }
 
 
-    public void setInformasiPeminjaman(String idPeminjaman, String namaCustomer, String namaKaryawan) {
+    public void setInformasiPeminjaman(String idPeminjaman, String namaCustomer, String namaKaryawan, String nominalDenda, String totalHarga) {
         generatePembayaranID();
         txtIDPeminjaman.setText(idPeminjaman);
         txtNamaCustomer.setText(namaCustomer);
         txtNamaKaryawan.setText(namaKaryawan);
+        txtTotalDenda.setText(nominalDenda != null ? nominalDenda : "0");
+        txtTotalHarga.setText(totalHarga != null ? totalHarga : "0");
+        cmbMetode.getItems().setAll("Tunai", "Non-Tunai");
+        setupTanggalPembayaran();
+        hitungKembalian();
+
+        try {
+            double harga = Double.parseDouble(txtTotalHarga.getText());
+            double denda = Double.parseDouble(txtTotalDenda.getText());
+            txtTotalHarga.setText(String.valueOf(harga + denda));
+        } catch (NumberFormatException e) {
+            txtBayar.setText("0");
+        }
     }
 
-//    private void tampilkanDetailPeminjaman(String idPeminjaman) {
-//        ObservableList<String> items = FXCollections.observableArrayList();
-//
-//        String query = "SELECT dp.jumlah, pr.nama_produk, pk.nama_paket " +
-//                "FROM Detail_Peminjaman dp " +
-//                "LEFT JOIN Produk pr ON dp.id_produk = pr.id_produk " +
-//                "LEFT JOIN Paket pk ON dp.id_paket = pk.id_paket " +
-//                "WHERE dp.id_peminjaman = '" + idPeminjaman + "'";
-//
-//        try (Connection conn = new DBConnect().getConnection();
-//             Statement stmt = conn.createStatement();
-//             ResultSet rs = stmt.executeQuery(query)) {
-//
-//            while (rs.next()) {
-//                int jumlah = rs.getInt("jumlah");
-//                String namaProduk = rs.getString("nama_produk");
-//                String namaPaket = rs.getString("nama_paket");
-//
-//                String namaItem;
-//                if (namaProduk != null) {
-//                    namaItem = namaProduk + " x" + jumlah;
-//                } else if (namaPaket != null) {
-//                    namaItem = namaPaket + " x" + jumlah;
-//                } else {
-//                    continue; // skip jika null semua
-//                }
-//
-//                items.add(namaItem);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        listPeminjaman.setItems(items);
-//    }
+    public void setIdPeminjamanLangsung(String idPeminjaman) {
+        txtIDPeminjaman.setText(idPeminjaman);
+        tampilkanDetailPeminjaman(idPeminjaman);
+    }
+
+    @FXML
+    public void initialize() {
+        txtBayar.textProperty().addListener((observable, oldValue, newValue) -> hitungKembalian());
+    }
+
+    private void hitungKembalian() {
+        try {
+            double totalBayar = Double.parseDouble(txtBayar.getText());
+            double totalHarga = Double.parseDouble(txtTotalHarga.getText());
+            double kembalian = totalBayar - totalHarga;
+
+            txtKembalian.setText(String.valueOf(kembalian < 0 ? 0 : kembalian)); // pastikan tidak minus
+        } catch (NumberFormatException e) {
+            txtKembalian.setText("0");
+        }
+    }
+
+    private void setupTanggalPembayaran() {
+        txtTglPembayaran.setValue(LocalDate.now());
+
+        txtTglPembayaran.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                setDisable(true);
+            }
+        });
+
+        txtTglPembayaran.setEditable(false);
+    }
+    private void tampilkanDetailPeminjaman(String idPeminjaman) {
+        ObservableList<String> items = FXCollections.observableArrayList();
+
+        String query = "SELECT dp.jumlah, pr.nama_produk, pk.nama_paket " +
+                "FROM Detail_Peminjaman dp " +
+                "LEFT JOIN Produk pr ON dp.id_item = pr.ID_Produk " +
+                "LEFT JOIN Paket pk ON dp.id_item = pk.ID_Paket " +
+                "WHERE dp.id_peminjaman = '" + idPeminjaman + "'";
+
+        try (Connection conn = new DBConnect().getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int jumlah = rs.getInt("jumlah");
+                String namaProduk = rs.getString("nama_produk");
+                String namaPaket = rs.getString("nama_paket");
+
+                String namaItem;
+                if (namaProduk != null && !namaProduk.isEmpty()) {
+                    namaItem = namaProduk + " x" + jumlah;
+                } else if (namaPaket != null && !namaPaket.isEmpty()) {
+                    namaItem = namaPaket + " x" + jumlah;
+                } else {
+                    continue; // Skip jika tidak punya nama produk/paket
+                }
+
+                items.add(namaItem);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        listPeminjaman.setItems(items);
+    }
 
     private void generatePembayaranID() {
         String id = "PMB001";

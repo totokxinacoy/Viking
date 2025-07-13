@@ -2141,7 +2141,8 @@ public void refreshKeranjangTransaksiView() {
         String idPengembalian = txtIDPengembalian.getText().trim();
         String idPeminjaman = txtIDPeminjaman.getText().trim();
         Denda selectedDenda = cmbDenda.getValue();
-        String statusPengembalian = "Pending";
+        String statusPengembalian = "Non-Aktif";
+
 
         // Validasi
         if (idPengembalian.isEmpty()) {
@@ -2184,24 +2185,46 @@ public void refreshKeranjangTransaksiView() {
                 showAlert("Sukses", "Pengembalian dicatat lanjut Ke Pembayaran.");
                 clearPengembalianForm();
                 refreshPeminjamanViews();
-                String queryInfo = "SELECT p.id_peminjaman, c.nama_customer, k.nama_karyawan " +
-                        "FROM Transaksi_Peminjaman p " +
-                        "JOIN Customer c ON p.id_customer = c.id_customer " +
-                        "JOIN Karyawan k ON p.id_karyawan = k.id_karyawan " +
-                        "WHERE p.id_peminjaman = ?";
+                String queryInfo = "SELECT p.id_peminjaman, c.Nama_Customer, k.Nama_Karyawan, " +
+                        "       COALESCE(d.Nominal, 0) AS nominal_denda " +
+                        "FROM Transaksi_Pengembalian tg " +
+                        "JOIN Transaksi_Peminjaman p ON tg.id_peminjaman = p.id_peminjaman " +
+                        "JOIN Customer c ON p.ID_Customer = c.ID_Customer " +
+                        "JOIN Karyawan k ON p.ID_Karyawan = k.ID_Karyawan " +
+                        "LEFT JOIN Denda d ON tg.ID_Denda = d.ID_Denda " +
+                        "WHERE tg.id_pengembalian = ?";
 
                 String namaCustomer = null;
                 String namaKaryawan = null;
+                String nominalDenda = "0";
 
                 try (PreparedStatement psInfo = conn.prepareStatement(queryInfo)) {
-                    psInfo.setString(1, idPeminjaman);
+                    psInfo.setString(1, idPengembalian);
                     try (ResultSet rs = psInfo.executeQuery()) {
                         if (rs.next()) {
                             namaCustomer = rs.getString("nama_customer");
                             namaKaryawan = rs.getString("nama_karyawan");
+                            nominalDenda = rs.getString("nominal_denda");
                         }
                     }
                 }
+                String queryTotalHarga = "SELECT SUM(dp.jumlah * COALESCE(pr.Harga, pk.Harga, 0)) AS total_harga " +
+                        "FROM Detail_Peminjaman dp " +
+                        "LEFT JOIN Produk pr ON dp.id_item = pr.ID_Produk " +
+                        "LEFT JOIN Paket pk ON dp.id_item = pk.ID_Paket " +
+                        "WHERE dp.id_peminjaman = ?";
+
+                String totalHarga = "0";
+
+                try (PreparedStatement psTotal = conn.prepareStatement(queryTotalHarga)) {
+                    psTotal.setString(1, idPeminjaman);
+                    try (ResultSet rsTotal = psTotal.executeQuery()) {
+                        if (rsTotal.next()) {
+                            totalHarga = rsTotal.getString("total_harga");
+                        }
+                    }
+                }
+
                 if (isFormIsiPembayaranTerbuka) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Form Pembayaran Aktif");
@@ -2218,7 +2241,8 @@ public void refreshKeranjangTransaksiView() {
                     Parent root = loader.load();
 
                     FormIsiPembayaranController pembayaranController = loader.getController();
-                    pembayaranController.setInformasiPeminjaman(idPeminjaman, namaCustomer, namaKaryawan);
+                    pembayaranController.setInformasiPeminjaman(idPeminjaman, namaCustomer, namaKaryawan, nominalDenda, totalHarga);
+                    pembayaranController.setIdPeminjamanLangsung(idPeminjaman);
 
                     Stage stage = new Stage();
                     stage.setTitle("Form Pembayaran");
@@ -2251,7 +2275,7 @@ public void refreshKeranjangTransaksiView() {
     }
 
     private void clearPengembalianForm() {
-        txtIDPengembalian.clear();
+        txtIDPengembalian.setText(generatePengembalianID());
         txtIDPeminjaman.clear();
         cmbDenda.getSelectionModel().clearSelection();
     }

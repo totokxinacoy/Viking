@@ -1921,165 +1921,6 @@
                   </Button>
                </children>
             </Pane>
-            <Pane fx:id="pnlTransaksiPengembalian" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
-                  <TextField layoutX="85.0" layoutY="100.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI TRANSAKSI PENGEMBALIAN" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
-                     <font>
-                        <Font name="Segoe UI Bold" size="24.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="5.0" left="20.0" top="5.0" />
-                     </padding>
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" height="2.0" offsetX="4.0" offsetY="4.0" radius="0.5" width="2.0">
-                           <color>
-                              <Color opacity="0.5" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                  </TextField>
-                  <Pane layoutX="85.0" layoutY="171.0" prefHeight="837.0" prefWidth="1126.0" style="-fx-background-color: #D4EBF8; -fx-background-radius: 2em;" styleClass="scroll-pane-color">
-                     <children>
-                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0">
-                           <content>
-                              <VBox fx:id="pnItemsTransaksi" prefHeight="764.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </VBox>
-                           </content>
-                        </ScrollPane>
-                        <HBox prefHeight="74.0" prefWidth="1126.0">
-                           <children>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="70.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA TRANSAKSI" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="100.0" top="25.0" />
-                                 </HBox.margin>
-                              </Text>
-                           </children>
-                        </HBox>
-                     </children>
-                  </Pane>
-                  <ImageView fitHeight="32.0" fitWidth="25.0" layoutX="1163.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/search.png" />
-                     </image>
-                  </ImageView>
-                  <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
-                     <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="938.0" prefWidth="392.0" spacing="3.0">
-                           <children>
-                              <Label layoutX="71.0" layoutY="20.0" text="TRANSAKSI PENGEMBALIAN" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="30.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets top="70.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label text="ID Transaksi Pengembalian" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="25.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets right="17.0" top="40.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <TextField fx:id="txtIDPengembalian" prefHeight="39.0" prefWidth="309.0">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="60.0" right="55.0" top="5.0" />
-                                 </VBox.margin>
-                                 <effect>
-                                    <DropShadow offsetX="4.0" offsetY="4.0" />
-                                 </effect>
-                              </TextField>
-                              <Label layoutX="69.0" layoutY="149.0" text="ID Transaksi Peminjaman" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="25.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets right="33.0" top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <TextField fx:id="txtIDPeminjaman" editable="false" prefHeight="39.0" prefWidth="309.0">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <effect>
-                                    <DropShadow offsetX="4.0" offsetY="4.0" />
-                                 </effect>
-                                 <VBox.margin>
-                                    <Insets left="60.0" right="55.0" top="5.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <Label layoutX="68.0" layoutY="327.0" text="ID Denda" textFill="WHITE">
-                                 <font>
-                                    <Font name="Franklin Gothic Demi Cond" size="25.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets right="188.0" top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <ComboBox fx:id="cmbDenda" layoutX="70.0" layoutY="359.0" prefHeight="39.0" prefWidth="309.0" promptText="Pilih Denda" style="-fx-background-color: #ffffff;">
-                                 <VBox.margin>
-                                    <Insets left="60.0" right="55.0" top="5.0" />
-                                 </VBox.margin>
-                              </ComboBox>
-                              <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
-                                 <children>
-                                    <Button fx:id="btnAddPengembalian" mnemonicParsing="false" onAction="#handleInsertPengembalian" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="NEXT" textAlignment="CENTER" textFill="WHITE">
-                                       <font>
-                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
-                                       </font>
-                                    </Button>
-                                    <Button fx:id="btnBatalPengembalian" layoutX="164.0" layoutY="46.0" mnemonicParsing="false" onAction="#handleBackPengembalian" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="BATAL" textAlignment="CENTER" textFill="WHITE">
-                                       <font>
-                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </Pane>
-                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
-                     <children>
-                        <Label prefHeight="38.0" prefWidth="283.0" text="TRANSAKSI PENGEMBALIAN" textFill="WHITE">
-                           <font>
-                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="15.0" right="-20.0" />
-                           </HBox.margin>
-                        </Label>
-                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/home-icon-silhouette.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="1300.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                  </HBox>
-               </children>
-            </Pane>
             <Pane fx:id="pnlPaket" layoutX="10.0" layoutY="10.0" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
@@ -2333,6 +2174,165 @@
                      <padding>
                         <Insets right="10.0" />
                      </padding>
+                  </HBox>
+               </children>
+            </Pane>
+            <Pane fx:id="pnlTransaksiPengembalian" prefHeight="576.0" prefWidth="783.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#577bc1" height="979.0" layoutX="59.0" layoutY="62.0" stroke="WHITE" strokeMiterLimit="0.0" strokeType="OUTSIDE" width="1584.0" />
+                  <TextField layoutX="85.0" layoutY="100.0" prefHeight="49.0" prefWidth="1126.0" promptText="CARI TRANSAKSI PENGEMBALIAN" style="-fx-background-color: #FFFFFF; -fx-border-color: #1E1E1E; -fx-background-radius: 1em; -fx-border-radius: 1em;">
+                     <font>
+                        <Font name="Segoe UI Bold" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" top="5.0" />
+                     </padding>
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="2.0" offsetX="4.0" offsetY="4.0" radius="0.5" width="2.0">
+                           <color>
+                              <Color opacity="0.5" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </TextField>
+                  <Pane layoutX="85.0" layoutY="171.0" prefHeight="837.0" prefWidth="1126.0" style="-fx-background-color: #D4EBF8; -fx-background-radius: 2em;" styleClass="scroll-pane-color">
+                     <children>
+                        <ScrollPane layoutY="81.0" prefHeight="757.0" prefWidth="1126.0">
+                           <content>
+                              <VBox fx:id="pnItemsTransaksi" prefHeight="764.0" prefWidth="1128.0" spacing="5.0" style="-fx-background-color: #D4EBF8;">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                        <HBox prefHeight="74.0" prefWidth="1126.0">
+                           <children>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="70.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Text fill="#0d2857" strokeType="OUTSIDE" strokeWidth="0.0" text="NAMA TRANSAKSI" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="32.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="100.0" top="25.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <ImageView fitHeight="32.0" fitWidth="25.0" layoutX="1163.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/search.png" />
+                     </image>
+                  </ImageView>
+                  <Pane layoutX="1250.0" layoutY="101.0" prefHeight="938.0" prefWidth="392.0" style="-fx-background-color: #051036;">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="938.0" prefWidth="392.0" spacing="3.0">
+                           <children>
+                              <Label layoutX="71.0" layoutY="20.0" text="TRANSAKSI PENGEMBALIAN" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="30.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="70.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="ID Transaksi Pengembalian" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="25.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="17.0" top="40.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="txtIDPengembalian" editable="false" prefHeight="39.0" prefWidth="309.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" top="5.0" />
+                                 </VBox.margin>
+                                 <effect>
+                                    <DropShadow offsetX="4.0" offsetY="4.0" />
+                                 </effect>
+                              </TextField>
+                              <Label layoutX="69.0" layoutY="149.0" text="ID Transaksi Peminjaman" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="25.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="33.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="txtIDPeminjaman" editable="false" prefHeight="39.0" prefWidth="309.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow offsetX="4.0" offsetY="4.0" />
+                                 </effect>
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" top="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Label layoutX="68.0" layoutY="327.0" text="ID Denda" textFill="WHITE">
+                                 <font>
+                                    <Font name="Franklin Gothic Demi Cond" size="25.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="188.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <ComboBox fx:id="cmbDenda" layoutX="70.0" layoutY="359.0" prefHeight="39.0" prefWidth="309.0" promptText="Pilih Denda" style="-fx-background-color: #ffffff;">
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="55.0" top="5.0" />
+                                 </VBox.margin>
+                              </ComboBox>
+                              <HBox alignment="CENTER" prefHeight="116.0" prefWidth="392.0" spacing="40.0">
+                                 <children>
+                                    <Button fx:id="btnAddPengembalian" mnemonicParsing="false" onAction="#handleInsertPengembalian" onKeyPressed="#handleClicks" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="NEXT" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btnBatalPengembalian" layoutX="164.0" layoutY="46.0" mnemonicParsing="false" onAction="#handleBackPengembalian" prefHeight="44.0" prefWidth="110.0" stylesheets="@style.css" text="BATAL" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Franklin Gothic Demi Cond" size="24.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </Pane>
+                  <HBox alignment="CENTER_LEFT" layoutX="33.0" prefHeight="65.0" prefWidth="1637.0" style="-fx-background-color: #051036;" stylesheets="@style.css">
+                     <children>
+                        <Label prefHeight="38.0" prefWidth="283.0" text="TRANSAKSI PENGEMBALIAN" textFill="WHITE">
+                           <font>
+                              <Font name="Franklin Gothic Demi Cond" size="26.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="15.0" right="-20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ImageView fitHeight="39.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/home-icon-silhouette.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="1300.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
                   </HBox>
                </children>
             </Pane>
