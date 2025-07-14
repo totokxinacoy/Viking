@@ -27,7 +27,7 @@
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="lblTelpon" layoutX="200.0" layoutY="26.0" prefHeight="22.0" prefWidth="100.0" text="No Telephone" textFill="WHITE" wrapText="true">
+      <Label fx:id="lblTelpon" layoutX="200.0" layoutY="26.0" prefHeight="22.0" prefWidth="157.0" text="No Telephone" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
@@ -35,7 +35,7 @@
             <Insets left="40.0" />
          </HBox.margin>
       </Label>
-      <Label fx:id="lblEmail" layoutX="300.0" layoutY="26.0" prefHeight="22.0" prefWidth="100.0" text="Email" textFill="WHITE" wrapText="true">
+      <Label fx:id="lblEmail" layoutX="300.0" layoutY="26.0" prefHeight="22.0" prefWidth="171.0" text="Email" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Franklin Gothic Demi Cond" size="18.0" />
          </font>
@@ -52,7 +52,7 @@
             </ImageView>
          </graphic>
          <HBox.margin>
-            <Insets left="250.0" right="10.0" />
+            <Insets left="130.0" right="10.0" />
          </HBox.margin>
       </Button>
       <Button fx:id="btnDelete" layoutX="638.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleDeleteButtonClick" stylesheets="@style.css" textFill="#0d2857">
