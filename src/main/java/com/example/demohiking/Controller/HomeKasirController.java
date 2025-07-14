@@ -31,6 +31,7 @@ import java.sql.*;
 import java.util.*;
 
 
+
 public class HomeKasirController implements Initializable {
     // IMAGE ALL
     @FXML
@@ -120,7 +121,7 @@ public class HomeKasirController implements Initializable {
     @FXML
     private Pane pnlPeminjaman;
     @FXML
-    private Pane pnlTransaksiPembayaran;
+    private Pane pnlHome;
     @FXML
     private Pane pnlTransaksiPengembalian;
 
@@ -1124,6 +1125,42 @@ public void refreshKeranjangTransaksiView() {
         txtIDPengembalian.setText(generatePengembalianID());
         loadDendaOptions();
 
+        // Inisialisasi Component Dashboard Kasir
+        if (Session.isLoggedIn()) {
+            String id = Session.getId();
+
+            try {
+                DBConnect db = new DBConnect();
+                Connection conn = db.getConnection();
+
+                String query = "SELECT Image FROM Karyawan WHERE ID_Karyawan = ?";
+                PreparedStatement pstat = conn.prepareStatement(query);
+                pstat.setString(1, id);
+
+                ResultSet rs = pstat.executeQuery();
+                if (rs.next()) {
+                    InputStream is = rs.getBinaryStream("Image");
+                    if (is != null) {
+                        Image image = new Image(is);
+                        imgProfile.setImage(image);
+                    } else {
+                        System.out.println("Image tidak tersedia untuk NPK: " + id);
+                        imgProfile.setImage(new Image(getClass().getResourceAsStream("/images/default.png")));
+                    }
+                } else {
+                    System.out.println("Data karyawan tidak ditemukan untuk NPK: " + id);
+                    imgProfile.setImage(new Image(getClass().getResourceAsStream("/images/default.png")));
+                }
+
+                rs.close();
+                pstat.close();
+                conn.close();
+
+            } catch (SQLException e) {
+                showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+            }
+        }
+
         // Tunda pengecekan session sampai setelah UI tampil
         Platform.runLater(this::cekSession);
     }
@@ -1150,8 +1187,7 @@ public void refreshKeranjangTransaksiView() {
         }
     }
 
-
-
+    // GENERAL METHOD
     public void handleClicks(ActionEvent actionEvent) {
         if (actionEvent.getSource() == btnProduk) {
             pnlProduk.setStyle("-fx-background-color : #ffffff");
@@ -1195,7 +1231,12 @@ public void refreshKeranjangTransaksiView() {
         }
     }
 
-    // GENERAL METHOD
+    @FXML
+    private void handleBackProfile (ActionEvent actionEvent) {
+        pnlHome.setStyle("-fx-background-color : #ffffff");
+        pnlHome.toFront();
+    }
+
     @FXML
     private void handleLogout() {
         Session.clearSession();
@@ -1238,7 +1279,6 @@ public void refreshKeranjangTransaksiView() {
         btnNewPaket.setScaleX(1.0);
         btnNewPaket.setScaleY(1.0);
     }
-
 
     /* --- PRODUK CRUD --- */
     @FXML
